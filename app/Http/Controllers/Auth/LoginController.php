@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -62,5 +62,10 @@ class LoginController extends Controller
                 'password' => ['Password yang anda masukkan tidak benar.'],
             ]);
         }
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect('/dashboard');
     }
 }

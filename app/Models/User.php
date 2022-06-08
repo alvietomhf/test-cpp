@@ -52,4 +52,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Clas::class, 'clas_id');
     }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
 }
