@@ -74,4 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::resource('{question}/butir-jawaban/{answer}/kunci-jawaban', KeyController::class);
     });
+
+    Route::get('profil', [DataController::class, 'profile'])->name('profile.index');
+    Route::put('profil', [DataController::class, 'updateProfile'])->name('profile.update');
 });
