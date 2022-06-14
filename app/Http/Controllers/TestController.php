@@ -35,12 +35,6 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        // Soon
-        if ($competency->id !== 1) {
-            flash('Tes ' . $competency->title . ' belum dibuka!')->warning();
-            return redirect()->route('dashboard');
-        }
-
         if ($progress->status === 'lock') {
             flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
             return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
@@ -65,23 +59,16 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        // Soon
-        if ($competency->id !== 1) {
-            flash('Tes ' . $competency->title . ' belum dibuka!')->warning();
-            return redirect()->route('dashboard');
-        }
-
         if ($progress->status === 'lock') {
             flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
             return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
         }
         if ($progress->status === 'passed') {
             flash('Tes '. $competency->title . ' sudah selesai!')->warning();
-            return redirect()->route('dashboard');
+            return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
-        $data = Question::where('competency_id', $competency->id)->get()->random(3)->values();
-        // $data = Question::where('id', 1)->get();
+        $data = Question::where('competency_id', $competency->id)->get()->shuffle()->take(3);
 
         return view('test.start', compact('data', 'competency'));
     }
@@ -91,6 +78,7 @@ class TestController extends Controller
         try {
             $data = $request->data;
             $totalQuestion = 3;
+            $failedScore = 30;
             $score = 0;
             $passed = 0;
 
@@ -104,8 +92,11 @@ class TestController extends Controller
             foreach ($data as $key => $dataValue) {
                 $question = Question::where('id', $dataValue['id'])->with(['answers', 'answers.keys'])->first();
 
-                $script = preg_replace('/\s+/', '', trim($dataValue['script']));
+                $script = $dataValue['script'] ?? 'Tidak ada code';
+                $script = preg_replace('/\s+/', '', trim($script));
                 $script = strtolower($script);
+                $is_timeup = $dataValue['time']['isTimeUp'] === "true" ? 1 : 0;
+                $is_success = $dataValue['success'] === "true" ? 1 : 0;
 
                 $questionScore = 0;
 
@@ -114,9 +105,10 @@ class TestController extends Controller
                 $resultDetail = ResultDetail::create([
                     'result_id' => $result->id,
                     'question_id' => $question->id,
-                    'answer' => $dataValue['script'],
+                    'answer' => $dataValue['script'] ?? 'Tidak ada code',
                     'timeup' => +$dataValue['time']['timeUp'],
-                    'is_timeup' => $dataValue['time']['isTimeUp'] === "true" ? 1 : 0,
+                    'is_timeup' => $is_timeup,
+                    'is_success' => $is_success,
                 ]);
 
                 foreach ($question->answers as $key => $answer) {
@@ -142,6 +134,8 @@ class TestController extends Controller
                     }
                 }
 
+                $questionScore = $is_success ? $questionScore : ($questionScore - $failedScore);
+                $questionScore = max($questionScore, 0);
                 $resultDetail->update(['score' => $questionScore]);
                 $score += $questionScore;
             }
@@ -151,19 +145,19 @@ class TestController extends Controller
             if ($score >= 75) {
                 $passed = 1;
 
-                // Soon
                 Progress::where([
                             'user_id' => auth()->user()->id,
                             'competency_id' => $competency->id,
                         ])
                         ->update(['status' => 'passed']);
-                // if ($competency->id < 4) {
-                //     Progress::where([
-                //                 'user_id' => auth()->user()->id,
-                //                 'competency_id' => $competency->id + 1,
-                //             ])
-                //             ->update(['status' => 'unlock']);
-                // }
+
+                if ($competency->id < 4) {
+                    Progress::where([
+                                'user_id' => auth()->user()->id,
+                                'competency_id' => $competency->id + 1,
+                            ])
+                            ->update(['status' => 'unlock']);
+                }
             }
 
             $result->update([
@@ -204,15 +198,13 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        // Soon
-        if ($competency->id !== 1) {
-            flash('Tes ' . $competency->title . ' belum dibuka!')->warning();
-            return redirect()->route('dashboard');
+        if ($progress->status === 'unlock') {
+            flash('Tes '. $competency->title . ' belum selesai! Selesaikan terlebih dahulu')->warning();
+            return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
         }
-
-        if ($progress->status !== 'passed') {
-            flash('Tes '. $competency->title . ' terkunci atau belum selesai!')->warning();
-            return redirect()->route('dashboard');
+        if ($progress->status === 'lock') {
+            flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
+            return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
         }
 
         $result = Result::where([
@@ -242,6 +234,16 @@ class TestController extends Controller
                     ->first();
 
         return view('test.result-show', compact('data'));
+    }
+
+    public function studentResult()
+    {
+        $result = Result::where('user_id', auth()->user()->id)
+                    ->with('competency')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return view('test.student-result', compact('result'));
     }
 
     public function teacherResult()
@@ -279,6 +281,7 @@ class TestController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'script' => 'required|string',
+            'stdin' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -290,11 +293,13 @@ class TestController extends Controller
 
         try {
             $script = $request->script;
+            $stdin = $request->stdin;
 
             $response = Http::post(env('JDOODLE_API_URL'), [
                 'clientId' => env('JDOODLE_CLIENT_ID'),
                 'clientSecret' => env('JDOODLE_CLIENT_SECRET'),
                 'script' => $script,
+                'stdin' => $stdin,
                 'language' => 'cpp',
                 'versionIndex' => '5'
             ]);

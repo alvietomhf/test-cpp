@@ -16,6 +16,7 @@ class ResultDetail extends Model
         'score',
         'timeup',
         'is_timeup',
+        'is_success',
     ];
 
     public function result()

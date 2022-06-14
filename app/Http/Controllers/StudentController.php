@@ -130,8 +130,8 @@ class StudentController extends Controller
         $user = User::find($id);
         if (!$user) {
             return response()->json([
-                    'status' => false,
-                    'message' => 'Data not found',
+                'status' => false,
+                'message' => 'Data not found',
             ], 404);
         }   
 
@@ -181,8 +181,8 @@ class StudentController extends Controller
             $user = User::find($id);
             if (!$user) {
                 return response()->json([
-                        'status' => false,
-                        'message' => 'Data not found',
+                    'status' => false,
+                    'message' => 'Data not found',
                 ], 404);
             }
 

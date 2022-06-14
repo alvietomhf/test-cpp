@@ -101,8 +101,8 @@ class ClasController extends Controller
             $clas = Clas::find($id);
             if (!$clas) {
                 return response()->json([
-                        'status' => false,
-                        'message' => 'Data not found',
+                    'status' => false,
+                    'message' => 'Data not found',
                 ], 404);
             }
 

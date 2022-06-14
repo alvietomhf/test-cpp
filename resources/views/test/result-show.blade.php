@@ -28,6 +28,7 @@
                         $seconds = $value->timeup % 60;
                         @endphp
                         Code siswa dikerjakan dalam <span class="text-info">{{ $minutes }} menit {{ $seconds }} detik</span>
+                        <span class="d-block">Hasil Running Code : <span style="color: {{ $value->is_success ? 'green' : 'red' }};">{{ $value->is_success ? 'SUKSES' : 'GAGAL' }}</span></span>
                         <span class="d-block">Waktu Habis : <span style="color: {{ $value->is_timeup ? 'red' : 'green' }};">{{ $value->is_timeup ? 'YA' : 'TIDAK' }}</span></span>
                     </p>
                     <hr>

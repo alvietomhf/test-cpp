@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('css')
+<style>
+    input:focus {
+        outline: solid 1px #1e9ff2;
+    }
+</style>
+@endsection
+
 @section('body')
 <body class="vertical-layout vertical-menu 1-column   fixed-navbar" data-open="click" data-menu="vertical-menu" data-col="1-column">
 @endsection
@@ -9,23 +17,22 @@
     <div class="bg-info p-1 rounded text-white text-center font-weight-bold">
         TES UJI KOMPETENSI PEMROGRAMAN C++
     </div>
+    @php
+        $questionCount = count($data);
+    @endphp
     @foreach ($data as $key => $value)
     <div class="row justify-content-center tab" data-question="{{ $value->id }}" style="display: none;">
         <div class="col-md-4 col-12 d-flex flex-column justify-content-between p-1 pt-2">
+            <input type="hidden" class="success" id="success-{{ $key + 1 }}" value="false">
             <div>
                 <div class="d-flex flex-xl-row flex-column justify-content-between" style="border-bottom: 2px solid; border-color: #1995C9">
-                    <p class="font-weight-bold">Pertanyaan {{ $key + 1 }} dari 3</p>
-                    <p class="">waktu tersisa : <span class="timer">2 menit 0 detik</span></p>
+                    <p class="font-weight-bold">Pertanyaan {{ $key + 1 }} dari {{ $questionCount }}</p>
+                    <p class="">waktu tersisa : <span class="timer">20 menit 0 detik</span></p>
                 </div>
                 <div class="mt-2">
                     {!! $value->description !!}
-                    <p>Sehingga menghasilkan output sebagai berikut :</p>
-                    @php
-                        $images = json_decode($value->image);
-                    @endphp
-                    @foreach ($images as $image)
-                    <img src="{{ asset('assets/images/question/' . $image) }}" alt="Output Question" style="width: 90%; height: 150px;">
-                    @endforeach
+                    <p>{{ $value->input ? 'Contoh output sebagai berikut :' : 'Sehingga menghasilkan output sebagai berikut :' }}</p>
+                    <img src="{{ asset('storage/images/' . json_decode($value->image)[0]) }}" alt="Output Question" style="width: 230px; height: 130px;">
                 </div>
             </div>
             <div class="d-flex flex-lg-row flex-column mt-md-0 mt-2 align-items-lg-center justify-content-lg-between">
@@ -38,7 +45,13 @@
                 <div class="form-group">
                     <textarea class="script" id="script-{{ $key + 1 }}" name="script" required="required"></textarea>
                 </div>
-                <button type="submit" id="submit-{{ $key + 1 }}" class="btn btn-info btn-run">Run Code <i class="ft-play" aria-hidden="true"></i></button>
+                <div class="d-flex flex-column flex-sm-row align-items-sm-center">
+                    <div class="{{ $value->input ? 'd-block' : 'd-none' }}  mr-0 mr-sm-5 mb-1 mb-sm-0">
+                        <label for="input-{{ $key + 1 }}">Input : </label>
+                        <input id="input-{{ $key + 1 }}" type="text" style="padding: 5px; border: 1px solid #1995C9;">
+                    </div>
+                    <button type="submit" id="run-{{ $key + 1 }}" class="btn btn-info btn-run"><i class="ft-play" aria-hidden="true"></i> Run Code</button>
+                </div>
             </div>
             <div class="form-group mt-2">
                 <textarea class="result" id="result-{{ $key + 1 }}" disabled></textarea>
@@ -51,8 +64,13 @@
 
 @section('js')
 <script type="text/javascript">
-    const minuteDuration = 2;
+    const minuteDuration = 20;
     let timeDurationArr = [];
+    let submitted = false;
+
+    document.addEventListener('copy', function(e) {
+        e.preventDefault();
+    });
 
     $(document).ready(function() {
         let currentTab = 0;
@@ -83,6 +101,9 @@
             });
             editors[i].on("change", editor => { editor.save() });
             editors[i].setOption('placeholder', 'Tulis kode disini...');
+            editors[i].on("beforeChange", function(_, change) {
+                if (change.origin == "paste") change.cancel()
+            });
             editors[i].setSize(null, 400);
 
             // Results
@@ -100,13 +121,17 @@
             const currentTimerEl = el[prevTab];
 
             const interval = setInterval(function() {
+                if (minutes == 0 && seconds == 7 && currentTab === prevTab && currentTab === (x.length - 1) && !submitted) runCode(currentTab + 1);
+
                 if (seconds == 0) {
                     if (minutes == 0) {
                         clearInterval(interval);
 
                         if (currentTab === prevTab) {
-                            if (currentTab === (x.length -1 )) {
-                                // console.log('SUBMIT AUTO');
+                            if (currentTab === (x.length - 1)) {
+                                if (submitted) return;
+                                submitted = true;
+
                                 if (Swal.isVisible()) {
                                     Swal.close();
                                 }
@@ -114,11 +139,13 @@
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Waktu pengerjaan habis!',
-                                    text: 'Halaman akan dialihkan...',
+                                    text: 'Halaman akan dialihkan dalam 3 detik',
                                     showConfirmButton: false,
-                                    timer: 2000,
+                                    timer: 3000,
                                     timerProgressBar: true,
                                 }).then((result) => {
+                                    const successEl = document.getElementsByClassName("success");
+
                                     timeDurationArr.push({
                                         timeUp: minuteDuration * 60,
                                         isTimeUp: true,
@@ -128,11 +155,13 @@
                                         const id = x[i].dataset.question;
                                         const time = timeDurationArr[i];
                                         const script = editor.getValue();
+                                        const success = successEl[i].value;
 
                                         return {
                                             id,
                                             script,
                                             time,
+                                            success,
                                         };
                                     });
 
@@ -143,7 +172,7 @@
                                         headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
                                         datatype: 'JSON',
                                         success: function (res) {
-                                            window.location.href="{{ route('dashboard') }}"
+                                            window.location.href = "{{ route('dashboard') }}"
                                         },
                                         error: function (err) {
                                             console.log(err)
@@ -188,18 +217,20 @@
             }
         }
 
+        // Next or Submit
         function nextPrev(n, auto = false) {
             const x = document.getElementsByClassName("tab");
             const timerEl = document.getElementsByClassName("timer");
             const currentTimerEl = timerEl[currentTab];
 
             if (currentTab == (x.length - 1)) {
-                // console.log('SUBMIT BUTTON');
+                if (!submitted) runCode(currentTab + 1);
+
                 x[currentTab].style.display = "flex";
 
                 Swal.fire({
                     title: 'Konfirmasi Submit',
-                    text: 'Apakah Anda yakin ingin meneyelesaikan tes ini?',
+                    text: 'Apakah Anda yakin ingin menyelesaikan tes ini?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -208,41 +239,56 @@
                     cancelButtonText: 'BATAL',
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        if (submitted) return;
+                        submitted = true;
+
                         const currentTimerVal = currentTimerEl.textContent;
-                        const currentTimerValArr = currentTimerVal.split(' ');
-                        const minute = +currentTimerValArr[0];
-                        const second = +currentTimerValArr[2];
-                        const timeUp = (minuteDuration * 60) - (minute * 60 + second );
-                        timeDurationArr.push({
-                            timeUp,
-                            isTimeUp: false,
-                        });
 
-                        const data = editors.map((editor, i) => {
-                            const id = x[i].dataset.question;
-                            const time = timeDurationArr[i];
-                            const script = editor.getValue();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Tes berhasil diselesaikan!',
+                            text: 'Halaman akan dialihkan dalam 3 detik',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        }).then((result) => {
+                            const successEl = document.getElementsByClassName("success");
+                            const currentTimerValArr = currentTimerVal.split(' ');
+                            const minute = +currentTimerValArr[0];
+                            const second = +currentTimerValArr[2];
+                            const timeUp = (minuteDuration * 60) - (minute * 60 + second );
+                            timeDurationArr.push({
+                                timeUp,
+                                isTimeUp: false,
+                            });
 
-                            return {
-                                id,
-                                script,
-                                time,
-                            };
-                        });
+                            const data = editors.map((editor, i) => {
+                                const id = x[i].dataset.question;
+                                const time = timeDurationArr[i];
+                                const script = editor.getValue();
+                                const success = successEl[i].value;
 
-                        $.ajax({
-                            url: "{{ route('student.test.store', [$competency->slug]) }}",
-                            data: { data },
-                            type: 'POST',
-                            headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
-                            datatype: 'JSON',
-                            success: function (res) {
-                                // console.log(res.message)
-                                window.location.href = res.url;
-                            },
-                            error: function (err) {
-                                console.log(err)
-                            }
+                                return {
+                                    id,
+                                    script,
+                                    time,
+                                    success,
+                                };
+                            });
+
+                            $.ajax({
+                                url: "{{ route('student.test.store', [$competency->slug]) }}",
+                                data: { data },
+                                type: 'POST',
+                                headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
+                                datatype: 'JSON',
+                                success: function (res) {
+                                    window.location.href = res.url;
+                                },
+                                error: function (err) {
+                                    console.log(err)
+                                }
+                            });
                         });
                     }
                 });
@@ -256,6 +302,8 @@
                         timeUp: minuteDuration * 60,
                         isTimeUp: true,
                     });
+
+                    runCode(currentTab + 1);
 
                     x[currentTab].style.display = "none";
                     currentTab = currentTab + n;
@@ -282,6 +330,8 @@
                                 timeUp,
                                 isTimeUp: false,
                             });
+
+                            runCode(currentTab + 1);
                             
                             x[currentTab].style.display = "none";
                             currentTab = currentTab + n;
@@ -292,6 +342,32 @@
                     });
                 }
             }
+        }
+
+        // Auto Run Code
+        function runCode(elementId) {
+            const numcode = parseInt(elementId) - 1;
+
+            const script = editors[numcode].getValue();
+            const stdin = document.getElementById(`input-${elementId}`).value;
+            const successEl = document.getElementById(`success-${elementId}`);
+
+            $.ajax({
+                url: "{{ route('student.execute') }}",
+                data: { 
+                    script,
+                    stdin,
+                },
+                type: 'POST',
+                headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
+                datatype: 'JSON',
+                success: function (res) {
+                    res.data.output ? successEl.value = true : successEl.value = false;
+                },
+                error: function (err) {
+                    successEl.value = false;
+                }
+            });
         }
 
         // Next Button
@@ -310,21 +386,28 @@
 
             const script = editors[numcode].getValue();
             const result = results[numcode];
+            const stdin = document.getElementById(`input-${ppp}`).value;
+            const successEl = document.getElementById(`success-${ppp}`);
 
             isLoading && result.setValue('Running the program...');
 
             $.ajax({
                 url: "{{ route('student.execute') }}",
-                data: { script },
+                data: { 
+                    script,
+                    stdin,
+                },
                 type: 'POST',
                 headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') },
                 datatype: 'JSON',
                 success: function (res) {
                     isLoading = false;
+                    res.data.output ? successEl.value = true : successEl.value = false;
                     result.setValue(res.data.output || res.data);
                 },
                 error: function (err) {
                     isLoading = false;
+                    successEl.value = false;
                     result.setValue(err.responseJSON.data);
                 }
             });

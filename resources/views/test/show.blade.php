@@ -13,21 +13,22 @@
         <h4 class="font-weight-bold">Materi Pokok</h4>
         <div class="" style="border-left: 2px solid; border-color: #1995C9">
             <ul class="list-unstyled ml-2">
-                <li>Tipe Data</li>
-                <li>Variabel</li>
-                <li>Konstanta</li>
-                <li>Operator</li>
-                <li>Ekspresi</li>
+                @php
+                    $subject = json_decode($progress->competency->subject);
+                @endphp
+                @foreach ($subject as $value)
+                    <li>{{ $value }}</li>
+                @endforeach
             </ul>
         </div>
     </div>
     <div class="mb-3">
         <h3 class="font-weight-bold">Aturan atau Ketentuan Pelaksanaan Test</h3>
         <ol class="pl-1">
-            <li>Soal pada test Uji Kompetensi Pemrograman berjumlah 3 soal yang mencakup materi tipe data, variabel, konstanta, operator, dan ekspresi.</li>
+            <li>Soal pada test Uji Kompetensi Pemrograman berjumlah 3 soal.</li>
             <li>Soal pada test Uji Kompetensi Pemrograman berbentuk live code.</li>
             <li>Durasi test yaitu 60 menit (20 menit tiap soal).</li>
-            <li>Range skor Uji Kompetensi Pemrograman 0-100. Skor >= 75 dinyatakan lulus, sedangkan skor <75 dinyatakan tidak lulus.</li>
+            <li>Range skor Uji Kompetensi Pemrograman 0-100. Skor >= 75 dinyatakan lulus, sedangkan skor < 75 dinyatakan tidak lulus.</li>
             <li>Pastikan perangakat mendukung dan terhubung dengan jaringan internet.</li>
         </ol>
     </div>
@@ -51,6 +52,11 @@
                 <span class="d-block font-italic ml-1">int bayar;</span>
             </li>
             <li>Gunakan tanda kutip dua (") untuk penulisan string, jangan menggunakan kutip satu (').</li>
+            <li>
+                Untuk memasukkan input gunakan perintah cin.
+                <span class="d-block">Contoh :</span>
+                <span class="d-block font-italic ml-1">{{ 'cin>>bayar;' }}</span>
+            </li>
             <li>
                 Untuk menampilkan output gunakan perintah cout.
                 <span class="d-block">Contoh :</span>

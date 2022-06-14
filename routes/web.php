@@ -1,13 +1,17 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ClasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\KeyController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TestController;
 use App\Models\Key;
 use App\Models\Question;
+use App\Models\Result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +56,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('tes/{competency:slug}/hasil/{id}', [TestController::class, 'showResult'])->name('test.result.show');
         Route::post('tes/{competency:slug}', [TestController::class, 'storeResult'])->name('test.store');
 
+        Route::get('hasil-tes-siswa', [TestController::class, 'studentResult'])->name('result');
+
         Route::post('execute', [TestController::class, 'execute'])->name('execute');
     });
 
@@ -61,35 +67,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('siswa', [DataController::class, 'student'])->name('student.index');
         Route::get('siswa/{id}', [DataController::class, 'studentShow'])->name('student.show');
-    });
 
-
-
-    // Pertanyaan
-    Route::get('pertanyaan', function () {
-        return view('pertanyaan');
-    });
-    Route::post('pertanyaan', function (Request $request) {
-        $images = array_filter($request->images, function ($val) {
-            return !!$val;
+        Route::group(['prefix' => '{competency:slug}'], function() {
+            Route::resource('pertanyaan', QuestionController::class);
+            Route::resource('pertanyaan/{question}/butir-jawaban', AnswerController::class);
         });
-        Question::create([
-            'competency_id' => $request->competency_id,
-            'description' => $request->description,
-            'image' => json_encode($images),
-        ]);
-        return redirect('/pertanyaan');
-    })->name('pertanyaan');
-
-    // Kunci
-    Route::get('kunci', function () {
-        return view('kunci');
+        Route::resource('{question}/butir-jawaban/{answer}/kunci-jawaban', KeyController::class);
     });
-    Route::post('kunci', function (Request $request) {
-        Key::create([
-            'answer_id' => $request->answer_id,
-            'detail' => $request->detail,
-        ]);
-        return redirect('/kunci');
-    })->name('kunci');
 });

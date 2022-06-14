@@ -14,5 +14,6 @@ class Competency extends Model
         'name',
         'slug',
         'description',
+        'subject',
     ];
 }

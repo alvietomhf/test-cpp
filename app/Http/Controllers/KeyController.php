@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Answer;
+use App\Models\Competency;
+use App\Models\Key;
+use App\Models\Question;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class TeacherController extends Controller
+class KeyController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Question $question, Answer $answer)
     {
-        $data = User::role('teacher')->get();
+        if ($answer->question->id !== $question->id) abort(404);
 
-        return view('teacher.index', compact('data'));
+        $data = Key::where('answer_id', $answer->id)->get();
+
+        return view('key.index', compact('data', 'question', 'answer'));
     }
 
     /**
@@ -27,9 +30,9 @@ class TeacherController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Question $question, Answer $answer)
     {
-        return view('teacher.create');
+        return view('key.create', compact('question', 'answer'));
     }
 
     /**
@@ -38,14 +41,11 @@ class TeacherController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Question $question, Answer $answer)
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'name' => 'required|string|min:2|max:50',
-            'username' => 'required|alpha_dash|min:2|max:50|unique:users,username',
-            'email' => 'nullable|string|email|unique:users,email',
-            'phone' => 'nullable|string|min:8|max:15|unique:users,phone',
+            'detail' => 'required|string|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -56,19 +56,18 @@ class TeacherController extends Controller
             ], 400);
         }
 
-        $data = User::create(array_merge(
+        Key::create(array_merge(
             $validator->validated(),
             [
-                'password' => Hash::make('password'),
+                'answer_id' => $answer->id,
             ]
         ));
-        $data->assignRole('teacher');
 
-        flash('Berhasil menambahkan guru')->success();
+        flash('Berhasil menambahkan kunci jawaban')->success();
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.guru.index'),
+            'url' => route('teacher.kunci-jawaban.index', [$question->id, $answer->id]),
         ]);
     }
 
@@ -89,11 +88,11 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Question $question, Answer $answer, $id)
     {
-        $data = User::find($id);
+        $data = Key::find($id);
 
-        return view('teacher.edit', compact('data'));
+        return view('key.edit', compact('data', 'question', 'answer'));
     }
 
     /**
@@ -103,23 +102,19 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Question $question, Answer $answer, $id)
     {
-        $user = User::find($id);
-        if (!$user) {
+        $key = Key::find($id);
+        if (!$key) {
             return response()->json([
                 'status' => false,
                 'message' => 'Data not found',
             ], 404);
-        }   
+        }
 
         $input = $request->all();
         $validator = Validator::make($input, [
-            'name' => 'required|string|min:2|max:50',
-            'username' => 'required|alpha_dash|min:2|max:50|unique:users,username,' . $id,
-            'email' => 'nullable|string|email|unique:users,email,' . $id,
-            'phone' => 'nullable|string|min:8|max:15|unique:users,phone,' . $id,
-            'password' => 'nullable|string|min:6|confirmed',
+            'detail' => 'required|string|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -130,20 +125,13 @@ class TeacherController extends Controller
             ], 400);
         }
 
-        $password = $request->password ? Hash::make($request->password) : $user->password;
+        $key->update($validator->validated());
 
-        $user->update(array_merge(
-            $validator->validated(),
-            [
-                'password' => $password,
-            ]
-        ));
-
-        flash('Berhasil mengedit guru')->success();
+        flash('Berhasil mengedit kunci jawaban')->success();
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.guru.index'),
+            'url' => route('teacher.kunci-jawaban.index', [$question->id, $answer->id]),
         ]);
     }
 
@@ -153,34 +141,28 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Question $question, Answer $answer, $id)
     {
         try {
-            $user = User::find($id);
-            if (!$user) {
+            $key = Key::find($id);
+            if (!$key) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Data not found',
                 ], 404);
             }
 
-            if ($user->avatar) {
-                if (Storage::exists('public/images/' . $user->avatar)) {
-                    Storage::delete('public/images/' . $user->avatar);
-                }
-            }
-
-            $user->delete();
+            $key->delete();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil menghapus guru',
-                'url' => route('admin.guru.index'),
+                'message' => 'Berhasil menghapus kunci jawaban',
+                'url' => route('teacher.kunci-jawaban.index', [$question->id, $answer->id]),
             ]);
         } catch(\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal menghapus guru',
+                'message' => 'Gagal menghapus kunci jawaban',
             ]);
         }
     }

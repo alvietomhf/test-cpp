@@ -13,7 +13,8 @@ class Question extends Model
         'competency_id',
         'description',
         'image',
-        'minute',
+        'duration',
+        'input',
     ];
 
     public function competency()

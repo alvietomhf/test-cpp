@@ -41,6 +41,8 @@
     <link rel="stylesheet" href="{{ asset('assets/codemirror/theme/dracula.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/codemirror/theme/solarized.css') }}">
     <!-- END: Custom CSS-->
+    
+    @yield('css')
 
 </head>
 <!-- END: Head-->
