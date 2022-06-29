@@ -10,8 +10,8 @@
     <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
     <title>UJI KOMPETENSI C++ | SMK NEGERI 2 SURABAYA</title>
-    <link rel="apple-touch-icon" href="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo/smekda.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo/smekda.png') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
@@ -57,7 +57,7 @@
                             <div class="card m-0" style="width: 100%;height: 400px;">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">
-                                        <div class="p-0"><img src="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png" alt="branding logo"></div>
+                                        <div class="p-0"><img src="{{ asset('assets/images/logo/smekda.png') }}" alt="branding logo"></div>
                                     </div>
                                 </div>
                                 <div class="card-content">

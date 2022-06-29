@@ -11,8 +11,8 @@
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>UJI KOMPETENSI C++ | SMK NEGERI 2 SURABAYA</title>
-    <link rel="apple-touch-icon" href="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo/smekda.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo/smekda.png') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
 
     <script src="//cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>

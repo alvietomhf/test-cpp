@@ -7,7 +7,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="navbar-brand" href="{{ route('dashboard') }}">
-                        <img class="brand-logo" alt="modern admin logo" src="https://web.smkn2sby.sch.id/media_library/images/9e5ee45a4329a84c0cb25c2b0c7fae8e.png">
+                        <img class="brand-logo" alt="modern admin logo" src="{{ asset('assets/images/logo/smekda.png') }}">
                         <h3 class="brand-text font-weight-bold">SMEKDA</h3>
                     </a>
                 </li>
