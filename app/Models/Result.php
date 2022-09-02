@@ -14,7 +14,10 @@ class Result extends Model
         'user_id',
         'competency_id',
         'score',
+        'real_score',
+        'trial_reduction',
         'passed',
+        'attempt',
     ];
 
     public function getCreatedAtAttribute($date)
