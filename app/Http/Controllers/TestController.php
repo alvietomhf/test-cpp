@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TestController extends Controller
 {
@@ -76,17 +77,27 @@ class TestController extends Controller
     public function storeResult(Request $request, Competency $competency)
     {
         try {
+            $count = Result::where([
+                                'user_id' => auth()->user()->id,
+                                'competency_id' => $competency->id,
+                            ])
+                            ->count();
+
             $data = $request->data;
             $totalQuestion = 3;
             $failedScore = 30;
             $score = 0;
             $passed = 0;
+            $attempt = $count + 1;
+            $trialReduction = $count * 2;
 
             DB::beginTransaction();
 
             $result = Result::create([
                 'user_id' => auth()->user()->id,
                 'competency_id' => $competency->id,
+                'trial_reduction' => $trialReduction,
+                'attempt' => $attempt,
             ]);
 
             foreach ($data as $key => $dataValue) {
@@ -141,9 +152,15 @@ class TestController extends Controller
             }
 
             $score = round($score / $totalQuestion);
+            $realScore = $score;
+
+            if ($count) $score = $realScore - $trialReduction;
+            // Log::info('Score : ' . $score);
+            // Log::info('Realscore : ' . $realScore);
 
             if ($score >= 75) {
                 $passed = 1;
+                $nextCompetencyId = $competency->id + 1;
 
                 Progress::where([
                             'user_id' => auth()->user()->id,
@@ -154,7 +171,7 @@ class TestController extends Controller
                 if ($competency->id < 4) {
                     Progress::where([
                                 'user_id' => auth()->user()->id,
-                                'competency_id' => $competency->id + 1,
+                                'competency_id' => $nextCompetencyId,
                             ])
                             ->update(['status' => 'unlock']);
                 }
@@ -162,6 +179,7 @@ class TestController extends Controller
 
             $result->update([
                 'score' => $score,
+                'real_score' => $realScore,
                 'passed' => $passed,
             ]);
 
@@ -233,7 +251,27 @@ class TestController extends Controller
                     ->withCount('resultDetails')
                     ->first();
 
-        return view('test.result-show', compact('data'));
+        return view('test.result-show', compact('data', 'competency'));
+    }
+
+    public function downloadResultPdf(Competency $competency, $id)
+    {
+        $data = Result::where([
+                        'id' => $id,
+                        'user_id' => auth()->user()->id,
+                    ])
+                    ->with([
+                        'resultDetails',
+                        'resultDetails.resultDetailAnswers',
+                        'resultDetails.resultDetailAnswers.answer',
+                        'resultDetails.question',
+                    ])
+                    ->withCount('resultDetails')
+                    ->first();
+                    
+        $filename = 'Hasil ' . $competency->title . ' (' . $data->attempt . ') - ' . auth()->user()->username . '.pdf';
+        $pdf = Pdf::loadView('test.result-download', compact('data', 'competency'));
+        return $pdf->download($filename);
     }
 
     public function studentResult()

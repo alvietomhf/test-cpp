@@ -10,13 +10,13 @@
             <div class="row">
                 @foreach ($data->resultDetails as $value)
                 <div class="col-12">
-                    <p class="h4 font-weight-bold">Soal {{ $loop->iteration }}</p>
+                    <p><span class="h4 font-weight-bold bg-yellow rounded" style="padding: 5px">Soal {{ $loop->iteration }}</span></p>
                     <div>
                         {!! $value->question->description ?? '' !!}
                     </div>
                     <hr>
                     <div>
-                        <p class="bg-info text-white text-center px-2" style="padding: 3px 0px;">Code Siswa</p>
+                        <p class="bg-info text-white text-center px-2 rounded" style="padding: 3px 0px;">Code Siswa</p>
                         <p class="mt-n2 px-2" style="white-space: pre-line;">
                             {{ $value->answer ?? '' }}
                         </p>
@@ -33,7 +33,7 @@
                     </p>
                     <hr>
                     <div>
-                        <p class="bg-info text-white text-center px-2" style="padding: 3px 0px;">Hasil Analisis Jawaban</p>
+                        <p class="bg-info text-white text-center px-2 rounded" style="padding: 3px 0px;">Hasil Analisis Jawaban</p>
                         <ul>
                             @foreach ($value->resultDetailAnswers as $val)
                             <li>{{ $val->answer->description }} <span style="color: {{ $val->correct ? 'green' : 'red' }};">{{ $val->correct ? 'Benar' : 'Salah' }}</span></li>
@@ -41,7 +41,7 @@
                         </ul>
                     </div>
                     @if ($loop->iteration !== $data->result_details_count)
-                    <div class="divider bg-dark"><hr></div>
+                    <hr style="border: none; height: 3px; background-color: black">
                     @endif
                 </div>
                 @endforeach
