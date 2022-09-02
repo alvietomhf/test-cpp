@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('tes/{competency:slug}/started', [TestController::class, 'start'])->name('test.start');
         Route::get('tes/{competency:slug}/hasil', [TestController::class, 'result'])->name('test.result');
         Route::get('tes/{competency:slug}/hasil/{id}', [TestController::class, 'showResult'])->name('test.result.show');
+        Route::get('tes/{competency:slug}/hasil/{id}/pdf', [TestController::class, 'downloadResultPdf'])->name('test.result.download');
         Route::post('tes/{competency:slug}', [TestController::class, 'storeResult'])->name('test.store');
 
         Route::get('hasil-tes-siswa', [TestController::class, 'studentResult'])->name('result');
