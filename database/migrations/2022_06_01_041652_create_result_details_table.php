@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('result_id')->constrained('results')->onDelete('cascade');
             $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
             $table->longText('answer');
+            $table->longText('output')->nullable();
+            $table->boolean('is_output_match')->nullable();
             $table->integer('score')->default(0);
             $table->timestamps();
         });

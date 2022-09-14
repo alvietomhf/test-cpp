@@ -13,15 +13,8 @@
                     <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description"></textarea>
                 </fieldset>
                 <fieldset class="form-group floating-label-form-group">
-                    <label for="input">Input</label>
-                    <label class="d-block">
-                        <input type="radio" name="input" id="input" value="true">
-                        Ya
-                    </label>
-                    <label class="d-block">
-                        <input type="radio" name="input" id="input" value="false" checked>
-                        Tidak
-                    </label>
+                    <label for="output">Output</label>
+                    <textarea class="form-control" id="output" name="output" rows="5" placeholder="Output"></textarea>
                 </fieldset>
                 <fieldset class="form-group floating-label-form-group">
                     <label for="image">Gambar Output</label>

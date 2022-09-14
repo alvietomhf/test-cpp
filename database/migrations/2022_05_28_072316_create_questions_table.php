@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('competency_id')->constrained('competencies')->onDelete('cascade');
             $table->longText('description');
             $table->json('image');
+            $table->longText('output');
             $table->integer('duration')->default(20);
             $table->timestamps();
         });

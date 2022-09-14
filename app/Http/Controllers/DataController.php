@@ -27,7 +27,11 @@ class DataController extends Controller
         $result = Result::where([
                         'user_id' => $id,
                     ])
-                    ->with('competency')
+                    ->with([
+                        'user',
+                        'user.clas',
+                        'competency',
+                    ])
                     ->orderBy('created_at', 'desc')
                     ->get();
 

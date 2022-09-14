@@ -51,26 +51,21 @@
                 <span class="d-block font-italic ml-1">int harga;</span>
                 <span class="d-block font-italic ml-1">int bayar;</span>
             </li>
-            <li>Gunakan tanda kutip dua (") untuk penulisan string, jangan menggunakan kutip satu (').</li>
-            <li>
-                Untuk memasukkan input gunakan perintah cin.
-                <span class="d-block">Contoh :</span>
-                <span class="d-block font-italic ml-1">{{ 'cin>>bayar;' }}</span>
-            </li>
+            <li>Gunakan tanda kutip dua (") untuk penulisan string, dan kutip satu (') untuk penulisan char.</li>
             <li>
                 Untuk menampilkan output gunakan perintah cout.
                 <span class="d-block">Contoh :</span>
-                <span class="d-block font-italic ml-1">cout<<"Output";</span>
-                <span class="d-block font-italic ml-1">{{ 'cout<<"Jumlah = " << jumlah;' }}</span>
+                <span class="d-block font-italic ml-1">cout << "Output";</span>
+                <span class="d-block font-italic ml-1">{{ 'cout << "Jumlah = " << jumlah;' }}</span>
             </li>
             <li>
                 Untuk membuat baris baru gunakan perintah endl secara terpisah dibaris selanjutnya.
                 <span class="d-block">Contoh :</span>
                 <img class="d-block" src="{{ asset('assets/images/term/endl.png') }}" alt="Endl">
                 <span class="d-block">Untuk menghasilkan output seperti gambar diatas, berikut kodenya</span>
-                <span class="d-block font-italic ml-1">{{ 'cout<<"Jumlah = " << jumlah;' }}</span>
-                <span class="d-block font-italic ml-1">{{ 'cout<<endl;' }}</span>
-                <span class="d-block font-italic ml-1">{{ 'cout<<"Harga = " << harga;' }}</span>
+                <span class="d-block font-italic ml-1">{{ 'cout << "Jumlah = " << jumlah;' }}</span>
+                <span class="d-block font-italic ml-1">{{ 'cout << endl;' }}</span>
+                <span class="d-block font-italic ml-1">{{ 'cout << "Harga = " << harga;' }}</span>
 
             </li>
         </ol>

@@ -13,6 +13,7 @@ class Question extends Model
         'competency_id',
         'description',
         'image',
+        'output',
         'duration',
         'input',
     ];
@@ -25,5 +26,10 @@ class Question extends Model
     public function answers()
     {
         return $this->hasMany(Answer::class);
+    }
+
+    public function descriptions()
+    {
+        return $this->hasMany(Description::class);
     }
 }

@@ -83,7 +83,10 @@
                                     <td class="align-middle">{{ $value->competency->title }}</td>
                                     <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                     <td class="align-middle">{{ $value->score ?? '0' }}/100<span style="display: block; color: {{ $value->passed ? 'green' : 'red' }};">{{ $value->passed ? '(Lulus)' : '(Tidak Lulus)' }}</span></td>
-                                    <td class="align-middle"><button type="button" class="btn btn-info btn-modal rounded" data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}" data-container=".app-modal">Lihat Hasil Tes</button></td>
+                                    <td class="align-middle">
+                                        <button type="button" class="btn btn-info btn-modal rounded" data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}" data-container=".app-modal">Lihat Hasil Tes</button>
+                                        <button type="button" class="btn btn-warning btn-modal rounded" onclick="window.location.href = this.dataset.href" data-href="{{ route('teacher.test.result.download', [$value->competency->slug, $value->user->id, $value->id]) }}">Download Hasil Tes</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

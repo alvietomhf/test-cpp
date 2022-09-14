@@ -17,7 +17,14 @@ class QuestionController extends Controller
      */
     public function index(Competency $competency)
     {
-        $data = Question::where('competency_id', $competency->id)->get();
+        $data = Question::where('competency_id', $competency->id)
+                        ->with([
+                            'descriptions',
+                            'descriptions.firstAnswers',
+                            'descriptions.firstAnswers.secondAnswers',
+                            'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                        ])
+                        ->get();
 
         return view('question.index', compact('data', 'competency'));
     }
@@ -44,7 +51,7 @@ class QuestionController extends Controller
         $validator = Validator::make($input, [
             'description' => 'required|string|min:10',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'input' => 'required',
+            'output' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -61,14 +68,12 @@ class QuestionController extends Controller
         }
 
         $images = [$image];
-        $input = $request->input === 'true' ? 1 : 0;
 
         Question::create(array_merge(
             $validator->validated(),
             [
                 'competency_id' => $competency->id,
                 'image' => json_encode($images),
-                'input' => $input,
             ]
         ));
 
@@ -125,7 +130,7 @@ class QuestionController extends Controller
         $validator = Validator::make($input, [
             'description' => 'required|string|min:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'input' => 'required',
+            'output' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -148,13 +153,11 @@ class QuestionController extends Controller
         }
 
         $images = [$image];
-        $input = $request->input === 'true' ? 1 : 0;
 
         $question->update(array_merge(
             $validator->validated(),
             [
                 'image' => json_encode($images),
-                'input' => $input,
             ]
         ));
 

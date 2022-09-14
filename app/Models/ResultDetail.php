@@ -13,6 +13,8 @@ class ResultDetail extends Model
         'result_id',
         'question_id',
         'answer',
+        'output',
+        'is_output_match',
         'score',
         'timeup',
         'is_timeup',
@@ -32,5 +34,10 @@ class ResultDetail extends Model
     public function resultDetailAnswers()
     {
         return $this->hasMany(ResultDetailAnswer::class);
+    }
+
+    public function resultDescriptions()
+    {
+        return $this->hasMany(ResultDescription::class);
     }
 }

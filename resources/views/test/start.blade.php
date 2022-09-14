@@ -30,8 +30,30 @@
                     <p class="">waktu tersisa : <span class="timer">20 menit 0 detik</span></p>
                 </div>
                 <div class="mt-2">
-                    {!! $value->description !!}
-                    <p>{{ $value->input ? 'Contoh output sebagai berikut :' : 'Sehingga menghasilkan output sebagai berikut :' }}</p>
+                    <div class="font-weight-bold">{!! $value->description !!}</div>
+                    @foreach ($value->descriptions as $description)
+                        {{ $description->detail }}
+                        <ul>
+                            @foreach ($description->firstAnswers as $firstAnswer)
+                                <li>{{ $firstAnswer->detail }}</li>
+                                @if($firstAnswer->nested)
+                                    <ul>
+                                        @foreach ($firstAnswer->secondAnswers as $secondAnswer)
+                                            <li>{{ $secondAnswer->detail }}</li>
+                                            @if($secondAnswer->nested)
+                                                <ul>
+                                                    @foreach ($secondAnswer->thirdAnswers as $thirdAnswer)
+                                                        <li>{{ $thirdAnswer->detail }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            @endforeach
+                        </ul> 
+                    @endforeach
+                    <p>Output sebagai berikut :</p>
                     <img src="{{ asset('storage/images/' . json_decode($value->image)[0]) }}" alt="Output Question" style="width: 230px; height: 130px;">
                 </div>
             </div>
@@ -110,6 +132,7 @@
             results[i] = CodeMirror.fromTextArea($(textResult[i])[0], {
                 readOnly: true,
             });
+            results[i].on("change", result => { result.save() });
             results[i].setOption('placeholder', 'Hasil running akan keluar disini.');
             results[i].setSize(null, 200);
         }
@@ -155,11 +178,13 @@
                                         const id = x[i].dataset.question;
                                         const time = timeDurationArr[i];
                                         const script = editor.getValue();
+                                        const result = results[i].getValue();
                                         const success = successEl[i].value;
 
                                         return {
                                             id,
                                             script,
+                                            result,
                                             time,
                                             success,
                                         };
@@ -266,11 +291,13 @@
                                 const id = x[i].dataset.question;
                                 const time = timeDurationArr[i];
                                 const script = editor.getValue();
+                                const result = results[i].getValue();
                                 const success = successEl[i].value;
 
                                 return {
                                     id,
                                     script,
+                                    result,
                                     time,
                                     success,
                                 };

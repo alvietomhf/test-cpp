@@ -6,9 +6,14 @@ use App\Models\Answer;
 use App\Models\Competency;
 use App\Models\Progress;
 use App\Models\Question;
+use App\Models\RdFirstAnswer;
+use App\Models\RdSecondAnswer;
+use App\Models\RdThirdAnswer;
 use App\Models\Result;
+use App\Models\ResultDescription;
 use App\Models\ResultDetail;
 use App\Models\ResultDetailAnswer;
+use App\Models\User;
 use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
@@ -69,7 +74,17 @@ class TestController extends Controller
             return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
-        $data = Question::where('competency_id', $competency->id)->get()->shuffle()->take(3);
+        $totalQuestion = $competency->id === 3 ? 4 : 3;
+        $data = Question::where('competency_id', $competency->id)
+                        ->with([
+                            'descriptions',
+                            'descriptions.firstAnswers',
+                            'descriptions.firstAnswers.secondAnswers',
+                            'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                        ])
+                        ->get()
+                        ->shuffle()
+                        ->take($totalQuestion);
 
         return view('test.start', compact('data', 'competency'));
     }
@@ -84,7 +99,7 @@ class TestController extends Controller
                             ->count();
 
             $data = $request->data;
-            $totalQuestion = 3;
+            $totalQuestion = $competency->id === 3 ? 4 : 3;
             $failedScore = 30;
             $score = 0;
             $passed = 0;
@@ -101,46 +116,113 @@ class TestController extends Controller
             ]);
 
             foreach ($data as $key => $dataValue) {
-                $question = Question::where('id', $dataValue['id'])->with(['answers', 'answers.keys'])->first();
+                $question = Question::where('id', $dataValue['id'])
+                                ->with([
+                                    'descriptions',
+                                    'descriptions.firstAnswers',
+                                    'descriptions.firstAnswers.firstKeys',
+                                    'descriptions.firstAnswers.secondAnswers',
+                                    'descriptions.firstAnswers.secondAnswers.secondKeys',
+                                    'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                                    'descriptions.firstAnswers.secondAnswers.thirdAnswers.thirdKeys',
+                                ])
+                                ->first();
 
                 $script = $dataValue['script'] ?? 'Tidak ada code';
                 $script = preg_replace('/\s+/', '', trim($script));
                 $script = strtolower($script);
+                $output = $dataValue['result'] ?? 'Tidak ada output';
+                $output = preg_replace('/\s+/', '', trim($output));
+                $output = strtolower($output);
+
+                // Log::info('script: '. $script);
+                // Log::info('output: '. $output);
+
                 $is_timeup = $dataValue['time']['isTimeUp'] === "true" ? 1 : 0;
                 $is_success = $dataValue['success'] === "true" ? 1 : 0;
 
                 $questionScore = 0;
 
-                // Log::info('script: '. $script);
+                $isOutputMatch = false;
+
+                $outputDetail = preg_replace('/\s+/', '', trim($question->output));
+                $outputDetail = strtolower($outputDetail);
+                // Log::info('outputDetail: '. $outputDetail);
+
+                if (strcmp($outputDetail, $output) === 0) $isOutputMatch = true;
 
                 $resultDetail = ResultDetail::create([
                     'result_id' => $result->id,
                     'question_id' => $question->id,
                     'answer' => $dataValue['script'] ?? 'Tidak ada code',
+                    'output' => $dataValue['result'] ?? 'Tidak ada output',
+                    'is_output_match' => $isOutputMatch,
                     'timeup' => +$dataValue['time']['timeUp'],
                     'is_timeup' => $is_timeup,
                     'is_success' => $is_success,
                 ]);
 
-                foreach ($question->answers as $key => $answer) {
-                    // Log::info('answerid: '. $answer->id);
-
-                    $resultDetailAnswer = ResultDetailAnswer::create([
+                foreach ($question->descriptions as $key => $description) {
+                    $resultDescription = ResultDescription::create([
                         'result_detail_id' => $resultDetail->id,
-                        'answer_id' => $answer->id,
+                        'description_id' => $description->id,
                     ]);
 
-                    foreach ($answer->keys as $key => $keyValue) {
-                        $detail = preg_replace('/\s+/', '', trim($keyValue->detail));
-                        $detail = strtolower($detail);
+                    foreach ($description->firstAnswers as $key => $firstAnswer) {
+                        $rdFirstAnswer = RdFirstAnswer::create([
+                            'result_description_id' => $resultDescription->id,
+                            'first_answer_id' => $firstAnswer->id,
+                        ]);
 
-                        // Log::info('keyid: '. $keyValue->id);
-                        // Log::info('detail: '. $detail);
+                        foreach ($firstAnswer->firstKeys as $key => $firstKey) {
+                            $firstDetail = preg_replace('/\s+/', '', trim($firstKey->detail));
+                            $firstDetail = strtolower($firstDetail); 
 
-                        if (str_contains($script, $detail)) {
-                            $resultDetailAnswer->update(['correct' => 1]);
-                            $questionScore += $answer->score;
-                            break;
+                            if (str_contains($script, $firstDetail)) {
+                                $rdFirstAnswer->update(['correct' => 1]);
+                                $questionScore += $firstAnswer->score;
+                                break;
+                            }
+                        }
+
+                        if ($firstAnswer->nested) {
+                            foreach ($firstAnswer->secondAnswers as $key => $secondAnswer) {
+                                $rdSecondAnswer = RdSecondAnswer::create([
+                                    'rdfirst_answer_id' => $rdFirstAnswer->id,
+                                    'second_answer_id' => $secondAnswer->id,
+                                ]);
+
+                                foreach ($secondAnswer->secondKeys as $key => $secondKey) {
+                                    $secondDetail = preg_replace('/\s+/', '', trim($secondKey->detail));
+                                    $secondDetail = strtolower($secondDetail); 
+        
+                                    if (str_contains($script, $secondDetail)) {
+                                        $rdSecondAnswer->update(['correct' => 1]);
+                                        $questionScore += $secondAnswer->score;
+                                        break;
+                                    }
+                                }
+
+                                if ($secondAnswer->nested) {
+                                    foreach ($secondAnswer->thirdAnswers as $key => $thirdAnswer) {
+                                        $rdThirdAnswer = RdThirdAnswer::create([
+                                            'rdsecond_answer_id' => $rdSecondAnswer->id,
+                                            'third_answer_id' => $thirdAnswer->id,
+                                        ]);
+
+                                        foreach ($thirdAnswer->thirdKeys as $key => $thirdKey) {
+                                            $thirdDetail = preg_replace('/\s+/', '', trim($thirdKey->detail));
+                                            $thirdDetail = strtolower($thirdDetail); 
+                
+                                            if (str_contains($script, $thirdDetail)) {
+                                                $rdThirdAnswer->update(['correct' => 1]);
+                                                $questionScore += $thirdAnswer->score;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -244,11 +326,16 @@ class TestController extends Controller
                     ])
                     ->with([
                         'resultDetails',
-                        'resultDetails.resultDetailAnswers',
-                        'resultDetails.resultDetailAnswers.answer',
+                        'resultDetails.resultDescriptions',
+                        'resultDetails.resultDescriptions.description',
+                        'resultDetails.resultDescriptions.rdFirstAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer',
                         'resultDetails.question',
                     ])
-                    ->withCount('resultDetails')
                     ->first();
 
         return view('test.result-show', compact('data', 'competency'));
@@ -262,14 +349,45 @@ class TestController extends Controller
                     ])
                     ->with([
                         'resultDetails',
-                        'resultDetails.resultDetailAnswers',
-                        'resultDetails.resultDetailAnswers.answer',
+                        'resultDetails.resultDescriptions',
+                        'resultDetails.resultDescriptions.description',
+                        'resultDetails.resultDescriptions.rdFirstAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer',
                         'resultDetails.question',
                     ])
-                    ->withCount('resultDetails')
                     ->first();
                     
         $filename = 'Hasil ' . $competency->title . ' (' . $data->attempt . ') - ' . auth()->user()->username . '.pdf';
+        $pdf = Pdf::loadView('test.result-download', compact('data', 'competency'));
+        return $pdf->download($filename);
+    }
+
+    public function teacherDownloadResultPdf(Competency $competency, $userId, $id)
+    {
+        $user = User::find($userId);
+        $data = Result::where([
+                        'id' => $id,
+                        'user_id' => $user->id,
+                    ])
+                    ->with([
+                        'resultDetails',
+                        'resultDetails.resultDescriptions',
+                        'resultDetails.resultDescriptions.description',
+                        'resultDetails.resultDescriptions.rdFirstAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer',
+                        'resultDetails.question',
+                    ])
+                    ->first();
+                    
+        $filename = 'Hasil ' . $competency->title . ' (' . $data->attempt . ') - ' . $user->username . '.pdf';
         $pdf = Pdf::loadView('test.result-download', compact('data', 'competency'));
         return $pdf->download($filename);
     }

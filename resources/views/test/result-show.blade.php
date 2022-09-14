@@ -7,17 +7,53 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="row">
+            <div class="row px-2 mb-n2">
                 @foreach ($data->resultDetails as $value)
-                <div class="col-12">
-                    <p><span class="h4 font-weight-bold bg-yellow rounded" style="padding: 5px">Soal {{ $loop->iteration }}</span></p>
-                    <div>
-                        {!! $value->question->description ?? '' !!}
-                    </div>
+                <div class="col-12 border border-info p-1 mb-2">
+                    <p><span class="h4 font-weight-bold rounded">Soal {{ $loop->iteration }}</span></p>
+                    <p class="bg-info text-white font-weight-medium text-center px-2 rounded" style="padding: 3px 0px;">Analisis</p>
+                    <div class="font-weight-bold">{!! $value->question->description !!}</div>
+                    @foreach ($value->resultDescriptions as $resultDescription)
+                        {{ $resultDescription->description->detail }}
+                        <ul>
+                            @foreach ($resultDescription->rdFirstAnswers as $rdFirstAnswer)
+                                <li>
+                                    {{ $rdFirstAnswer->firstAnswer->detail }}
+                                    <span class="ml-1" style="color: {{ $rdFirstAnswer->correct ? 'green' : 'red' }};">
+                                        {{ $rdFirstAnswer->correct ? '(Benar)' : '(Salah)' }}
+                                    </span>
+                                </li>
+                                @if($rdFirstAnswer->firstAnswer->nested)
+                                    <ul>
+                                        @foreach ($rdFirstAnswer->rdSecondAnswers as $rdSecondAnswer)
+                                            <li>
+                                                {{ $rdSecondAnswer->secondAnswer->detail }}
+                                                <span class="ml-1" style="color: {{ $rdSecondAnswer->correct ? 'green' : 'red' }};">
+                                                    {{ $rdSecondAnswer->correct ? '(Benar)' : '(Salah)' }}
+                                                </span>
+                                            </li>
+                                            @if($rdSecondAnswer->secondAnswer->nested)
+                                                <ul>
+                                                    @foreach ($rdSecondAnswer->rdThirdAnswers as $rdThirdAnswer)
+                                                        <li>
+                                                            {{ $rdThirdAnswer->thirdAnswer->detail }}
+                                                            <span class="ml-1" style="color: {{ $rdThirdAnswer->correct ? 'green' : 'red' }};">
+                                                                {{ $rdThirdAnswer->correct ? '(Benar)' : '(Salah)' }}
+                                                            </span>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            @endforeach
+                        </ul> 
+                    @endforeach
                     <hr>
                     <div>
-                        <p class="bg-info text-white text-center px-2 rounded" style="padding: 3px 0px;">Code Siswa</p>
-                        <p class="mt-n2 px-2" style="white-space: pre-line;">
+                        <p class="bg-info text-white font-weight-medium text-center px-2 rounded" style="padding: 3px 0px;">Code Siswa</p>
+                        <p class="mt-n2 px-2" style="white-space: pre-wrap;">
                             {{ $value->answer ?? '' }}
                         </p>
                     </div>
@@ -29,20 +65,9 @@
                         @endphp
                         Code siswa dikerjakan dalam <span class="text-info">{{ $minutes }} menit {{ $seconds }} detik</span>
                         <span class="d-block">Hasil Running Code : <span style="color: {{ $value->is_success ? 'green' : 'red' }};">{{ $value->is_success ? 'SUKSES' : 'GAGAL' }}</span></span>
+                        <span class="d-block">Output Sesuai : <span style="color: {{ $value->is_output_match ? 'green' : 'red' }};">{{ $value->is_output_match ? 'YA' : 'TIDAK' }}</span></span>
                         <span class="d-block">Waktu Habis : <span style="color: {{ $value->is_timeup ? 'red' : 'green' }};">{{ $value->is_timeup ? 'YA' : 'TIDAK' }}</span></span>
                     </p>
-                    <hr>
-                    <div>
-                        <p class="bg-info text-white text-center px-2 rounded" style="padding: 3px 0px;">Hasil Analisis Jawaban</p>
-                        <ul>
-                            @foreach ($value->resultDetailAnswers as $val)
-                            <li>{{ $val->answer->description }} <span style="color: {{ $val->correct ? 'green' : 'red' }};">{{ $val->correct ? 'Benar' : 'Salah' }}</span></li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @if ($loop->iteration !== $data->result_details_count)
-                    <hr style="border: none; height: 3px; background-color: black">
-                    @endif
                 </div>
                 @endforeach
             </div>

@@ -25,6 +25,7 @@
                                         <th style="text-align: center;">No</th>
                                         <th style="text-align: center;">Deskripsi</th>
                                         <th style="text-align: center;">Output</th>
+                                        <th style="text-align: center;">Gambar</th>
                                         <th style="text-align: center;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -32,10 +33,35 @@
                                     @foreach ($data as $key => $value)
                                     <tr>
                                         <td style="text-align: center;">{{ $loop->iteration }}</td>
-                                        <td>{!! $value->description ?? '' !!}</td>
+                                        <td>
+                                            <div class="font-weight-bold">{!! $value->description !!}</div>
+                                            @foreach ($value->descriptions as $description)
+                                                {{ $description->detail }}
+                                                <ul>
+                                                    @foreach ($description->firstAnswers as $firstAnswer)
+                                                        <li>{{ $firstAnswer->detail }}</li>
+                                                        @if($firstAnswer->nested)
+                                                            <ul>
+                                                                @foreach ($firstAnswer->secondAnswers as $secondAnswer)
+                                                                    <li>{{ $secondAnswer->detail }}</li>
+                                                                    @if($secondAnswer->nested)
+                                                                        <ul>
+                                                                            @foreach ($secondAnswer->thirdAnswers as $thirdAnswer)
+                                                                                <li>{{ $thirdAnswer->detail }}</li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    @endif
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    @endforeach
+                                                </ul> 
+                                            @endforeach
+                                        </td>
+                                        <td><div style="white-space: pre-line">{{ $value->output }}</div></td>
                                         <td style="text-align: center;"><img src="{{ asset('storage/images/'. json_decode($value->image)[0]) }}" alt="Image" width="150px"></td>
                                         <td>
-                                            <a href="{{ route('teacher.butir-jawaban.index', [$competency->slug, $value->id]) }}" class="btn btn-primary btn-sm"><i class="ft-eye"></i> Butir Jawaban</a>
+                                            <a href="{{ route('teacher.keterangan.index', [$competency->slug, $value->id]) }}" class="btn btn-primary btn-sm"><i class="ft-eye"></i> Keterangan</a>
                                             <button data-href="{{ route('teacher.pertanyaan.edit', [$competency->slug, $value->id]) }}" data-container=".app-modal"  class="btn btn-success btn-sm btn-modal"><i class="ft-edit-2"></i> Ubah</button>
                                             <button data-href="{{ route('teacher.pertanyaan.destroy', [$competency->slug, $value->id]) }}" class="btn btn-danger btn-sm btn-delete"><i class="ft-trash-2"></i> Hapus</button> 
                                         </td>
