@@ -101,6 +101,7 @@ class TestController extends Controller
             $data = $request->data;
             $totalQuestion = $competency->id === 3 ? 4 : 3;
             $failedScore = 30;
+            $failedOutput = 10;
             $score = 0;
             $passed = 0;
             $attempt = $count + 1;
@@ -228,6 +229,7 @@ class TestController extends Controller
                 }
 
                 $questionScore = $is_success ? $questionScore : ($questionScore - $failedScore);
+                $questionScore = $isOutputMatch ? $questionScore : ($questionScore - $failedOutput);
                 $questionScore = max($questionScore, 0);
                 $resultDetail->update(['score' => $questionScore]);
                 $score += $questionScore;
