@@ -244,21 +244,21 @@ class TestController extends Controller
 
             if ($score >= 75) {
                 $passed = 1;
-                $nextCompetencyId = $competency->id + 1;
+                // $nextCompetencyId = $competency->id + 1;
 
-                Progress::where([
-                            'user_id' => auth()->user()->id,
-                            'competency_id' => $competency->id,
-                        ])
-                        ->update(['status' => 'passed']);
+                // Progress::where([
+                //             'user_id' => auth()->user()->id,
+                //             'competency_id' => $competency->id,
+                //         ])
+                //         ->update(['status' => 'passed']);
 
-                if ($competency->id < 4) {
-                    Progress::where([
-                                'user_id' => auth()->user()->id,
-                                'competency_id' => $nextCompetencyId,
-                            ])
-                            ->update(['status' => 'unlock']);
-                }
+                // if ($competency->id < 4) {
+                //     Progress::where([
+                //                 'user_id' => auth()->user()->id,
+                //                 'competency_id' => $nextCompetencyId,
+                //             ])
+                //             ->update(['status' => 'unlock']);
+                // }
             }
 
             $result->update([

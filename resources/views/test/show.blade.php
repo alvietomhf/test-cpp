@@ -25,9 +25,9 @@
     <div class="mb-3">
         <h3 class="font-weight-bold">Aturan atau Ketentuan Pelaksanaan Test</h3>
         <ol class="pl-1">
-            <li>Soal pada test Uji Kompetensi Pemrograman berjumlah 3 soal.</li>
+            <li>Soal pada test Uji Kompetensi Pemrograman berjumlah {{ $progress->competency->id === 3 ? 4 : 3 }} soal.</li>
             <li>Soal pada test Uji Kompetensi Pemrograman berbentuk live code.</li>
-            <li>Durasi test yaitu 60 menit (20 menit tiap soal).</li>
+            <li>Durasi test yaitu {{ $progress->competency->id === 3 ? '80' : '60' }} menit (20 menit tiap soal).</li>
             <li>Range skor Uji Kompetensi Pemrograman 0-100. Skor >= 75 dinyatakan lulus, sedangkan skor < 75 dinyatakan tidak lulus.</li>
             <li>Pastikan perangakat mendukung dan terhubung dengan jaringan internet.</li>
         </ol>
