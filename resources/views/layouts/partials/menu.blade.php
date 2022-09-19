@@ -73,6 +73,12 @@
                     <span class="menu-title">Hasil Tes</span>
                 </a>
             </li>
+            <li class=" nav-item">
+                <a href="{{ asset('assets/Contoh Penulisan Program.pdf') }}" target="_blank">
+                    <i class="la la-file-code-o"></i>
+                    <span class="menu-title">Panduan Penulisan</span>
+                </a>
+            </li>
             @php
             $progress = \App\Models\Progress::where('user_id', auth()->user()->id)
                             ->with('competency')
