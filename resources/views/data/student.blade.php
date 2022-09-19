@@ -16,7 +16,7 @@
                 <div class="card-content collapse show">
                     <div class="card-body card-dashboard">
                         <div class="table-responsive">
-                            <table class="table table-bordered zero-configuration">
+                            <table class="table table-bordered" id="table">
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
@@ -43,4 +43,12 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('js')
+    <script>
+        $('#table').dataTable( {
+            "order": [],
+        } );
+    </script>
 @endsection

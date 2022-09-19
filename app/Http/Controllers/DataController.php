@@ -15,7 +15,8 @@ class DataController extends Controller
     {
         $data = User::role('student')
                     ->with('clas')
-                    ->get();
+                    ->get()
+                    ->sortBy('clas.id');
 
         return view('data.student', compact('data'));
     }
