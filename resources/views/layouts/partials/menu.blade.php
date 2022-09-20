@@ -76,7 +76,13 @@
             <li class=" nav-item">
                 <a href="{{ asset('assets/Contoh Penulisan Program.pdf') }}" target="_blank">
                     <i class="la la-file-code-o"></i>
-                    <span class="menu-title">Panduan Penulisan</span>
+                    <span class="menu-title">Contoh Penulisan</span>
+                </a>
+            </li>
+            <li class=" nav-item">
+                <a href="{{ asset('assets/cpp_tutorial.pdf') }}" target="_blank">
+                    <i class="la la-book"></i>
+                    <span class="menu-title">Buku Tutorial</span>
                 </a>
             </li>
             @php
