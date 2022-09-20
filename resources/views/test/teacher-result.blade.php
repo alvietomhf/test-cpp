@@ -14,7 +14,7 @@
             <div class="card-content collapse show">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered zero-configuration">
+                        <table class="table table-striped table-bordered" id="table">
                             <thead>
                                 <tr>
                                     <th>Nama</th>
@@ -50,4 +50,12 @@
     </div>
 </div>
 <div class="modal app-modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"></div>
+@endsection
+
+@section('js')
+    <script>
+        $('#table').dataTable( {
+            "order": [],
+        } );
+    </script>
 @endsection
