@@ -26,7 +26,7 @@ class MhsSeeder extends Seeder
 
         for ($i = 1; $i <= $total; $i++) {
             $user = User::create([
-                'clas_id' => $testClas,
+                'clas_id' => $testClas->id,
                 'name' => 'Mahasiswa ' . $i,
                 'username' => 'mhstest' . $i,
                 'password' => Hash::make('password'),
