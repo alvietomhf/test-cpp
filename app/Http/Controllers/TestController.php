@@ -101,8 +101,8 @@ class TestController extends Controller
 
             $data = $request->data;
             $totalQuestion = $competency->id === 3 ? 4 : 3;
-            $failedScore = 30;
-            $failedOutput = 10;
+            $failedScore = 15;
+            $failedOutput = 15;
             $score = 0;
             $passed = 0;
             $attempt = $count + 1;
