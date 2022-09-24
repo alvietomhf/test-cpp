@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Clas;
 use App\Models\Competency;
 use App\Models\Progress;
 use App\Models\Question;
@@ -406,15 +407,24 @@ class TestController extends Controller
 
     public function teacherResult()
     {
+        $clas = Clas::all();
+
+        return view('test.teacher-result', compact('clas'));
+    }
+
+    public function teacherResultClas(Clas $clas)
+    {
         $result = Result::with([
                         'user',
-                        'user.clas',
                         'competency',
                     ])
+                    ->whereHas('user.clas', function ($q) use ($clas) {
+                        $q->where('id', $clas->id);
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        return view('test.teacher-result', compact('result'));
+        return view('test.teacher-resultcls', compact('result', 'clas'));
     }
 
     public function showTeacherResult(Competency $competency, $id)

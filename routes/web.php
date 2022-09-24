@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['as' => 'teacher.', 'middleware' => ['role:teacher']], function() {
         Route::get('hasil-tes', [TestController::class, 'teacherResult'])->name('result');
+        Route::get('hasil-tes/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
         Route::get('hasil-tes/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
         Route::get('tes/{competency:slug}/{userId}/hasil/{id}/pdf-guru', [TestController::class, 'teacherDownloadResultPdf'])->name('test.result.download');
 

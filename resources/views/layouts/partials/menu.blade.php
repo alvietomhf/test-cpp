@@ -36,7 +36,7 @@
                     <span class="menu-title">Siswa</span>
                 </a>
             </li>
-            <li class=" nav-item {{ request()->is('hasil-tes') ? ' active' : '' }}">
+            <li class=" nav-item {{ request()->is('hasil-tes*') ? ' active' : '' }}">
                 <a href="{{ route('teacher.result') }}">
                     <i class="la la-clipboard"></i>
                     <span class="menu-title">Hasil Tes</span>

@@ -5,57 +5,25 @@
 @endsection
 
 @section('content')
-<div class="row">
+<div class="row match-height">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="font-weight-bold">Hasil Tes Siswa</h4>
-            </div>
-            <div class="card-content collapse show">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="table">
-                            <thead>
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Kelas</th>
-                                    <th>Waktu</th>
-                                    <th>Tes</th>
-                                    <th>Percobaan</th>
-                                    <th>Nilai</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($result as $key => $value)
-                                <tr class="">
-                                    <td class="align-middle">{{ $value->user->name }}</td>
-                                    <td class="align-middle">{{ $value->user->clas->name }}</td>
-                                    <td class="align-middle">{{ $value->created_at }}</td>
-                                    <td class="align-middle">{{ $value->competency->title }}</td>
-                                    <td class="align-middle">Ke - {{ $value->attempt }}</td>
-                                    <td class="align-middle">{{ $value->score ?? '0' }}/100<span style="display: block; color: {{ $value->passed ? 'green' : 'red' }};">{{ $value->passed ? '(Lulus)' : '(Tidak Lulus)' }}</span></td>
-                                    <td class="align-middle">
-                                        <button type="button" class="btn btn-info btn-modal rounded" data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}" data-container=".app-modal">Lihat Hasil Tes</button>
-                                        <button type="button" class="btn btn-warning btn-modal rounded" onclick="window.location.href = this.dataset.href" data-href="{{ route('teacher.test.result.download', [$value->competency->slug, $value->user->id, $value->id]) }}">Download Hasil Tes</button></td>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+        <table width="100%" class="mb-2">
+            <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3 class="text-dark font-weight-bold">HASIL TES SISWA</h3></td>
+            <td><hr /></td>
+        </table>
+        <div class="row">
+            @foreach ($clas as $key => $value)
+            <div class="col-xl-3 col-12">
+                <a class="card p-1" href="{{ route('teacher.result.clas', [$value->id]) }}" style="border-bottom: 3px solid #1995C9">
+                    <div class="card-content text-center">
+                        <p class="h3 text-dark font-weight-bold">{{ $value->name }}</p>
+                        <p class="h4 text-dark">TA. {{ $value->season }}</p>
                     </div>
-                </div>
+                </a>
             </div>
+            @endforeach
         </div>
     </div>
 </div>
 <div class="modal app-modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"></div>
-@endsection
-
-@section('js')
-    <script>
-        $('#table').dataTable( {
-            "order": [],
-        } );
-    </script>
 @endsection
