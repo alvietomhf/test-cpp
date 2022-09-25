@@ -101,8 +101,8 @@ class TestController extends Controller
 
             $data = $request->data;
             $totalQuestion = $competency->id === 3 ? 4 : 3;
-            $failedScore = 15;
-            $failedOutput = 15;
+            $successScore = 15;
+            $successOutput = 15;
             $score = 0;
             $passed = 0;
             $attempt = $count + 1;
@@ -229,8 +229,9 @@ class TestController extends Controller
                     }
                 }
 
-                $questionScore = $is_success ? $questionScore : ($questionScore - $failedScore);
-                $questionScore = $isOutputMatch ? $questionScore : ($questionScore - $failedOutput);
+                $questionScore = $questionScore - ($questionScore * 30 / 100);
+                $questionScore = $is_success ? ($questionScore + $successScore) : $questionScore;
+                $questionScore = $isOutputMatch ? ($questionScore + $successOutput) : $questionScore;
                 $questionScore = max($questionScore, 0);
                 $resultDetail->update(['score' => $questionScore]);
                 $score += $questionScore;
@@ -240,6 +241,7 @@ class TestController extends Controller
             $realScore = $score;
 
             if ($count) $score = $realScore - $trialReduction;
+            $score = max($score, 0);
             // Log::info('Score : ' . $score);
             // Log::info('Realscore : ' . $realScore);
 
