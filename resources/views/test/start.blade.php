@@ -430,7 +430,7 @@
                 success: function (res) {
                     isLoading = false;
                     res.data.output ? successEl.value = true : successEl.value = false;
-                    result.setValue(res.data.output || res.data);
+                    result.setValue((res.data.output === '' ? 'No output' : res.data.output) ?? res.data);
                 },
                 error: function (err) {
                     isLoading = false;

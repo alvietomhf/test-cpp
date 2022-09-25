@@ -71,9 +71,9 @@
                         <button onclick="window.location.href='{{ route('student.test.result', [$value->competency->slug]) }}'" class="btn btn-info w-25 m-2 ml-n1">Lihat Hasil</button>
                         @endif
                     </div>
-                    {{-- @if($value->status === 'unlock')
+                    @if($value->status === 'unlock')
                     <div class="p-1 text-white rounded" style="position: absolute; background-color: #1995C9; top: -25px; left: -20px;">Skor >= 75 untuk membuka tes berikutnya</div>
-                    @endif --}}
+                    @endif
                     @if($value->status === 'lock')
                     <div class="d-flex flex-column align-items-center justify-content-center w-100 h-100 p-1" style="position: absolute; top: 0px;background-color: #d9d9d9bd;">
                         <img src="{{ asset('assets/images/lock.png') }}" alt="Lock Icon" style="width: 100px; height: 100px;">
