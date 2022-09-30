@@ -90,9 +90,9 @@
     let timeDurationArr = [];
     let submitted = false;
 
-    document.addEventListener('copy', function(e) {
-        e.preventDefault();
-    });
+    // document.addEventListener('copy', function(e) {
+    //     e.preventDefault();
+    // });
 
     $(document).ready(function() {
         let currentTab = 0;
@@ -123,9 +123,9 @@
             });
             editors[i].on("change", editor => { editor.save() });
             editors[i].setOption('placeholder', 'Tulis kode disini...');
-            editors[i].on("beforeChange", function(_, change) {
-                if (change.origin == "paste") change.cancel()
-            });
+            // editors[i].on("beforeChange", function(_, change) {
+            //     if (change.origin == "paste") change.cancel()
+            // });
             editors[i].setSize(null, 400);
 
             // Results
