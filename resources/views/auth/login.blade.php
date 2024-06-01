@@ -50,6 +50,13 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
+                @if (session('status'))
+                    <div class="container mt-1">
+                        <div class="alert alert-success text-center" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    </div>
+                @endif
                 <section class="row flexbox-container">
                     <div class="col-12 d-flex align-items-center justify-content-center">
                         <img src="{{ asset('assets/images/pages/cpp.png') }}" alt="Icon CPP" style="width: 300px;height: 400px" class="d-lg-block d-none">
@@ -61,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <div id="login" class="card-body pt-0">
+                                    <div id="login" style="display: @error('email') none @else block @enderror;" class="card-body pt-0">
                                         <form class="form-horizontal" action="{{ route('login') }}" method="POST">
                                             @csrf
                                             <fieldset class="form-group position-relative has-icon-left">
@@ -96,14 +103,29 @@
                                         </form>
                                     </div>
 
-                                    <div id="forgot" style="display: none;">
+                                    <div id="forgot" style="display: @error('email') block @else none @enderror;">
                                         <div class="card-body">
-                                            <div class="text-center">
-                                                <h4 class="text-bold-700 font-italic">Lupa Password?</h4>
-                                                <h4 class="font-italic">Silahkan Hubungi Administrator untuk Informasi Lebih Lanjut</h4>
-                                            </div>
+                                            <form class="form-horizontal" action="{{ route('password.reset') }}" method="POST">
+                                                @csrf
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    <input
+                                                    oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                                    oninput="this.setCustomValidity('')"
+                                                    type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                                    <div class="form-control-position">
+                                                        <i class="la la-at"></i>
+                                                    </div>
+                                                    @error('email')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </fieldset>
+    
+                                                <div class="form-group row justify-content-end">
+                                                    <div class="col-sm-6 col-12 text-right"><a id="btnLogin" href="javascript:void(0);" class="card-link" onclick="onClickLogin(this)">Login</a></div>
+                                                </div>
+                                                <button type="submit" class="btn btn-outline-info btn-block"> Kirim</button>
+                                            </form>
                                         </div>
-                                        <p class="card-subtitle text-muted text-center mx-2"><span><a id="btnlogin" href="javascript:void(0);" onclick="onClickLogin(this)">Masuk</a></span></p>
                                     </div>
                                 </div>
                             </div>

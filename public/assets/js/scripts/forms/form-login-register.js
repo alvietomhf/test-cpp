@@ -16,4 +16,6 @@ $(document).ready(function(){
 	// For change default year in copyright
 	var $year = new Date().getFullYear();
 	$(".year").text($year);
+
+	$('div.alert').not('.alert-warning').delay(5000).fadeOut(350);
 });

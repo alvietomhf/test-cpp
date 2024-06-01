@@ -10,6 +10,7 @@ use App\Http\Controllers\FirstKeyController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionOutputController;
+use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SecondAnswerController;
 use App\Http\Controllers\SecondKeyController;
 use App\Http\Controllers\StudentController;
@@ -38,6 +39,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+Route::post('reset-password', [ResetController::class, 'resetPassword'])->name('password.reset');
 
 Auth::routes([
     'register' => false,
