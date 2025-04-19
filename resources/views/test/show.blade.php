@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('css')
+    <style>
+        @media (min-width: 768px) {
+            .w-md-25 {
+                width: 25% !important;
+            }
+        }
+    </style>
+@endsection
+
 @section('menu')
     @include('layouts.partials.menu')
 @endsection
@@ -9,15 +19,15 @@
         @include('flash::message')
         <div class="card p-3">
             <div>
-                <h1 class="font-weight-bold mb-2">{{ $progress->competency->name }}</h1>
-                <p class="mb-3" style="white-space: pre-line;">{{ $progress->competency->description }}</p>
+                <h1 class="font-weight-bold">{{ $progress->competency->name }}</h1>
+                <p style="white-space: pre-line;">{{ $progress->competency->description }}</p>
             </div>
-            <div class="row justify-between">
-                <div class="col-4">
-                    <div class="w-100 overflow-y-auto mb-3">
+            <div class="row mt-2">
+                <div class="col-12 col-md-4 mb-2">
+                    <div class="w-100 overflow-auto">
                         <h4 class="font-weight-bold">Substansi Materi</h4>
-                        <div class="" style="border-left: 2px solid; border-color: #512da8">
-                            <ul class="list-unstyled ml-2">
+                        <div class="pl-2 border-left" style="border-color: #512da8">
+                            <ul class="list-unstyled">
                                 @php
                                     $subject = json_decode($progress->competency->subject);
                                 @endphp
@@ -28,9 +38,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+
+                <div class="col-12 col-md-8">
                     <h3 class="font-weight-bold">Panduan Pelaksanaan Pengerjaan Soal</h3>
-                    <ol class="pl-1">
+                    <ol class="pl-3">
                         @unless ($progress->competency->id === 6)
                             <li>Terdapat 2 soal yang harus diselesaikan.</li>
                         @endunless
@@ -47,14 +58,16 @@
                             {{ $progress->competency->id === 6 ? 75 : 60 }}.</li>
                         <li>Pastikan perangkat yang digunakan mendukung coding dan terhubung ke internet secara stabil.</li>
                     </ol>
+
                     @if ($progress->status === 'unlock')
-                        <button type="button" class="btn btn-info w-25 btn-next">Selanjutnya</button>
+                        <button type="button" class="btn btn-info w-100 w-md-25 btn-next">Selanjutnya</button>
                     @else
                         <button type="button" data-href="{{ route('student.test.result', [$progress->competency->slug]) }}"
-                            class="btn btn-info w-25 btn-result">Lihat Hasil</button>
+                            class="btn btn-info w-100 w-md-25 btn-result">Lihat Hasil</button>
                     @endif
                 </div>
             </div>
+
         </div>
     </div>
 
