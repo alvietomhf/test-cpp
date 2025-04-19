@@ -120,8 +120,8 @@ body.vertical-layout.vertical-menu.menu-collapsed .main-menu {
     color: #fff;
     text-transform: uppercase;
     text-align: left;
-    background-color: #1e9ff2;
-    border-color: #1e9ff2;
+    background-color: #512da8;
+    border-color: #512da8;
     padding: 15px 20px; }
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
       body.vertical-layout.vertical-menu.menu-collapsed .main-menu .main-menu-content > span.menu-title,

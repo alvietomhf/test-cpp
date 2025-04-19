@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 
 class TestController extends Controller
 {
@@ -75,7 +76,7 @@ class TestController extends Controller
             return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
-        $totalQuestion = $competency->id === 3 ? 4 : 3;
+        $totalQuestion = 2;
         $data = Question::where('competency_id', $competency->id)
                         ->with([
                             'descriptions',
@@ -100,13 +101,13 @@ class TestController extends Controller
                             ->count();
 
             $data = $request->data;
-            $totalQuestion = $competency->id === 3 ? 4 : 3;
-            $successScore = 15;
-            $successOutput = 15;
+            $totalQuestion = 2;
+            $successScore = 10;
+            $successOutput = 10;
             $score = 0;
             $passed = 0;
             $attempt = $count + 1;
-            $trialReduction = $count * 2;
+            $trialReduction = $count * 1;
 
             DB::beginTransaction();
 
@@ -229,7 +230,6 @@ class TestController extends Controller
                     }
                 }
 
-                $questionScore = $questionScore - ($questionScore * 30 / 100);
                 $questionScore = $is_success ? ($questionScore + $successScore) : $questionScore;
                 $questionScore = $isOutputMatch ? ($questionScore + $successOutput) : $questionScore;
                 $questionScore = max($questionScore, 0);
@@ -245,7 +245,9 @@ class TestController extends Controller
             // Log::info('Score : ' . $score);
             // Log::info('Realscore : ' . $realScore);
 
-            if ($score >= 75) {
+            $minimumPassedScore = $competency->id == 6 ? 75 : 60;
+
+            if ($score >= $minimumPassedScore) {
                 $passed = 1;
                 $nextCompetencyId = $competency->id + 1;
 
@@ -255,7 +257,7 @@ class TestController extends Controller
                         ])
                         ->update(['status' => 'passed']);
 
-                if ($competency->id < 4) {
+                if ($competency->id < 6) {
                     Progress::where([
                                 'user_id' => auth()->user()->id,
                                 'competency_id' => $nextCompetencyId,
@@ -465,23 +467,30 @@ class TestController extends Controller
             $script = $request->script;
             $stdin = $request->stdin;
 
-            // Post request to jdoodle api endpoint
-            $response = Http::post(env('JDOODLE_API_URL'), [
-                'clientId' => env('JDOODLE_CLIENT_ID'),
-                'clientSecret' => env('JDOODLE_CLIENT_SECRET'),
-                'script' => $script,
-                'stdin' => $stdin,
-                'language' => 'cpp',
-                'versionIndex' => '5'
-            ]);
-            $result = $response->json(); 
+            $filename = 'code.cpp';
+            $outputFile = 'code.out';
+        
+            File::put($filename, $script);
+        
+            $compile = shell_exec("g++ $filename -o $outputFile 2>&1");
+        
+            if (!empty($compile)) {
+                return response()->json([
+                    'success' => false,
+                    'data' => "[COMPILE ERROR]\n" . $compile
+                ]);
+            }
 
-            if ($response->status() != 200) throw new ErrorException('Internal Error', 500);
-            if (!$result['memory']) throw new ErrorException($result['output'], 422);
-
+            if ($stdin !== null && $stdin !== '') {
+                $escapedStdin = escapeshellarg($stdin);
+                $run = shell_exec("echo $escapedStdin | timeout 3s ./$outputFile 2>&1");
+            } else {
+                $run = shell_exec("timeout 3s ./$outputFile 2>&1");
+            }
+        
             return response()->json([
                 'success' => true,
-                'data' => $result,
+                'data' => $run
             ]);
         } catch (Exception $e) {
             return response()->json([

@@ -1,5 +1,5 @@
 <div class="modal-dialog" role="document">
-    <form id="create-teacher" data-action="{{ route('admin.guru.store') }}">
+    <form id="create-teacher" data-action="{{ route('teacher.guru.store') }}">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel1">Tambah Guru</h4>
@@ -12,33 +12,35 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Nama</label>
-                            <input
-                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
-                            oninput="this.setCustomValidity('')"
-                            type="text" id="name" class="form-control" placeholder="Thomas Shelby" name="name" required>
+                            <input oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                oninput="this.setCustomValidity('')" type="text" id="name" class="form-control"
+                                placeholder="Thomas Shelby" name="name" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input
-                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
-                            oninput="this.setCustomValidity('')"
-                            type="text" id="username" class="form-control" placeholder="thomas123" name="username" required>
+                            <input oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                oninput="this.setCustomValidity('')" type="text" id="username" class="form-control"
+                                placeholder="thomas123" name="username" required>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="email">Email <span class="d-inline-block" style="transform: scale(0.7); color: gray">(optional)</span></label>
-                            <input type="email" id="email" class="form-control" placeholder="thomas@gmail.com" name="email">
+                            <label for="email">Email <span class="d-inline-block"
+                                    style="transform: scale(0.7); color: gray">(optional)</span></label>
+                            <input type="email" id="email" class="form-control" placeholder="thomas@gmail.com"
+                                name="email">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="phone">Nomor HP <span class="d-inline-block" style="transform: scale(0.7); color: gray">(optional)</span></label>
-                            <input type="text" id="phone" class="form-control" placeholder="082234897654" name="phone"">
+                            <label for="phone">Nomor HP <span class="d-inline-block"
+                                    style="transform: scale(0.7); color: gray">(optional)</span></label>
+                            <input type="text" id="phone" class="form-control" placeholder="082234897654"
+                                name="phone"">
                         </div>
                     </div>
                 </div>

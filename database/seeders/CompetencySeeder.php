@@ -15,38 +15,53 @@ class CompetencySeeder extends Seeder
      */
     public function run()
     {
-        $subjectA = ['Tipe Data', 'Variabel', 'Konstanta', 'Operator', 'Ekspresi'];
+        $subjectA = ['Tipe Data', 'Operator'];
         $subjectB = ['Operasi Aritmatika', 'Operasi Logika'];
         $subjectC = ['Percabangan'];
         $subjectD = ['Perulangan'];
+        $subjectE = ['Array', 'List'];
 
         Competency::create([
-            'title' => 'KD 4.4',
-            'name' => 'Kompetensi Dasar 4.4',
-            'slug' => 'kompetensi-dasar-4.4',
-            'description' => 'Membuat kode program dengan tipe data, variabel, konstanta, operator dan ekspresi.',
+            'title' => 'Tipe Data',
+            'name' => 'Tipe Data',
+            'slug' => 'tipe-data',
+            'description' => 'Membuat kode program dengan tipe data, dan operator.',
             'subject' => json_encode($subjectA),
         ]);
         Competency::create([
-            'title' => 'KD 4.5',
-            'name' => 'Kompetensi Dasar 4.5',
-            'slug' => 'kompetensi-dasar-4.5',
+            'title' => 'Sekuensial',
+            'name' => 'Struktur Sekuensial',
+            'slug' => 'sekuensial',
             'description' => 'Membuat kode program dengan operasi aritmatika dan logika.',
             'subject' => json_encode($subjectB),
         ]);
         Competency::create([
-            'title' => 'KD 4.6',
-            'name' => 'Kompetensi Dasar 4.6',
-            'slug' => 'kompetensi-dasar-4.6',
+            'title' => 'Percabangan',
+            'name' => 'Struktur Kontrol Percabangan',
+            'slug' => 'percabangan',
             'description' => 'Membuat kode program struktur kontrol percabangan.',
             'subject' => json_encode($subjectC),
         ]);
         Competency::create([
-            'title' => 'KD 4.7',
-            'name' => 'Kompetensi Dasar 4.7',
-            'slug' => 'kompetensi-dasar-4.7',
+            'title' => 'Perulangan',
+            'name' => 'Struktur Kontrol Perulangan',
+            'slug' => 'perulangan',
             'description' => 'Membuat kode program struktur kontrol perulangan.',
             'subject' => json_encode($subjectD),
+        ]);
+        Competency::create([
+            'title' => 'Struktur Data',
+            'name' => 'Struktur Data',
+            'slug' => 'struktur-data',
+            'description' => 'Membuat kode program struktur data.',
+            'subject' => json_encode($subjectE),
+        ]);
+        Competency::create([
+            'title' => 'Proyek',
+            'name' => 'Proyek Akhir',
+            'slug' => 'proyek-akhir',
+            'description' => 'Membuat kode program proyek akhir.',
+            'subject' => json_encode(array_merge($subjectA, $subjectB, $subjectC, $subjectD, $subjectE)),
         ]);
     }
 }

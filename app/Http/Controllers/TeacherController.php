@@ -68,7 +68,7 @@ class TeacherController extends Controller
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.guru.index'),
+            'url' => route('teacher.guru.index'),
         ]);
     }
 
@@ -143,7 +143,7 @@ class TeacherController extends Controller
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.guru.index'),
+            'url' => route('teacher.guru.index'),
         ]);
     }
 
@@ -175,7 +175,7 @@ class TeacherController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menghapus guru',
-                'url' => route('admin.guru.index'),
+                'url' => route('teacher.guru.index'),
             ]);
         } catch(\Exception $e) {
             return response()->json([

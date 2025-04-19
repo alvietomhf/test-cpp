@@ -43,7 +43,7 @@ class ClasController extends Controller
 
         flash('Berhasil menambahkan kelas')->success();
 
-        return redirect()->route('admin.kelas.index');
+        return redirect()->route('teacher.kelas.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class ClasController extends Controller
 
         flash('Berhasil mengedit kelas')->success();
 
-        return redirect()->route('admin.kelas.index');
+        return redirect()->route('teacher.kelas.index');
     }
 
     /**
@@ -111,7 +111,7 @@ class ClasController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menghapus kelas',
-                'url' => route('admin.kelas.index'),
+                'url' => route('teacher.kelas.index'),
             ]);
         } catch(\Exception $e) {
             return response()->json([

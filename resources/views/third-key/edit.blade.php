@@ -6,7 +6,8 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form id="edit-third-key" data-action="{{ route('teacher.kj-ketiga.update', [$secondAnswer->id, $thirdAnswer->id, $data->id]) }}">
+        <form id="edit-third-key"
+            data-action="{{ route('teacher.kj-ketiga.update', [$secondAnswer->id, $thirdAnswer->id, $data->id]) }}">
             <div class="modal-body">
                 <fieldset class="form-group floating-label-form-group">
                     <label for="detail">Detail</label>
@@ -26,7 +27,7 @@
             mode: "text/x-c++src",
             theme: "solarized",
             lineNumbers: true,
-            autoRefresh:true,
+            autoRefresh: true,
             lineWrapping: true,
             indentWithTabs: true,
             tabMode: "indent",
@@ -39,14 +40,19 @@
         }
     )
     cm.setValue(detailData);
-    cm.on("change", editor => { editor.save() });
+    cm.on("change", editor => {
+        editor.save()
+    });
     cm.setSize(null, 250);
 
     var style = {
         "border": "0",
         "border-top": "2px solid",
-        "border-color": "#1995C9",
+        "border-color": "#5a3da1",
     }
     $('.CodeMirror.cm-s-solarized.CodeMirror-wrap').css(style);
-    $('.CodeMirror.cm-s-default').css({ ...style, padding: '10px 20px' });
+    $('.CodeMirror.cm-s-default').css({
+        ...style,
+        padding: '10px 20px'
+    });
 </script>

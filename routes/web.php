@@ -52,14 +52,6 @@ Auth::routes([
 Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::group(['as' => 'admin.', 'middleware' => ['role:admin']], function() {
-        Route::resource('kelas', ClasController::class);
-        Route::group(['prefix' => 'kelas/{kelasId}'], function() {
-            Route::resource('siswa', StudentController::class);
-        });
-        Route::resource('guru', TeacherController::class);
-    });
-
     Route::group(['as' => 'student.', 'middleware' => ['role:student']], function() {
         Route::get('tes/{competency:slug}', [TestController::class, 'show'])->name('test.show');
         Route::get('tes/{competency:slug}/started', [TestController::class, 'start'])->name('test.start');
@@ -74,6 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['as' => 'teacher.', 'middleware' => ['role:teacher']], function() {
+        Route::resource('kelas', ClasController::class);
+        Route::group(['prefix' => 'kelas/{kelasId}'], function() {
+            Route::resource('siswa', StudentController::class);
+        });
+
         Route::get('hasil-tes', [TestController::class, 'teacherResult'])->name('result');
         Route::get('hasil-tes/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
         Route::get('hasil-tes/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');

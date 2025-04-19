@@ -85,12 +85,20 @@ class StudentController extends Controller
             'user_id' => $data->id,
             'competency_id' => 4,
         ]);
+        Progress::create([
+            'user_id' => $data->id,
+            'competency_id' => 5,
+        ]);
+        Progress::create([
+            'user_id' => $data->id,
+            'competency_id' => 6,
+        ]);
 
         flash('Berhasil menambahkan siswa')->success();
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.siswa.index', [$kelasId]),
+            'url' => route('teacher.siswa.index', [$kelasId]),
         ]);
     }
 
@@ -165,7 +173,7 @@ class StudentController extends Controller
 
         return response()->json([
             'status' => true,
-            'url' => route('admin.siswa.index', [$kelasId]),
+            'url' => route('teacher.siswa.index', [$kelasId]),
         ]);
     }
 
@@ -197,7 +205,7 @@ class StudentController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menghapus siswa',
-                'url' => route('admin.siswa.index', [$kelasId]),
+                'url' => route('teacher.siswa.index', [$kelasId]),
             ]);
         } catch(\Exception $e) {
             return response()->json([

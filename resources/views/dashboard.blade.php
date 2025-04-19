@@ -5,103 +5,274 @@
 @endsection
 
 @section('content')
-@role('student')
-@include('flash::message')
-<div class="card p-3">
-    <h1 class="font-weight-bold">PENDAHULUAN</h1>
-    <div class="d-flex align-items-center justify-content-center" style="background: linear-gradient(to bottom, #ffffff 0%,#ffffff 20%,#D5ECFD 20%,#D5ECFD 80%,#ffffff 80%,#ffffff 80%,#ffffff 100%);">
-        <div class="d-md-block d-none p-2">
-            <h2 class="font-weight-bold">provides a tool for assesment of coding capabilities</h2>
-            <p>&bull; Memilik fitur untuk mengecek baris setiap code</p>
-        </div>
-        <img src="{{ asset('assets/images/cpp-dashboard.png') }}" alt="CPP Dashboard" style="width: 300px; height: 300px;">
-    </div>
-    <div class="w-100 overflow-y-auto my-2">
-        <h3 class="font-weight-bold">C++ PENGENALAN</h3>
-        <div style="border-left: 2px solid; border-color: #1995C9">
-            <ul>
-                <li>C++  merupakan bahasa pemrograman yang dikembangkan dari bahasa C.</li>
-                <li>C++  dikembangkan oleh Bjarne Stroustrup.</li>
-                <li>C++ adalah bahasa lintas platform yang dapat digunakan untuk membuat aplikasi berkinerja tinggi.</li>
-                <li>C++ memberi pemrogram kontrol tingkat tinggi atas sumber daya dan memori sistem.</li>
-            </ul>
-        </div>
-    </div>
-    <div class="my-2">
-        <h3 class="text-center font-weight-bold pb-3">Materi yang diajukan :</h3>
-        <div class="row match-height px-5">
-            @foreach ($competency as $key => $value)
-            <div class="col-xl-3 col-md-6 col-sm-12">
-                <div class="card" style="background-color: #D9D9D9; height: 210px;">
-                    <div class="card-content">
-                        <div class="card-body text-center">
-                            <h4 class="card-title font-weight-bold">{{ $value->title }}</h4>
-                            <hr style="border-top: 2px solid #1995C9">
-                            <p class="card-text">{{ $value->description }}</p>
-                        </div>
-                    </div>
+    @role('student')
+        <div style="background: #ffffff">
+            <div class="d-flex flex-column p-2">
+                @include('flash::message')
+                <div class="user-data text-center rounded py-4 px-10">
+                    <h1 class="font-weight-bold">Selamat datang {{ auth()->user()->name ?? '' }}</h1>
                 </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-    <hr class="d-flex align-self-center my-3" style="border-top: 2px solid #1995C9; width: 50%;"></hr>
-    <div class="text-center h4" style="padding-top: 30px; padding-bottom: 30px;">
-        Aplikasi ini dikembangkan untuk mengukur serta mengevaluasi kompetensi pemrograman C++ yang dimiliki siswa dan ditujukan kepada siswa SMK kelas X rekayasa perangkat lunak.
-    </div>
-    <hr class="d-flex align-self-center my-3" style="border-top: 2px solid #1995C9; width: 50%;"></hr>
-    <div class="mt-3">
-        <h3 class="text-center font-weight-bold pb-3">Ayo Tunjukan Kemampuan Pemrogramanmu</h3>
-        <div class="row match-height p-2">
-            @foreach ($progress as $key => $value)
-            <div class="col-xl-6 col-12 mb-1">
-                <div class="card pt-1" style="background-color: #D9D9D9; height: 200px; position: relative;">
-                    <div class="d-flex align-items-center @if($value->status !== 'lock') justify-content-center @endif">
-                        <div class="card-content w-75">
-                            <div class="card-body">
-                                <h4 class="card-title font-weight-bold">{{ $value->competency->title }}</h4>
-                                <hr style="border-top: 2px solid #1995C9">
-                                <p class="card-text">{{ $value->competency->description }}</p>
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="warning">{{ intval($totalMateri) }}</h3>
+                                            <span>Substansi Materi</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-notebook warning font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        @if($value->status === 'unlock')
-                        <a class="btn btn-info w-25 m-2 ml-n1" href="{{ route('student.test.show', [$value->competency->slug]) }}">Selesaikan</a>
-                        @endif
-                        @if($value->status === 'passed')
-                        <button onclick="window.location.href='{{ route('student.test.result', [$value->competency->slug]) }}'" class="btn btn-info w-25 m-2 ml-n1">Lihat Hasil</button>
-                        @endif
                     </div>
-                    @if($value->status === 'unlock')
-                    <div class="p-1 text-white rounded" style="position: absolute; background-color: #1995C9; top: -25px; left: -20px;">Skor >= 75 untuk membuka tes berikutnya</div>
-                    @endif
-                    @if($value->status === 'lock')
-                    <div class="d-flex flex-column align-items-center justify-content-center w-100 h-100 p-1" style="position: absolute; top: 0px;background-color: #d9d9d9bd;">
-                        <img src="{{ asset('assets/images/lock.png') }}" alt="Lock Icon" style="width: 100px; height: 100px;">
-                        <div class="text-center text-dark mt-1">
-                            Tes ini terkunci.
-                            <span class="d-block">
-                                Skor >=75 pada tes sebelumnya untuk membuka tes ini.
-                            </span>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="success">{{ intval($passed->total) }}</h3>
+                                            <span>Tes Berhasil</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-rocket success font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    @endif
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="danger">{{ intval($passed->score) }}</h3>
+                                            <span>Skor Tes</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-bag danger font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="info">{{ intval($projectScore) }}</h3>
+                                            <span>Skor Proyek</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-graduation info font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white font-weight-bold">
+                        Panduan Aplikasi
+                    </div>
+                    <div class="card-body">
+                        <ol>
+                            <li><strong>Menu Hasil</strong>
+                                <ul>
+                                    <li>Digunakan untuk melihat rekap hasil belajar siswa.</li>
+                                    <li>Menampilkan daftar tes yang berhasil dilalui beserta skor yang diperoleh.</li>
+                                    <li>Menampilkan skor proyek apabila siswa telah menyelesaikan proyek.</li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Penulisan Kode</strong>
+                                <ul>
+                                    <li>Digunakan untuk membuka tab baru yang menampilkan file PDF panduan penulisan kode
+                                        program.</li>
+                                    <li>Bertujuan sebagai referensi untuk membantu siswa memahami sintaks dasar pemrograman.
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Referensi</strong>
+                                <ul>
+                                    <li>Digunakan untuk membuka tab baru yang berisi file PDF materi belajar.</li>
+                                    <li>Berisi ringkasan teori atau penjelasan yang relevan dengan soal latihan yang diberikan.
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Soal Tes</strong>
+                                <ul>
+                                    <li>Berisi berbagai soal latihan berdasarkan kategori, yaitu:</li>
+                                    <ol type="a">
+                                        <li><strong>Tipe Data</strong>: Soal terkait jenis data dasar seperti integer, float,
+                                            char, dll.</li>
+                                        <li><strong>Sekuensial</strong>: Soal dengan alur program berurutan seperti menghitung
+                                            luas.</li>
+                                        <li><strong>Percabangan</strong>: Soal menggunakan kondisi seperti <code>if</code>,
+                                            <code>if-else</code>, atau <code>switch-case</code>.
+                                        </li>
+                                        <li><strong>Perulangan</strong>: Soal menggunakan perulangan seperti <code>for</code>
+                                            dan <code>do-while</code>.</li>
+                                        <li><strong>Struktur Data</strong>: Soal lanjutan yang menggunakan array atau struktur
+                                            data lainnya.</li>
+                                    </ol>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Proyek</strong>
+                                <ul>
+                                    <li>Berisi tugas proyek pemrograman yang berisi gabungan dari soal sebelumnya.</li>
+                                    <li>Siswa akan mengerjakan proyek sebagai bagian dari evaluasi kemampuan menyeluruh.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
             </div>
-            @endforeach
         </div>
-    </div>
-</div>
-@else
-<div class="row">
-    <div class="col-12">
-        <img src="{{ asset('assets/images/gallery/smekda.jpg') }}" class="img-fluid rounded" style="width: 100%; max-height: 400px; height: auto; object-fit: cover; object-position: 100% 60%;" alt="timeline image">
-        <div class="user-data text-center bg-white rounded pb-2 mb-md-2">
-            <img src="{{ auth()->user()->avatar ? asset('storage/images/' . auth()->user()->avatar) : asset('assets/images/portrait/small/avatar-s-23.png') }}" class="img-fluid rounded-circle width-150 profile-image shadow-lg border border-3" alt="timeline image">
-            <h4 class="mt-1 mb-0">{{ auth()->user()->name ?? '' }}</h4>
-            <p class="m-0">Surabaya, INA</p>
-            <h1 class="mt-2">Welcome to Dashboard</h1>
+    @else
+        <div style="background: #ffffff">
+            <div class="d-flex flex-column p-2">
+                <div class="user-data text-center rounded py-4 px-10">
+                    <h1 class="font-weight-bold">Selamat datang {{ auth()->user()->name ?? '' }}</h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="danger">{{ intval($totalClass) }}</h3>
+                                            <span>Kelas</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-screen-desktop danger font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="success">{{ intval($totalStudent) }}</h3>
+                                            <span>Siswa</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-user success font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="warning">{{ intval($totalMateri) }}</h3>
+                                            <span>Substansi Materi</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-notebook warning font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="media d-flex">
+                                        <div class="media-body text-left">
+                                            <h3 class="info">{{ intval($totalQuestion) }}</h3>
+                                            <span>Butir Soal</span>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="icon-question info font-large-2 float-right"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white font-weight-bold">
+                        Panduan Aplikasi
+                    </div>
+                    <div class="card-body">
+                        <ol>
+                            <li><strong>Menu Kelas & Menu Siswa</strong><br>
+                                <p>Menu ini digunakan untuk memanajemen data kelas dan siswa, seperti: menambah, mengedit dan
+                                    menghapus data.</p>
+                                <ul type="a">
+                                    <li>Terdapat daftar nama siswa beserta username yang digunakan untuk login.</li>
+                                    <li>Tombol Tambah digunakan untuk menambahkan data baru.</li>
+                                    <li>Tombol berwarna hijau digunakan untuk mengedit data yang sudah ada.</li>
+                                    <li>Tombol berwarna merah digunakan untuk menghapus data.</li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Hasil Tes</strong><br>
+                                <p>Menu ini digunakan untuk monitoring hasil tes siswa. Pada halaman ini terdapat daftar kelas
+                                    dimana didalamnya ada tabel yang
+                                    menampilkan nama-nama siswa beserta nilai.</p>
+                                <ul type="a">
+                                    <li>Terdapat daftar kelas beserta siswa.</li>
+                                    <li>Tombol Lihat digunakan untuk membuka popup yang berisi data analisa serta kode program
+                                        yang
+                                        dikerjakan oleh siswa.</li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Soal</strong><br>
+                                <p>Menu ini digunakan untuk memanajemen data soal, seperti: menambah, mengedit dan menghapus
+                                    data soal.</p>
+                                <ul type="a">
+                                    <li>Terdapat beberapa data substansi soal.</li>
+                                    <li>Tombol Tambah digunakan untuk membuka popup yang berisi form untuk membuat soal
+                                        baru.</li>
+                                    <li>Tombol berwarna ungu dengan label <b>Keterangan</b> digunakan untuk membuka detail soal
+                                        yang berisi instruksi,
+                                        bobot poin serta kunci jawaban.</li>
+                                    <li>Tombol berwarna hijau digunakan untuk mengedit data yang sudah ada.</li>
+                                    <li>Tombol berwarna merah digunakan untuk menghapus data.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
-</div>
-@endrole
+    @endrole
 @endsection

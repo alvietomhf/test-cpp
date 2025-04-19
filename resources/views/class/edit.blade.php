@@ -1,5 +1,5 @@
 <div class="modal-dialog" role="document">
-    <form action="{{ route('admin.kelas.update', [$data->id]) }}" method="POST">
+    <form action="{{ route('teacher.kelas.update', [$data->id]) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="modal-content">
@@ -12,17 +12,17 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="name">Nama Kelas</label>
-                    <input 
-                    oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
-                    oninput="this.setCustomValidity('')"
-                    type="text" id="name" class="form-control" value="{{ $data->name }}" placeholder="X RPL 1" name="name" required autocomplete="name" autofocus>
+                    <input oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                        oninput="this.setCustomValidity('')" type="text" id="name" class="form-control"
+                        value="{{ $data->name }}" placeholder="X RPL 1" name="name" required autocomplete="name"
+                        autofocus>
                 </div>
                 <div class="form-group">
                     <label for="season">Tahun Ajaran</label>
-                    <input 
-                    oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
-                    oninput="this.setCustomValidity('')"
-                    type="text" id="season" class="form-control" value="{{ $data->season }}" placeholder="2022/2023" name="season" required autocomplete="season" autofocus>
+                    <input oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                        oninput="this.setCustomValidity('')" type="text" id="season" class="form-control"
+                        value="{{ $data->season }}" placeholder="2022/2023" name="season" required
+                        autocomplete="season" autofocus>
                 </div>
             </div>
             <div class="modal-footer">
