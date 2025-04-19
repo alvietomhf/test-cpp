@@ -100,6 +100,10 @@
 <script src="{{ asset('assets/vendors/js/tables/vfs_fonts.js') }}"></script>
 <script src="{{ asset('assets/vendors/js/tables/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/js/tables/buttons.print.min.js') }}"></script>
+<script src="{{ asset('assets/vendors/js/extensions/jquery.knob.min.js') }}"></script>
+<script src="{{ asset('assets/vendors/js/charts/morris.min.js') }}"></script>
+<script src="{{ asset('assets/vendors/js/charts/raphael-min.js') }}"></script>
+<script src="{{ asset('assets/vendors/js/charts/jquery.sparkline.min.js') }}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

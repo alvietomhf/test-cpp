@@ -101,7 +101,7 @@ class TestController extends Controller
                             ->count();
 
             $data = $request->data;
-            $totalQuestion = 2;
+            $totalQuestion = $competency->id == 6 ? 1 : 2;
             $successScore = 10;
             $successOutput = 10;
             $score = 0;
@@ -246,10 +246,11 @@ class TestController extends Controller
             // Log::info('Realscore : ' . $realScore);
 
             $minimumPassedScore = $competency->id == 6 ? 75 : 60;
+            $nextCompetencyId = $competency->id + 1;
+            $nextCompetency = Competency::where('id', $nextCompetencyId)->first();
 
             if ($score >= $minimumPassedScore) {
                 $passed = 1;
-                $nextCompetencyId = $competency->id + 1;
 
                 Progress::where([
                             'user_id' => auth()->user()->id,
@@ -273,11 +274,25 @@ class TestController extends Controller
             ]);
 
             DB::commit();
-            
+
+            if ($competency->id == 6) {
+                $resUrl = $passed == 1 ? route('student.test.result') : route('student.test.show', [$competency->slug]);
+                $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan proyek akhir. Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+            } else {
+                $resUrl = $passed == 1 ? route('student.test.show', [$nextCompetency->slug]) : route('student.test.show', [$competency->slug]);
+                $resDesc = $passed == 1 ? 'Kamu berhasil melewati soal ini. Lanjut ke soal berikutnya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Answer successfully stored',
-                'url' => route('dashboard'),
+                'data' => [
+                    'url' => $resUrl,
+                    'score' => $score,
+                    'min_score' => $minimumPassedScore,
+                    'passed' => $passed == 1 ? true : false,
+                    'description' => $resDesc,
+                ],
             ]);
         } catch (Exception $e) {
             DB::rollBack();

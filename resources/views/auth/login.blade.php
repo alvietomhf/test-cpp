@@ -107,11 +107,6 @@
                                                 @enderror
                                             </fieldset>
 
-                                            <div class="form-group row justify-content-end">
-                                                <div class="col-sm-6 col-12 text-right"><a id="btnforgot"
-                                                        href="javascript:void(0);" class="card-link"
-                                                        onclick="onClickForgot(this)">Lupa Password?</a></div>
-                                            </div>
                                             <button type="submit" class="btn btn-info btn-block">
                                                 Masuk</button>
                                         </form>

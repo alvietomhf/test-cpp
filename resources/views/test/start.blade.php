@@ -168,12 +168,17 @@
                 const el = document.getElementsByClassName("timer");
                 const currentTimerEl = el[prevTab];
 
+                const format = (num) => String(num).padStart(2, '0');
+
                 const interval = setInterval(function() {
+                    currentTimerEl.innerHTML = `${format(minutes)} : ${format(seconds)}`;
+
                     if (minutes == 0 && seconds == 7 && currentTab === prevTab && currentTab === (x.length -
                             1) && !submitted) runCode(currentTab + 1);
 
                     if (seconds == 0) {
                         if (minutes == 0) {
+                            currentTimerEl.innerHTML = "00 : 00";
                             clearInterval(interval);
 
                             if (currentTab === prevTab) {
@@ -186,9 +191,9 @@
                                     }
 
                                     Swal.fire({
-                                        icon: 'success',
+                                        icon: 'info',
                                         title: 'Waktu pengerjaan habis!',
-                                        text: 'Halaman akan dialihkan dalam 3 detik',
+                                        text: 'Hasil kode akan disubmit otomatis',
                                         showConfirmButton: false,
                                         timer: 3000,
                                         timerProgressBar: true,
@@ -229,11 +234,38 @@
                                             },
                                             datatype: 'JSON',
                                             success: function(res) {
-                                                window.location.href =
-                                                    "{{ route('dashboard') }}"
+                                                if (res.data.passed) {
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Bagus!',
+                                                        html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
+                                                        showConfirmButton: false,
+                                                        timer: 3000,
+                                                        timerProgressBar: true,
+                                                    }).then((result) => {
+                                                        window.location.href =
+                                                            res.data.url;
+                                                    });
+                                                } else {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Belum berhasil',
+                                                        html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
+                                                        showConfirmButton: false,
+                                                        timer: 3000,
+                                                        timerProgressBar: true,
+                                                    }).then((result) => {
+                                                        window.location.href =
+                                                            res.data.url;
+                                                    });
+                                                }
                                             },
                                             error: function(err) {
-                                                console.log(err)
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Terjadi kesalahan',
+                                                    text: 'Silakan coba lagi.',
+                                                });
                                             }
                                         });
                                     });
@@ -245,14 +277,14 @@
                             return;
                         } else {
                             minutes--;
-                            seconds = 60;
+                            seconds = 59;
                         }
+                    } else {
+                        seconds--;
                     }
 
-                    const text = `${minutes} : ${seconds}`;
-                    currentTimerEl.innerHTML = text;
+                    currentTimerEl.innerHTML = `${format(minutes)} : ${format(seconds)}`;
 
-                    seconds--;
                 }, 1000);
             }
 
@@ -293,65 +325,82 @@
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'YA',
                         cancelButtonText: 'BATAL',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    }).then((res) => {
+                        if (res.isConfirmed) {
                             if (submitted) return;
                             submitted = true;
 
                             const currentTimerVal = currentTimerEl.textContent;
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Tes berhasil diselesaikan!',
-                                text: 'Halaman akan dialihkan dalam 3 detik',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                            }).then((result) => {
-                                const successEl = document.getElementsByClassName("success");
-                                const currentTimerValArr = currentTimerVal.split(' ');
-                                const minute = +currentTimerValArr[0];
-                                const second = +currentTimerValArr[2];
-                                const timeUp = (minuteDuration * 60) - (minute * 60 + second);
-                                timeDurationArr.push({
-                                    timeUp,
-                                    isTimeUp: false,
-                                });
+                            const successEl = document.getElementsByClassName("success");
+                            const currentTimerValArr = currentTimerVal.split(' ');
+                            const minute = +currentTimerValArr[0];
+                            const second = +currentTimerValArr[2];
+                            const timeUp = (minuteDuration * 60) - (minute * 60 + second);
+                            timeDurationArr.push({
+                                timeUp,
+                                isTimeUp: false,
+                            });
 
-                                const data = editors.map((editor, i) => {
-                                    const id = x[i].dataset.question;
-                                    const time = timeDurationArr[i];
-                                    const script = editor.getValue();
-                                    const result = results[i].getValue();
-                                    const success = successEl[i].value;
+                            const data = editors.map((editor, i) => {
+                                const id = x[i].dataset.question;
+                                const time = timeDurationArr[i];
+                                const script = editor.getValue();
+                                const result = results[i].getValue();
+                                const success = successEl[i].value;
 
-                                    return {
-                                        id,
-                                        script,
-                                        result,
-                                        time,
-                                        success,
-                                    };
-                                });
+                                return {
+                                    id,
+                                    script,
+                                    result,
+                                    time,
+                                    success,
+                                };
+                            });
 
-                                $.ajax({
-                                    url: "{{ route('student.test.store', [$competency->slug]) }}",
-                                    data: {
-                                        data
-                                    },
-                                    type: 'POST',
-                                    headers: {
-                                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr(
-                                            'content')
-                                    },
-                                    datatype: 'JSON',
-                                    success: function(res) {
-                                        window.location.href = res.url;
-                                    },
-                                    error: function(err) {
-                                        console.log(err)
+                            $.ajax({
+                                url: "{{ route('student.test.store', [$competency->slug]) }}",
+                                data: {
+                                    data
+                                },
+                                type: 'POST',
+                                headers: {
+                                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr(
+                                        'content')
+                                },
+                                datatype: 'JSON',
+                                success: function(res) {
+                                    if (res.data.passed) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Bagus!',
+                                            html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                        }).then((result) => {
+                                            window.location.href = res.data.url;
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Belum berhasil',
+                                            html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                        }).then((result) => {
+                                            window.location.href = res.data.url;
+                                        });
                                     }
-                                });
+                                },
+                                error: function(err) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Terjadi kesalahan',
+                                        text: 'Silakan coba lagi.',
+                                    });
+                                }
                             });
                         }
                     });
