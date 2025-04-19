@@ -14,7 +14,7 @@
                             <h1 class="font-weight-bold mb-2">Data Siswa</h1>
                             <div class="media mb-2">
                                 <a class="mr-2" href="javascript:void(0)">
-                                    <img src="{{ auth()->user()->avatar ? asset('storage/images/' . auth()->user()->avatar) : asset('assets/images/portrait/small/avatar-s-23.png') }}"
+                                    <img src="{{ auth()->user()->avatar ? asset('storage/images/' . auth()->user()->avatar) : asset('assets/images/profile.png') }}"
                                         alt="users avatar" class="users-avatar-shadow rounded-circle" height="64"
                                         width="64">
                                 </a>
