@@ -276,7 +276,7 @@ class TestController extends Controller
             DB::commit();
 
             if ($competency->id == 6) {
-                $resUrl = $passed == 1 ? route('student.test.result') : route('student.test.show', [$competency->slug]);
+                $resUrl = $passed == 1 ? route('student.result') : route('student.test.show', [$competency->slug]);
                 $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan proyek akhir. Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             } else {
                 $resUrl = $passed == 1 ? route('student.test.show', [$nextCompetency->slug]) : route('student.test.show', [$competency->slug]);
