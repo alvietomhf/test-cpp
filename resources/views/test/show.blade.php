@@ -43,19 +43,17 @@
                     <h3 class="font-weight-bold">Panduan Pelaksanaan Pengerjaan Soal</h3>
                     <ol class="pl-3">
                         @unless ($progress->competency->id === 6)
-                            <li>Terdapat 2 soal yang harus diselesaikan.</li>
+                            <li>Terdapat 1 soal yang harus dikerjakan.</li>
                         @endunless
 
                         <li>Pengerjaan berbentuk live coding, di mana peserta menuliskan langsung kode programnya.</li>
 
+                        <li>Waktu pengerjaan adalah 15 menit.</li>
+
                         @if ($progress->competency->id === 6)
-                            <li>Waktu pengerjaan proyek akhir 15 menit.</li>
-                        @else
-                            <li>Waktu pengerjaan adalah 30 menit, dialokasikan 15 menit untuk masing-masing soal.</li>
+                            <li>Skor berada pada rentang 0-100. Dapatkan skor minimum 75.</li>
                         @endif
 
-                        <li>Skor berada pada rentang 0-100. Dapatkan skor minimum
-                            {{ $progress->competency->id === 6 ? 75 : 60 }}.</li>
                         <li>Pastikan perangkat yang digunakan mendukung coding dan terhubung ke internet secara stabil.</li>
                     </ol>
 
