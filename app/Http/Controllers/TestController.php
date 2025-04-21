@@ -76,7 +76,7 @@ class TestController extends Controller
             return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
-        $totalQuestion = 2;
+        $totalQuestion = 1;
         $data = Question::where('competency_id', $competency->id)
                         ->with([
                             'descriptions',
@@ -101,7 +101,7 @@ class TestController extends Controller
                             ->count();
 
             $data = $request->data;
-            $totalQuestion = $competency->id == 6 ? 1 : 2;
+            $totalQuestion = 1;
             $successScore = 10;
             $successOutput = 10;
             $score = 0;
@@ -245,7 +245,7 @@ class TestController extends Controller
             // Log::info('Score : ' . $score);
             // Log::info('Realscore : ' . $realScore);
 
-            $minimumPassedScore = $competency->id == 6 ? 75 : 60;
+            $minimumPassedScore = $competency->id == 6 ? 75 : 0;
             $nextCompetencyId = $competency->id + 1;
             $nextCompetency = Competency::where('id', $nextCompetencyId)->first();
 
@@ -280,13 +280,14 @@ class TestController extends Controller
                 $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan proyek akhir. Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             } else {
                 $resUrl = $passed == 1 ? route('student.test.show', [$nextCompetency->slug]) : route('student.test.show', [$competency->slug]);
-                $resDesc = $passed == 1 ? 'Kamu berhasil melewati soal ini. Lanjut ke soal berikutnya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+                $resDesc = $passed == 1 ? 'Kamu telah mengerjakan soal ini. Lanjut ke soal berikutnya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             }
 
             return response()->json([
                 'success' => true,
                 'message' => 'Answer successfully stored',
                 'data' => [
+                    'competency_id' => $competency->id,
                     'url' => $resUrl,
                     'score' => $score,
                     'min_score' => $minimumPassedScore,
