@@ -383,10 +383,22 @@
                                 datatype: 'JSON',
                                 success: function(res) {
                                     if (res.data.passed) {
+                                        const competencyId = res.data
+                                            .competency_id;
+                                        let description;
+
+                                        if (competencyId === 6) {
+                                            description =
+                                                `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`
+                                        } else {
+                                            description = res.data
+                                                .description;
+                                        }
+
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Bagus!',
-                                            html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
+                                            html: description,
                                             showConfirmButton: false,
                                             timer: 3000,
                                             timerProgressBar: true,
