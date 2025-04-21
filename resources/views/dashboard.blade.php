@@ -37,8 +37,8 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="success">{{ intval($passed->total) }}</h3>
-                                            <span>Tes Berhasil</span>
+                                            <h3 class="success">{{ intval(optional($passed)->total ?? 0) }}</h3>
+                                            <span>Tes Dikerjakan</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-rocket success font-large-2 float-right"></i>
@@ -54,7 +54,7 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="danger">{{ intval($passed->score) }}</h3>
+                                            <h3 class="danger">{{ intval(optional($passed)->score ?? 0) }}</h3>
                                             <span>Skor Tes</span>
                                         </div>
                                         <div class="align-self-center">
@@ -71,7 +71,7 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="info">{{ intval($project->score) }}</h3>
+                                            <h3 class="info">{{ intval(optional($project)->score ?? 0) }}</h3>
                                             <span>Skor Proyek</span>
                                         </div>
                                         <div class="align-self-center">
