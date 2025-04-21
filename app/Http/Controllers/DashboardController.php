@@ -29,7 +29,7 @@ class DashboardController extends Controller
                     ->where('r.competency_id', '!=', 6)
                     ->first();
 
-        $projectScore = DB::table('results as r')
+        $project = DB::table('results as r')
                     ->selectRaw('r.score')
                     ->where('r.user_id', auth()->user()->id)
                     ->where('r.passed', 1)
@@ -41,7 +41,6 @@ class DashboardController extends Controller
         $totalMateri = Competency::where('id', '!=', 6)->count();
         $totalQuestion = Question::where('competency_id', '!=', 6)->count();
 
-
-        return view('dashboard', compact('competency', 'progress', 'passed', 'projectScore', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion'));
+        return view('dashboard', compact('competency', 'progress', 'passed', 'project', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion'));
     }
 }

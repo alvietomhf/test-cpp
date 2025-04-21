@@ -273,15 +273,16 @@ class TestController extends Controller
                 'passed' => $passed,
             ]);
 
-            DB::commit();
-
             if ($competency->id == 6) {
                 $resUrl = $passed == 1 ? route('student.result') : route('student.test.show', [$competency->slug]);
                 $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan proyek akhir. Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             } else {
+                $passedDesc = $competency->id == 5 ? 'Yuk lanjutkan ke proyek akhir.' : 'Lanjut ke soal berikutnya.';
                 $resUrl = $passed == 1 ? route('student.test.show', [$nextCompetency->slug]) : route('student.test.show', [$competency->slug]);
-                $resDesc = $passed == 1 ? 'Kamu telah mengerjakan soal ini. Lanjut ke soal berikutnya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+                $resDesc = $passed == 1 ? 'Kamu telah mengerjakan soal ini. ' . $passedDesc : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             }
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -301,7 +302,7 @@ class TestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
-            ], $e->getCode());
+            ], 400);
         }
     }
 
@@ -512,7 +513,7 @@ class TestController extends Controller
             return response()->json([
                 'success' => false,
                 'data' => $e->getMessage(),
-            ], $e->getCode());
+            ], 400);
         }
     }
 }
