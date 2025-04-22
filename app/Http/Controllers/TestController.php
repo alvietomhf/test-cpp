@@ -480,13 +480,14 @@ class TestController extends Controller
             ]);
         }
 
+        $uniqueId = uniqid();
+        $filename = "{$uniqueId}.cpp";
+        $outputFile = "{$uniqueId}.out";
+
         try {
             $script = $request->script;
             $stdin = $request->stdin;
 
-            $filename = 'code.cpp';
-            $outputFile = 'code.out';
-        
             File::put($filename, $script);
         
             $compile = shell_exec("g++ $filename -o $outputFile 2>&1");
@@ -514,6 +515,14 @@ class TestController extends Controller
                 'success' => false,
                 'data' => $e->getMessage(),
             ], 400);
+        } finally {
+            if (file_exists($filename)) {
+                @unlink($filename);
+            }
+
+            if (file_exists($outputFile)) {
+                @unlink($outputFile);
+            }
         }
     }
 }
