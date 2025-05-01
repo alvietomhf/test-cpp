@@ -22,6 +22,8 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/vendors.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/forms/icheck/icheck.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/forms/icheck/custom.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -38,6 +40,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pages/page-users.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/simple-line-icons/style.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pages/card-statistics.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/plugins/forms/checkboxes-radios.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- END: Page CSS-->
 
@@ -104,6 +107,7 @@
 <script src="{{ asset('assets/vendors/js/charts/morris.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/js/charts/raphael-min.js') }}"></script>
 <script src="{{ asset('assets/vendors/js/charts/jquery.sparkline.min.js') }}"></script>
+<script src="{{ asset('assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -126,6 +130,7 @@
 <script src="{{ asset('assets/codemirror/addon/selection/active-line.js') }}"></script>
 <script src="{{ asset('assets/codemirror/addon/display/placeholder.js') }}"></script>
 <script src="{{ asset('assets/codemirror/addon/display/autorefresh.js') }}"></script>
+<script src="{{ asset('assets/js/scripts/forms/checkbox-radio.js') }}"></script>
 <!-- END: Page JS-->
 
 <script>

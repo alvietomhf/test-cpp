@@ -91,8 +91,8 @@
                 <li
                     class=" nav-item {{ request()->is('tes/*') && !request()->is('tes/proyek-akhir*') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
-                        <i class="la la-clipboard"></i>
-                        <span class="menu-title" data-i18n="Soal">Soal Tes</span>
+                        <i class="la la-play"></i>
+                        <span class="menu-title" data-i18n="Soal">Play Ground</span>
                     </a>
                     <ul class="menu-content">
                         @foreach ($progress as $key => $value)
@@ -108,6 +108,13 @@
                             </li>
                         @endforeach
                     </ul>
+                </li>
+
+                <li class=" nav-item {{ request()->is('pre-tes*') ? 'active' : '' }}">
+                    <a href="{{ route('student.pretest.show') }}">
+                        <i class="la la-clipboard"></i>
+                        <span class="menu-title" data-i18n="Pre Test">Pre Test</span>
+                    </a>
                 </li>
 
                 @foreach ($project as $key => $value)
