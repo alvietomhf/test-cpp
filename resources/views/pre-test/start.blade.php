@@ -81,6 +81,7 @@
             let minutesRemaining = minuteDuration;
             let secondsRemaining = 0;
             let countdownStarted = false;
+            let isTimeup = false;
 
             showTab(currentTab);
 
@@ -91,7 +92,6 @@
 
                 const format = (num) => String(num).padStart(2, '0');
 
-                // Reset timer jika sudah habis
                 clearInterval(timerInterval);
                 minutesRemaining = minutes;
                 secondsRemaining = seconds;
@@ -104,9 +104,9 @@
                             currentTimerEl.innerHTML = "00 : 00";
                             clearInterval(timerInterval);
 
-                            // Auto submit setelah waktu habis, di tab mana pun
                             if (!submitted) {
-                                submitAnswers(true); // Kirim jawaban jika waktu habis
+                                isTimeup = true;
+                                submitAnswers();
                             }
 
                             return;
@@ -123,7 +123,6 @@
                 }, 1000);
             }
 
-            // Wizard
             function showTab(n) {
                 const x = document.getElementsByClassName("tab");
                 x[n].style.display = "flex";
@@ -143,23 +142,19 @@
                     nextBtn.innerHTML = "Selanjutnya";
                 }
 
-
-                // Jalankan countdown hanya sekali
                 if (!countdownStarted) {
                     countdownStarted = true;
                     countdown(minuteDuration, 0);
                 }
             }
 
-            // Next or Submit
             function nextPrev(n) {
                 const x = document.getElementsByClassName("tab");
 
                 if (submitted) {
-                    return; // Tidak melakukan apa-apa jika sudah disubmit
+                    return;
                 }
 
-                // Menyembunyikan tab hanya setelah konfirmasi Swal selesai
                 if (currentTab + n >= x.length) {
                     Swal.fire({
                         title: 'Konfirmasi',
@@ -172,14 +167,13 @@
                         cancelButtonText: 'BATAL',
                     }).then((res) => {
                         if (res.isConfirmed) {
-                            submitAnswers(); // Kirim jawaban jika YA
+                            submitAnswers();
                         } else {
-                            // Jangan lanjutkan ke tab berikutnya jika batal
                             return;
                         }
                     });
                 } else {
-                    x[currentTab].style.display = "none"; // Sembunyikan tab sebelumnya
+                    x[currentTab].style.display = "none";
                     currentTab += n;
                     showTab(currentTab);
                 }
@@ -193,47 +187,95 @@
                     const questionId = $(this).data('question');
                     const selectedRadio = $(this).find('input[type=radio]:checked');
 
-                    // Cek jika ada radio button yang dipilih
                     const answer = selectedRadio.length ? selectedRadio.val() : null;
 
-                    // Tambahkan jawaban ke array answers
                     const existing = answers.findIndex(a => a.question_id === questionId);
                     if (existing >= 0) {
-                        answers[existing].answer = answer;
+                        answers[existing].option_id = answer;
                     } else {
                         answers.push({
                             question_id: questionId,
-                            answer: answer // Nilai null jika belum dipilih
+                            option_id: answer
                         });
                     }
                 });
 
-                console.log(answers);
-                alert('OK');
+                const x = document.getElementsByClassName("timer");
+                const currentTimerEl = x[0];
+                const currentTimerVal = currentTimerEl.textContent;
+                const currentTimerValArr = currentTimerVal.split(' ');
+                const minute = parseInt(currentTimerValArr[0]);
+                const second = parseInt(currentTimerValArr[2]);
+                const timeUp = (minuteDuration * 60) - (minute * 60 + second);
+
+                $.ajax({
+                    url: "{{ route('student.pretest.store') }}",
+                    data: JSON.stringify({
+                        answers,
+                        time_up: timeUp,
+                        is_timeup: isTimeup
+                    }),
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]')
+                            .attr('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    datatype: 'JSON',
+                    success: function(res) {
+                        if (res.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                html: res.message,
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            }).then((result) => {
+                                window.location.href =
+                                    res.data.url;
+                            });
+                        } else {
+                            submitted = false;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: res.message,
+                            });
+                        }
+                    },
+                    error: function(err) {
+                        submitted = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi kesalahan',
+                            text: 'Silakan coba lagi!',
+                        });
+                    }
+                });
             }
 
             $(document).on('change', 'input[type=radio]', function() {
                 const questionId = $(this).closest('.tab').data('question');
-                const answer = $(this).val() || null; // Jika tidak ada nilai, gunakan null
+                const answer = $(this).val() || null;
 
                 const existing = answers.findIndex(a => a.question_id === questionId);
                 if (existing >= 0) {
-                    answers[existing].answer = answer;
+                    answers[existing].option_id = answer;
                 } else {
                     answers.push({
                         question_id: questionId,
-                        answer: answer // Nilai answer bisa null jika tidak dipilih
+                        option_id: answer
                     });
                 }
             });
 
-            // Next Button
             $(".btn-next").on("click", function(e) {
                 e.preventDefault();
                 nextPrev(1);
             });
 
-            // Prev Button
             $(".btn-prev").on("click", function(e) {
                 e.preventDefault();
                 nextPrev(-1);

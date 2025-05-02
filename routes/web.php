@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('pre-tes/hasil', [PreTestController::class, 'result'])->name('pretest.result');
         // Route::get('pre-tes/hasil/{id}', [PreTestController::class, 'showResult'])->name('pretest.result.show');
         // Route::get('pre-tes/hasil/{id}/pdf', [PreTestController::class, 'downloadResultPdf'])->name('pretest.result.download');
-        // Route::post('pre-tes', [PreTestController::class, 'storeResult'])->name('pretest.store');
+        Route::post('pre-tes', [PreTestController::class, 'storeResult'])->name('pretest.store');
 
         Route::get('hasil-tes-siswa', [TestController::class, 'studentResult'])->name('result');
 
