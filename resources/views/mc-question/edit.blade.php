@@ -50,10 +50,6 @@
                                     </select>
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label class="fw-600" for="image">Gambar (kosongkan jika tidak diubah)</label>
-                                    <input type="file" class="form-control" id="image" name="image">
-                                </fieldset>
-                                <fieldset class="form-group">
                                     <label class="fw-600">Pilihan Jawaban</label>
                                     @foreach ($question->options as $index => $option)
                                         <div class="form-group mb-0">

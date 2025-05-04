@@ -5,6 +5,12 @@
         input:focus:not([type="radio"]) {
             outline: solid 1px #512da8;
         }
+
+        input[type="radio"]+p {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            margin-left: 5px;
+        }
     </style>
 @endsection
 
@@ -25,7 +31,7 @@
                 <div class="text-center p-1"
                     style="border: 1px solid #e6e6e6; padding: 7px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); background-color: #ffffff;">
                     <p class="font-weight-bold mb-0">Sisa Waktu</p>
-                    <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">1 : 00</span>
+                    <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">40 : 00</span>
                 </div>
             </div>
         </div>
@@ -38,16 +44,17 @@
                             <p class="font-weight-bold">Pertanyaan {{ $key + 1 }} dari {{ $questionCount }}</p>
                         </div>
                         <div class="mt-2">
-                            <div class="font-weight-bold">{!! $value->case !!}</div>
-                            <div class="font-weight-bold mt-1">{!! $value->question !!}</div>
+                            <div>{!! $value->case !!}</div>
+                            <br>
+                            <div>{!! $value->question !!}</div>
                             <form>
                                 @foreach ($value->options as $option)
                                     <div class="mt-2">
                                         <fieldset class="radio">
-                                            <label>
+                                            <label class="w-100 flex flex-row" style="display: flex;">
                                                 <input type="radio" name="radio-{{ $value->id }}"
                                                     value="{{ $option->id }}">
-                                                {{ $option->title }}
+                                                {!! $option->title !!}
                                             </label>
                                         </fieldset>
                                     </div>
@@ -59,7 +66,7 @@
                             <button type="button" class="btn px-3 btn-prev"
                                 style="background-color: #cccccc; color: black; border-radius: 20px;">Sebelumnya</button>
 
-                            <button type="submit" id="nextBtn-{{ $key + 1 }}" class="btn px-3 btn-next"
+                            <button type="submit" id="nextBtn-{{ $key + 1 }}" class="btn px-3 btn-next ml-1"
                                 style="background: linear-gradient(to right, #512da8, #7e57c2); color: white; border-radius: 20px;">Selanjutnya</button>
                         </div>
                     </div>
@@ -71,7 +78,7 @@
 
 @section('js')
     <script type="text/javascript">
-        const minuteDuration = 1;
+        const minuteDuration = 40;
         let submitted = false;
 
         $(document).ready(function() {

@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('assessment_subaspects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mc_question_id')->constrained('mc_questions')->onDelete('cascade');
-            $table->longText('title');
-            $table->boolean('correct');
+            $table->foreignId('assessment_aspect_id')->constrained('assessment_aspects')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('options');
+        Schema::dropIfExists('assessment_subaspects');
     }
 };

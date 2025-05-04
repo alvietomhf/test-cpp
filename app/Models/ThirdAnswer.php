@@ -11,6 +11,7 @@ class ThirdAnswer extends Model
 
     protected $fillable = [
         'second_answer_id',
+        'assessment_subaspect_id',
         'detail',
         'score',
     ];
@@ -18,6 +19,11 @@ class ThirdAnswer extends Model
     public function secondAnswer()
     {
         return $this->belongsTo(SecondAnswer::class, 'second_answer_id');
+    }
+
+    public function assessmentSubaspect()
+    {
+        return $this->belongsTo(AssessmentSubaspect::class, 'assessment_subaspect_id');
     }
 
     public function thirdKeys()

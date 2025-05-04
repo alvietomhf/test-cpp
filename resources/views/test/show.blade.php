@@ -61,8 +61,7 @@
                         @if ($progress->status === 'unlock')
                             <button type="button" class="btn btn-info w-100 w-md-25 btn-next">Selanjutnya</button>
                         @else
-                            <button type="button"
-                                data-href="{{ route('student.test.result', [$progress->competency->slug]) }}"
+                            <button type="button" data-href="{{ route('student.result') }}"
                                 class="btn btn-info w-100 w-md-25 btn-result">Lihat Hasil</button>
                         @endif
                     @else

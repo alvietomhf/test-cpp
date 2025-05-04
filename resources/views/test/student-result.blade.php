@@ -36,7 +36,8 @@
                                                 </td>
                                                 <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                                 <td class="align-middle">{{ $value->score ?? '0' }} /
-                                                    {{ $value->competency ? $maxScoreCode : $maxScoreMcq }}</td>
+                                                    {{ $value->competency ? ($value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground) : $maxScoreMcq }}
+                                                </td>
                                                 <td class="align-middle">{{ $value->created_at }}</td>
                                                 <td class="align-middle">
                                                     @if ($value->type === 'code')

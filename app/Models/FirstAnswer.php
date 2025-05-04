@@ -11,6 +11,7 @@ class FirstAnswer extends Model
 
     protected $fillable = [
         'description_id',
+        'assessment_subaspect_id',
         'detail',
         'score',
         'nested',
@@ -19,6 +20,11 @@ class FirstAnswer extends Model
     public function description()
     {
         return $this->belongsTo(Description::class);
+    }
+
+    public function assessmentSubaspect()
+    {
+        return $this->belongsTo(AssessmentSubaspect::class, 'assessment_subaspect_id');
     }
 
     public function secondAnswers()

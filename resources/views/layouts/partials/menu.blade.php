@@ -114,7 +114,7 @@
 
 
                 <li
-                    class=" nav-item {{ request()->is('tes/*') && !request()->is('tes/proyek-akhir*') ? 'menu-collapsed-open open' : '' }}">
+                    class=" nav-item {{ request()->is('tes/*') && !request()->is('tes/post-test*') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
                         <i class="la la-play"></i>
                         <span class="menu-title" data-i18n="Soal">Play Ground</span>
@@ -142,7 +142,7 @@
                 </li>
 
                 @foreach ($project as $key => $value)
-                    <li class=" nav-item {{ request()->is('tes/proyek-akhir*') ? 'active' : '' }}">
+                    <li class=" nav-item {{ request()->is('tes/post-test*') ? 'active' : '' }}">
                         <a href="{{ route('student.test.show', [$value->competency->slug]) }}">
                             <i class="la la-code-fork"></i>
                             <span class="menu-title" data-i18n="Post Test">Post Test</span>

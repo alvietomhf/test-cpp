@@ -234,18 +234,9 @@
                                             },
                                             datatype: 'JSON',
                                             success: function(res) {
-                                                if (res.data.passed) {
-                                                    const competencyId = res.data
-                                                        .competency_id;
-                                                    let description;
-
-                                                    if (competencyId === 4) {
-                                                        description =
-                                                            `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`
-                                                    } else {
-                                                        description = res.data
-                                                            .description;
-                                                    }
+                                                if (res.success) {
+                                                    const description = res.data
+                                                        .description;
 
                                                     Swal.fire({
                                                         icon: 'success',
@@ -261,14 +252,8 @@
                                                 } else {
                                                     Swal.fire({
                                                         icon: 'error',
-                                                        title: 'Belum berhasil',
-                                                        html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
-                                                        showConfirmButton: false,
-                                                        timer: 3000,
-                                                        timerProgressBar: true,
-                                                    }).then((result) => {
-                                                        window.location.href =
-                                                            res.data.url;
+                                                        title: 'Gagal',
+                                                        text: res.message,
                                                     });
                                                 }
                                             },
@@ -382,18 +367,9 @@
                                 },
                                 datatype: 'JSON',
                                 success: function(res) {
-                                    if (res.data.passed) {
-                                        const competencyId = res.data
-                                            .competency_id;
-                                        let description;
-
-                                        if (competencyId === 4) {
-                                            description =
-                                                `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`
-                                        } else {
-                                            description = res.data
-                                                .description;
-                                        }
+                                    if (res.success) {
+                                        const description = res.data
+                                            .description;
 
                                         Swal.fire({
                                             icon: 'success',
@@ -408,13 +384,8 @@
                                     } else {
                                         Swal.fire({
                                             icon: 'error',
-                                            title: 'Belum berhasil',
-                                            html: `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`,
-                                            showConfirmButton: false,
-                                            timer: 3000,
-                                            timerProgressBar: true,
-                                        }).then((result) => {
-                                            window.location.href = res.data.url;
+                                            title: 'Gagal',
+                                            text: res.message,
                                         });
                                     }
                                 },

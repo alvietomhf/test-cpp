@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Clas;
 use App\Models\Competency;
+use App\Models\FirstAnswer;
 use App\Models\McqResult;
 use App\Models\McQuestion;
 use App\Models\Progress;
@@ -90,10 +91,10 @@ class TestController extends Controller
 
             $data = $request->data;
             $totalQuestion = 1;
-            $successScore = 10;
-            $successOutput = 10;
+            $successScore = $competency->id === 4 ? 0 : 10;
+            $successOutput = $competency->id === 4 ? 0 : 10;
             $score = 0;
-            $passed = 0;
+            $passed = 1;
             $attempt = $count + 1;
             $trialReduction = 0;
 
@@ -227,11 +228,7 @@ class TestController extends Controller
             if ($count) $score = $realScore - $trialReduction;
             $score = max($score, 0);
 
-            $minimumPassedScore = $competency->id == 4 ? 75 : 0;
-
-            if ($score >= $minimumPassedScore) {
-                $passed = 1;
-
+            if ($competency->id === 4) {
                 Progress::where([
                             'user_id' => auth()->user()->id,
                             'competency_id' => $competency->id,
@@ -262,7 +259,6 @@ class TestController extends Controller
                     'competency_id' => $competency->id,
                     'url' => $resUrl,
                     'score' => $score,
-                    'min_score' => $minimumPassedScore,
                     'passed' => $passed == 1 ? true : false,
                     'description' => $resDesc,
                 ],
@@ -407,12 +403,41 @@ class TestController extends Controller
                         return $item;
                     });
 
-        $maxScoreCode = 100;
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+        
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $maxScorePlayground = 100;
         $maxScoreMcq = McQuestion::count();
 
         $result = $results->merge($mcqResults)->sortByDesc('created_at')->values();
         
-        return view('test.student-result', compact('result', 'maxScoreCode', 'maxScoreMcq'));
+        return view('test.student-result', compact('result', 'maxScoreCode', 'maxScorePlayground', 'maxScoreMcq'));
     }
 
     public function teacherResult()

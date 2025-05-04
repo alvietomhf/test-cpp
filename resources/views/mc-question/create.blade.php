@@ -46,13 +46,8 @@
                                     </select>
                                 </fieldset>
                                 <fieldset class="form-group floating-label-form-group">
-                                    <label class="fw-600" for="image">Gambar</label>
-                                    <input type="file" class="form-control" id="image" name="image"
-                                        placeholder="Gambar">
-                                </fieldset>
-                                <fieldset class="form-group floating-label-form-group">
                                     <label class="fw-600">Pilihan Jawaban</label>
-                                    @for ($i = 0; $i < 4; $i++)
+                                    @for ($i = 0; $i < 5; $i++)
                                         <div class="form-group mb-0">
                                             <label>Opsi {{ $i + 1 }}</label>
                                             <textarea name="options[{{ $i }}][title]" id="option_{{ $i }}" class="form-control" required></textarea>
@@ -83,7 +78,7 @@
         CKEDITOR.replace('case');
         CKEDITOR.replace('question');
         CKEDITOR.replace('note');
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             CKEDITOR.replace('option_' + i);
         }
     </script>
@@ -119,7 +114,7 @@
                     messages.push('⚙️ Level wajib dipilih.');
                 }
 
-                for (let i = 0; i < 4; i++) {
+                for (let i = 0; i < 5; i++) {
                     const optionId = 'option_' + i;
                     const content = CKEDITOR.instances[optionId].getData().trim();
                     if (!content) {

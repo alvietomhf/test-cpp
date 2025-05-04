@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\McqResult;
 use App\Models\McQuestion;
+use App\Models\Question;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,12 +45,41 @@ class DataController extends Controller
                         return $item;
                     });
 
-        $maxScoreCode = 100;
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+        
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $maxScorePlayground = 100;
         $maxScoreMcq = McQuestion::count();
 
         $result = $results->merge($mcqResults)->sortByDesc('created_at')->values();
 
-        return view('data.student-show', compact('data', 'result', 'maxScoreCode', 'maxScoreMcq'));
+        return view('data.student-show', compact('data', 'result', 'maxScoreCode', 'maxScorePlayground', 'maxScoreMcq'));
     }
 
     public function profile()
