@@ -52,7 +52,9 @@ class PreTestController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        return view('pre-test.teacher-resultcls', compact('result', 'clas'));
+        $maxScoreMcq = McQuestion::count();
+
+        return view('pre-test.teacher-resultcls', compact('result', 'clas', 'maxScoreMcq'));
     }
 
     public function showTeacherResult(Clas $clas, $id)

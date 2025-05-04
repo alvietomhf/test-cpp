@@ -459,7 +459,38 @@ class TestController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        return view('test.teacher-resultcls', compact('result', 'clas'));
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+        
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $maxScorePlayground = 100;
+
+        return view('test.teacher-resultcls', compact('result', 'clas', 'maxScoreCode', 'maxScorePlayground'));
     }
 
     public function showTeacherResult(Competency $competency, $id)

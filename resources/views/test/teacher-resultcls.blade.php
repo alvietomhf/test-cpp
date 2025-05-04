@@ -38,10 +38,13 @@
                                     @foreach ($result as $key => $value)
                                         <tr class="">
                                             <td class="align-middle">{{ $value->user->name }}</td>
-                                            <td class="align-middle">{{ $value->competency->title }}</td>
+                                            <td class="align-middle">
+                                                {{ $value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title }}
+                                            </td>
                                             <td class="align-middle">Ke - {{ $value->attempt }}</td>
-                                            <td class="align-middle" style="color: {{ $value->passed ? 'green' : 'red' }};">
-                                                {{ $value->score ?? '0' }}
+                                            <td class="align-middle">
+                                                {{ $value->score ?? '0' }} /
+                                                {{ $value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground }}
                                             </td>
                                             <td class="align-middle">{{ $value->created_at }}</td>
                                             <td class="align-middle">
