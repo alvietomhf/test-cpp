@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\McqResult;
+use App\Models\McQuestion;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,20 +25,31 @@ class DataController extends Controller
 
     public function studentShow($id)
     {
-        $data = User::role('student')->where('id', $id)->firstOrFail();
+        $data = User::role('student')->with('clas')->where('id', $id)->firstOrFail();
         
-        $result = Result::where([
-                        'user_id' => $id,
-                    ])
-                    ->with([
-                        'user',
-                        'user.clas',
-                        'competency',
-                    ])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        $results = Result::where('user_id', $id)
+                    ->with('competency')
+                    ->get()
+                    ->map(function ($item) {
+                        $item->type = 'code';
+                        return $item;
+                    });
 
-        return view('data.student-show', compact('data', 'result'));
+        $mcqResults = McqResult::where('user_id', $id)
+                    ->get()
+                    ->map(function ($item) {
+                        $item->type = 'mcq';
+                        $item->attempt = 1;
+                        $item->passed = 1;
+                        return $item;
+                    });
+
+        $maxScoreCode = 100;
+        $maxScoreMcq = McQuestion::count();
+
+        $result = $results->merge($mcqResults)->sortByDesc('created_at')->values();
+
+        return view('data.student-show', compact('data', 'result', 'maxScoreCode', 'maxScoreMcq'));
     }
 
     public function profile()

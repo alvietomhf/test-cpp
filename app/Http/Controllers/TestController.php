@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Clas;
 use App\Models\Competency;
+use App\Models\McqResult;
+use App\Models\McQuestion;
 use App\Models\Progress;
 use App\Models\Question;
 use App\Models\RdFirstAnswer;
@@ -36,16 +38,9 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        $currentProgress = Progress::where([
-                                'user_id' => auth()->user()->id,
-                                'status' => 'unlock',
-                            ])
-                            ->with('competency')
-                            ->first();
-
-        if ($progress->status === 'lock') {
-            flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
-            return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
+        if ($competency->id === 4 && $progress->status === 'lock') {
+            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            return redirect()->route('student.pretest.show');
         }
                                         
         return view('test.show', compact('progress'));
@@ -60,19 +55,12 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        $currentProgress = Progress::where([
-                                'user_id' => auth()->user()->id,
-                                'status' => 'unlock',
-                            ])
-                            ->with('competency')
-                            ->first();
-
-        if ($progress->status === 'lock') {
-            flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
-            return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
+        if ($competency->id === 4 && $progress->status === 'lock') {
+            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            return redirect()->route('student.pretest.show');
         }
-        if ($progress->status === 'passed') {
-            flash('Tes '. $competency->title . ' sudah selesai!')->warning();
+        if ($competency->id === 4 && $progress->status === 'passed') {
+            flash('Post Test sudah selesai kamu kerjakan!')->warning();
             return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
@@ -107,7 +95,7 @@ class TestController extends Controller
             $score = 0;
             $passed = 0;
             $attempt = $count + 1;
-            $trialReduction = $count * 1;
+            $trialReduction = 0;
 
             DB::beginTransaction();
 
@@ -138,9 +126,6 @@ class TestController extends Controller
                 $output = preg_replace('/\s+/', '', trim($output));
                 $output = strtolower($output);
 
-                // Log::info('script: '. $script);
-                // Log::info('output: '. $output);
-
                 $is_timeup = $dataValue['time']['isTimeUp'] === "true" ? 1 : 0;
                 $is_success = $dataValue['success'] === "true" ? 1 : 0;
 
@@ -150,7 +135,6 @@ class TestController extends Controller
 
                 $outputDetail = preg_replace('/\s+/', '', trim($question->output));
                 $outputDetail = strtolower($outputDetail);
-                // Log::info('outputDetail: '. $outputDetail);
 
                 if (strcmp($outputDetail, $output) === 0) $isOutputMatch = true;
 
@@ -242,12 +226,8 @@ class TestController extends Controller
 
             if ($count) $score = $realScore - $trialReduction;
             $score = max($score, 0);
-            // Log::info('Score : ' . $score);
-            // Log::info('Realscore : ' . $realScore);
 
-            $minimumPassedScore = $competency->id == 6 ? 75 : 0;
-            $nextCompetencyId = $competency->id + 1;
-            $nextCompetency = Competency::where('id', $nextCompetencyId)->first();
+            $minimumPassedScore = $competency->id == 4 ? 75 : 0;
 
             if ($score >= $minimumPassedScore) {
                 $passed = 1;
@@ -257,14 +237,6 @@ class TestController extends Controller
                             'competency_id' => $competency->id,
                         ])
                         ->update(['status' => 'passed']);
-
-                if ($competency->id < 6) {
-                    Progress::where([
-                                'user_id' => auth()->user()->id,
-                                'competency_id' => $nextCompetencyId,
-                            ])
-                            ->update(['status' => 'unlock']);
-                }
             }
 
             $result->update([
@@ -273,13 +245,12 @@ class TestController extends Controller
                 'passed' => $passed,
             ]);
 
-            if ($competency->id == 6) {
+            if ($competency->id == 4) {
                 $resUrl = $passed == 1 ? route('student.result') : route('student.test.show', [$competency->slug]);
-                $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan proyek akhir. Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+                $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan Post Test! Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             } else {
-                $passedDesc = $competency->id == 5 ? 'Yuk lanjutkan ke proyek akhir.' : 'Lanjut ke soal berikutnya.';
-                $resUrl = $passed == 1 ? route('student.test.show', [$nextCompetency->slug]) : route('student.test.show', [$competency->slug]);
-                $resDesc = $passed == 1 ? 'Kamu telah mengerjakan soal ini. ' . $passedDesc : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+                $resUrl = route('student.result');
+                $resDesc = 'Jawaban kamu berhasil terkirim! Silahkan cek hasilnya.';
             }
 
             DB::commit();
@@ -322,13 +293,14 @@ class TestController extends Controller
                             ->with('competency')
                             ->first();
 
-        if ($progress->status === 'unlock') {
-            flash('Tes '. $competency->title . ' belum selesai! Selesaikan terlebih dahulu')->warning();
+        if ($competency->id === 4 && $progress->status === 'unlock') {
+            flash('Belum ada hasil jawaban yang dikirimkan!')->warning();
             return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
         }
-        if ($progress->status === 'lock') {
-            flash('Tes '. $competency->title . ' terkunci! Selesaikan tes berikut terlebih dahulu')->warning();
-            return redirect()->route('student.test.show', [$currentProgress->competency->slug]);
+
+        if ($competency->id === 4 && $progress->status === 'lock') {
+            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            return redirect()->route('student.pretest.show');
         }
 
         $result = Result::where([
@@ -418,12 +390,29 @@ class TestController extends Controller
 
     public function studentResult()
     {
-        $result = Result::where('user_id', auth()->user()->id)
+        $results = Result::where('user_id', auth()->user()->id)
                     ->with('competency')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        $item->type = 'code';
+                        return $item;
+                    });
 
-        return view('test.student-result', compact('result'));
+        $mcqResults = McqResult::where('user_id', auth()->id())
+                    ->get()
+                    ->map(function ($item) {
+                        $item->type = 'mcq';
+                        $item->attempt = 1;
+                        $item->passed = 1;
+                        return $item;
+                    });
+
+        $maxScoreCode = 100;
+        $maxScoreMcq = McQuestion::count();
+
+        $result = $results->merge($mcqResults)->sortByDesc('created_at')->values();
+        
+        return view('test.student-result', compact('result', 'maxScoreCode', 'maxScoreMcq'));
     }
 
     public function teacherResult()

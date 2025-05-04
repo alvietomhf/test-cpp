@@ -77,10 +77,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Waktu</th>
-                                            <th>Tes</th>
+                                            <th>Tanggal</th>
+                                            <th>Soal</th>
                                             <th>Percobaan</th>
-                                            <th>Nilai</th>
+                                            <th>Skor</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -88,15 +88,22 @@
                                         @foreach ($result as $key => $value)
                                             <tr class="">
                                                 <td class="align-middle">{{ $value->created_at }}</td>
-                                                <td class="align-middle">{{ $value->competency->title }}</td>
-                                                <td class="align-middle">Ke - {{ $value->attempt }}</td>
-                                                <td class="align-middle">{{ $value->score ?? '0' }}/100<span
-                                                        style="display: block; color: {{ $value->passed ? 'green' : 'red' }};">{{ $value->passed ? '(Lulus)' : '(Tidak Lulus)' }}</span>
-                                                </td>
                                                 <td class="align-middle">
-                                                    <button type="button" class="btn btn-info btn-modal rounded"
-                                                        data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}"
-                                                        data-container=".app-modal">Lihat</button>
+                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title) : 'Pre Test' }}
+                                                </td>
+                                                <td class="align-middle">Ke - {{ $value->attempt }}</td>
+                                                <td class="align-middle">{{ $value->score ?? '0' }} /
+                                                    {{ $value->competency ? $maxScoreCode : $maxScoreMcq }}</td>
+                                                <td class="align-middle">
+                                                    @if ($value->type === 'code')
+                                                        <button type="button" class="btn btn-info btn-modal rounded"
+                                                            data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}"
+                                                            data-container=".app-modal">Lihat</button>
+                                                    @else
+                                                        <button type="button" class="btn btn-info btn-modal rounded"
+                                                            data-href="{{ route('teacher.result.kognitif.show', [$data->clas->id, $value->id]) }}"
+                                                            data-container=".app-modal">Lihat</button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

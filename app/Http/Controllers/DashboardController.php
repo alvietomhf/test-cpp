@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Clas;
 use App\Models\Competency;
 use App\Models\McqResult;
+use App\Models\McQuestion;
 use App\Models\Progress;
 use App\Models\Question;
 use App\Models\User;
@@ -15,46 +16,34 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
-        // $data = McqResult::where('user_id', auth()->user()->id)
-        //                 ->with([
-        //                 'resultDetails' => function($q) {
-        //                     $q->select('id', 'mcq_result_id', 'mc_question_id', 'option_id', 'correct', 'score');
-        //                 },
-        //                 'resultDetails.question:id,case,question,note,difficulty',
-        //                 'resultDetails.question.options:id,mc_question_id,title,correct',
-        //                 'resultDetails.option:id,title',
-        //                 ])
-        //                 ->first();
-        // dd($data->toArray());
-
         $competency = Competency::all();
-        $progress = Progress::where('user_id', auth()->user()->id)
-                                ->whereHas('competency', function ($query) {
-                                    $query->where('id', '!=', 6);
-                                })
-                                ->with('competency')
-                                ->get();
         
-        $passed = DB::table('results as r')
-                    ->selectRaw('COUNT(r.id) as total, COALESCE(SUM(r.score), 0) / COUNT(r.id) as score')
+        $playground = DB::table('results as r')
+                    ->selectRaw('COUNT(r.id) as total')
                     ->where('r.user_id', auth()->user()->id)
-                    ->where('r.passed', 1)
-                    ->where('r.competency_id', '!=', 6)
+                    ->where('r.competency_id', '!=', 4)
+                    ->first();
+
+        $mcq = DB::table('mcq_results as r')
+                    ->selectRaw('r.score')
+                    ->where('r.user_id', auth()->user()->id)
                     ->first();
 
         $project = DB::table('results as r')
                     ->selectRaw('r.score')
                     ->where('r.user_id', auth()->user()->id)
                     ->where('r.passed', 1)
-                    ->where('r.competency_id', '=', 6)
+                    ->where('r.competency_id', '=', 4)
                     ->first();
 
         $totalClass = Clas::count();
         $totalStudent = User::role('student')->count();
-        $totalMateri = Competency::where('id', '!=', 6)->count();
-        $totalQuestion = Question::where('competency_id', '!=', 6)->count();
+        $totalMateri = Competency::where('id', '!=', 4)->count();
 
-        return view('dashboard', compact('competency', 'progress', 'passed', 'project', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion'));
+        $countQuestion = Question::count();
+        $countMcQuestion = McQuestion::count();
+        $totalQuestion = $countQuestion + $countMcQuestion;
+
+        return view('dashboard', compact('competency', 'playground', 'mcq', 'project', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion'));
     }
 }

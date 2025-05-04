@@ -8,6 +8,7 @@ use App\Http\Controllers\DescriptionController;
 use App\Http\Controllers\FirstAnswerController;
 use App\Http\Controllers\FirstKeyController;
 use App\Http\Controllers\KeyController;
+use App\Http\Controllers\McQuestionController;
 use App\Http\Controllers\PreTestController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionOutputController;
@@ -63,8 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('pre-tes', [PreTestController::class, 'show'])->name('pretest.show');
         Route::get('pre-tes/started', [PreTestController::class, 'start'])->name('pretest.start');
-        // Route::get('pre-tes/hasil', [PreTestController::class, 'result'])->name('pretest.result');
-        // Route::get('pre-tes/hasil/{id}', [PreTestController::class, 'showResult'])->name('pretest.result.show');
+        Route::get('pre-tes/hasil/{id}', [PreTestController::class, 'showResult'])->name('pretest.result.show');
         // Route::get('pre-tes/hasil/{id}/pdf', [PreTestController::class, 'downloadResultPdf'])->name('pretest.result.download');
         Route::post('pre-tes', [PreTestController::class, 'storeResult'])->name('pretest.store');
 
@@ -79,14 +79,19 @@ Route::group(['middleware' => 'auth'], function () {
             Route::resource('siswa', StudentController::class);
         });
 
-        Route::get('hasil-tes', [TestController::class, 'teacherResult'])->name('result');
-        Route::get('hasil-tes/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
-        Route::get('hasil-tes/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
+        Route::get('hasil-sumatif', [TestController::class, 'teacherResult'])->name('result');
+        Route::get('hasil-sumatif/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
+        Route::get('hasil-sumatif/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
         Route::get('tes/{competency:slug}/{userId}/hasil/{id}/pdf-guru', [TestController::class, 'teacherDownloadResultPdf'])->name('test.result.download');
+
+        Route::get('hasil-kognitif', [PreTestController::class, 'teacherResult'])->name('result.kognitif');
+        Route::get('hasil-kognitif/{clas}', [PreTestController::class, 'teacherResultClas'])->name('result.kognitif.clas');
+        Route::get('hasil-kognitif/{clas}/{id}', [PreTestController::class, 'showTeacherResult'])->name('result.kognitif.show');
 
         Route::get('siswa', [DataController::class, 'student'])->name('student.index');
         Route::get('siswa/{id}', [DataController::class, 'studentShow'])->name('student.show');
 
+        Route::resource('kognitif', McQuestionController::class);
         Route::group(['prefix' => '{competency:slug}'], function() {
             Route::resource('pertanyaan', QuestionController::class);
             Route::resource('pertanyaan/{question}/butir-jawaban', AnswerController::class);

@@ -37,8 +37,10 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="success">{{ intval(optional($passed)->total ?? 0) }}</h3>
-                                            <span>Tes Dikerjakan</span>
+                                            <h3 class="success">
+                                                {{ is_numeric(optional($playground)->total) ? intval($playground->total) : '-' }}
+                                            </h3>
+                                            <span>Latihan Dikerjakan</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-rocket success font-large-2 float-right"></i>
@@ -54,8 +56,9 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="danger">{{ intval(optional($passed)->score ?? 0) }}</h3>
-                                            <span>Skor Tes</span>
+                                            <h3 class="danger">
+                                                {{ is_numeric(optional($mcq)->score) ? intval($mcq->score) : '-' }}</h3>
+                                            <span>Skor Pre Test</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-bag danger font-large-2 float-right"></i>
@@ -71,8 +74,9 @@
                                 <div class="card-body">
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
-                                            <h3 class="info">{{ intval(optional($project)->score ?? 0) }}</h3>
-                                            <span>Skor Proyek</span>
+                                            <h3 class="info">
+                                                {{ is_numeric(optional($project)->score) ? intval($project->score) : '-' }}</h3>
+                                            <span>Skor Post Test</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-graduation info font-large-2 float-right"></i>
@@ -115,28 +119,35 @@
                                 </ul>
                             </li>
 
-                            <li><strong>Menu Soal Tes</strong>
+                            <li><strong>Menu Play Ground</strong>
                                 <ul>
-                                    <li>Berisi berbagai soal latihan berdasarkan kategori, yaitu:</li>
+                                    <li>Berisi berbagai soal latihan pemrograman berdasarkan kategori, yaitu:</li>
                                     <ol type="a">
                                         <li><strong>Tipe Data</strong>: Soal terkait jenis data dasar seperti integer, float,
                                             char, dll.</li>
-                                        <li><strong>Sekuensial</strong>: Soal dengan alur program berurutan seperti menghitung
-                                            luas.</li>
-                                        <li><strong>Percabangan</strong>: Soal menggunakan kondisi seperti <code>if</code>,
-                                            <code>if-else</code>, atau <code>switch-case</code>.
+                                        <li><strong>Struktur Kontrol</strong>: Soal menggunakan kondisi seperti <code>if</code>,
+                                            <code>if-else</code>, atau <code>switch-case</code> dan juga perulangan seperti
+                                            <code>for</code>
+                                            dan <code>do-while</code>.
                                         </li>
-                                        <li><strong>Perulangan</strong>: Soal menggunakan perulangan seperti <code>for</code>
-                                            dan <code>do-while</code>.</li>
                                         <li><strong>Struktur Data</strong>: Soal lanjutan yang menggunakan array atau struktur
                                             data lainnya.</li>
                                     </ol>
                                 </ul>
                             </li>
 
-                            <li><strong>Menu Proyek</strong>
+                            <li><strong>Menu Pre Test</strong>
                                 <ul>
-                                    <li>Berisi tugas proyek pemrograman yang berisi gabungan dari soal sebelumnya.</li>
+                                    <li>Berisi soal pilihan ganda yang mencakup berbagai topik materi pemrograman.</li>
+                                    <li>Siswa mengerjakan soal-soal ini untuk mengukur pemahaman awal sebelum mengikuti
+                                        pembelajaran.</li>
+                                </ul>
+                            </li>
+
+
+                            <li><strong>Menu Post Test</strong>
+                                <ul>
+                                    <li>Berisi soal pemrograman berupa proyek yang terdiri dari gabungan beberapa materi.</li>
                                     <li>Siswa akan mengerjakan proyek sebagai bagian dari evaluasi kemampuan menyeluruh.</li>
                                 </ul>
                             </li>
@@ -243,19 +254,32 @@
                             </li>
 
                             <li><strong>Menu Hasil Tes</strong><br>
-                                <p>Menu ini digunakan untuk monitoring hasil tes siswa. Pada halaman ini terdapat daftar kelas
+                                <p>Menu ini digunakan untuk monitoring hasil tes kognitif dan sumatif siswa. Pada halaman ini
+                                    terdapat daftar
+                                    kelas
                                     dimana didalamnya ada tabel yang
-                                    menampilkan nama-nama siswa beserta nilai.</p>
+                                    menampilkan nama-nama siswa beserta nilai / skor yang diperoleh.</p>
                                 <ul type="a">
                                     <li>Terdapat daftar kelas beserta siswa.</li>
-                                    <li>Tombol Lihat digunakan untuk membuka popup yang berisi data analisa serta kode program
-                                        yang
-                                        dikerjakan oleh siswa.</li>
+                                    <li>Tombol Lihat digunakan untuk membuka popup yang berisi data jawaban siswa.</li>
                                 </ul>
                             </li>
 
-                            <li><strong>Menu Soal</strong><br>
-                                <p>Menu ini digunakan untuk memanajemen data soal, seperti: menambah, mengedit dan menghapus
+                            <li><strong>Menu Soal Kognitif</strong><br>
+                                <p>Menu ini digunakan untuk memanajemen soal-soal kognitif yang berbentuk pilihan ganda seperti
+                                    menambahkan, mengedit, dan menghapus soal.</p>
+                                <ul type="a">
+                                    <li>Tombol <b>Tambah</b> digunakan untuk membuka halaman yang berisi form pembuatan soal
+                                        baru
+                                        dengan format pilihan ganda (opsi A–D).</li>
+                                    <li>Tombol berwarna ungu digunakan untuk mengedit soal yang telah dibuat sebelumnya.</li>
+                                    <li>Tombol berwarna merah digunakan untuk menghapus soal yang tidak digunakan.</li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu Soal Sumatif</strong><br>
+                                <p>Menu ini digunakan untuk memanajemen data soal sumatif, seperti: menambah, mengedit dan
+                                    menghapus
                                     data soal.</p>
                                 <ul type="a">
                                     <li>Terdapat beberapa data substansi soal.</li>

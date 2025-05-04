@@ -42,7 +42,7 @@
                 <div class="col-12 col-md-8">
                     <h3 class="font-weight-bold">Panduan Pelaksanaan Pengerjaan Soal</h3>
                     <ol class="pl-3">
-                        @unless ($progress->competency->id === 6)
+                        @unless ($progress->competency->id === 4)
                             <li>Terdapat 1 soal yang harus dikerjakan.</li>
                         @endunless
 
@@ -50,18 +50,23 @@
 
                         <li>Waktu pengerjaan adalah 15 menit.</li>
 
-                        @if ($progress->competency->id === 6)
+                        @if ($progress->competency->id === 4)
                             <li>Skor berada pada rentang 0-100. Dapatkan skor minimum 75.</li>
                         @endif
 
                         <li>Pastikan perangkat yang digunakan mendukung coding dan terhubung ke internet secara stabil.</li>
                     </ol>
 
-                    @if ($progress->status === 'unlock')
-                        <button type="button" class="btn btn-info w-100 w-md-25 btn-next">Selanjutnya</button>
+                    @if ($progress->competency->id === 4)
+                        @if ($progress->status === 'unlock')
+                            <button type="button" class="btn btn-info w-100 w-md-25 btn-next">Selanjutnya</button>
+                        @else
+                            <button type="button"
+                                data-href="{{ route('student.test.result', [$progress->competency->slug]) }}"
+                                class="btn btn-info w-100 w-md-25 btn-result">Lihat Hasil</button>
+                        @endif
                     @else
-                        <button type="button" data-href="{{ route('student.test.result', [$progress->competency->slug]) }}"
-                            class="btn btn-info w-100 w-md-25 btn-result">Lihat Hasil</button>
+                        <button type="button" class="btn btn-info w-100 w-md-25 btn-next">Selanjutnya</button>
                     @endif
                 </div>
             </div>

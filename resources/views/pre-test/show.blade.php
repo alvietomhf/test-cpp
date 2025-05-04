@@ -20,29 +20,40 @@
         <div class="card p-3">
             <div class="row d-flex justify-content-center mt-2">
                 <div class="col-12 col-md-8">
-                    <h1 class="font-weight-bold">Pretest: Mengukur Pemahaman Awal Kamu</h1>
-                    <p style="">Sebelum mulai belajar, coba isi pretest ini dulu, ya! Tujuannya
-                        buat ngecek
-                        seberapa paham kamu sama materi yang akan dipelajari. Tenang, hasilnya nggak ngaruh ke nilai akhir,
-                        kok.
-                        Anggap aja pemanasan biar belajarnya makin pas buat kamu.</p>
-                </div>
-                <div class="col-12 col-md-8 mt-3">
-                    <h3 class="font-weight-bold">Panduan Pelaksanaan Pengerjaan Soal</h3>
-                    <ol class="list-unstyled">
-                        <li>1. Terdapat 16 soal yang harus dikerjakan.</li>
-                        <li>2. Waktu pengerjaan adalah 40 menit.</li>
-                        <li>3. Pastikan perangkat yang digunakan mendukung dan terhubung ke internet secara stabil.</li>
-                    </ol>
+                    @if (!$result)
+                        <h1 class="font-weight-bold">Pretest: Mengukur Pemahaman Awal Kamu</h1>
+                        <p>Sebelum mulai belajar, coba isi pretest ini dulu, ya! Tujuannya buat ngecek seberapa paham kamu
+                            sama materi yang akan dipelajari. Tenang, hasilnya nggak ngaruh ke nilai akhir, kok. Anggap aja
+                            pemanasan biar belajarnya makin pas buat kamu.</p>
 
-                    {{-- @if ($progress->status === 'unlock') --}}
-                    <button type="button" data-href="{{ route('student.pretest.start') }}"
-                        class="btn btn-info w-100 w-md-25 btn-start">Mulai</button>
-                    {{-- @else
-                        <button type="button" data-href="{{ route('student.pre-test.result') }}"
-                            class="btn btn-info w-100 w-md-25 btn-result">Lihat Hasil</button>
-                    @endif --}}
+                        <h3 class="font-weight-bold mt-4">Panduan Pelaksanaan Pengerjaan Soal</h3>
+                        <ol class="pl-3">
+                            <li>Ada <strong>16 soal</strong> yang harus kamu kerjakan. Baca soalnya baik-baik, ya!</li>
+                            <li>Waktu yang disediakan cuma <strong>40 menit</strong>, jadi jangan terlalu lama di satu soal.
+                            </li>
+                            <li>Pastikan koneksi internet di komputermu <strong>stabil</strong>.</li>
+                            <li>Fokus ngerjain soal dan <strong>jangan ngobrol</strong> saat tes berlangsung.</li>
+                            <li><strong>Kerjakan sendiri</strong>. Nyontek atau bantuin teman itu pelanggaran, ya.</li>
+                            <li>Kalau sudah selesai, <strong>periksa lagi jawabanmu</strong> sebelum klik submit.</li>
+                        </ol>
+
+                        <p><strong>Perhatian:</strong> Pretest ini hanya bisa dikerjakan sekali, jadi pastikan kamu sudah
+                            siap sebelum memulai!</p>
+
+                        <button type="button" data-href="{{ route('student.pretest.start') }}"
+                            class="btn btn-info w-100 w-md-25 btn-start mt-3">Mulai</button>
+                    @else
+                        <h1 class="font-weight-bold">Kamu Sudah Menyelesaikan Pretest</h1>
+                        <p>Mantap! Kamu udah ngerjain pretest-nya. Sekarang saatnya lihat hasilnya biar kamu bisa tahu
+                            sejauh mana pemahaman awalmu sebelum mulai belajar materi inti. Hasil ini bisa bantu kamu dan
+                            gurumu buat menyesuaikan pembelajaran supaya lebih pas dan efektif buat kamu.</p>
+                        <p class="mt-2 mb-0">Yuk, klik tombol di bawah ini untuk melihat hasil pengerjaanmu!</p>
+
+                        <button type="button" data-href="{{ route('student.result') }}"
+                            class="btn btn-info w-100 w-md-25 btn-result mt-1">Lihat Hasil</button>
+                    @endif
                 </div>
+
             </div>
 
         </div>

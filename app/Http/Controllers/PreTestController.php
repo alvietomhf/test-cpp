@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clas;
 use App\Models\McqResult;
 use App\Models\McqResultDetail;
 use App\Models\McQuestion;
 use App\Models\Option;
+use App\Models\Progress;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,9 @@ class PreTestController extends Controller
 {
     public function show()
     {
-        return view('pre-test.show');
+        $result = McqResult::where('user_id', auth()->user()->id)->first();
+
+        return view('pre-test.show', compact('result'));
     }
 
     public function start()
@@ -30,9 +34,47 @@ class PreTestController extends Controller
         return view('pre-test.start', compact('data'));
     }
 
+    public function teacherResult()
+    {
+        $clas = Clas::all();
+
+        return view('pre-test.teacher-result', compact('clas'));
+    }
+
+    public function teacherResultClas(Clas $clas)
+    {
+        $result = McqResult::with([
+                        'user',
+                    ])
+                    ->whereHas('user.clas', function ($q) use ($clas) {
+                        $q->where('id', $clas->id);
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return view('pre-test.teacher-resultcls', compact('result', 'clas'));
+    }
+
+    public function showTeacherResult(Clas $clas, $id)
+    {
+        $data = McqResult::where('id', $id)
+                        ->with([
+                        'resultDetails' => function($q) {
+                            $q->select('id', 'mcq_result_id', 'mc_question_id', 'option_id', 'correct', 'score');
+                        },
+                        'resultDetails.question:id,case,question,note,difficulty',
+                        'resultDetails.question.options:id,mc_question_id,title,correct',
+                        'resultDetails.option:id,title',
+                        ])
+                        ->first();
+
+        return view('pre-test.result-show', compact('data'));
+    }
+
     public function storeResult(Request $request)
     {
         $isResult = McqResult::where('user_id', auth()->user()->id)->first();
+
         if(isset($isResult)) {
             return response()->json([
                 'success' => false,
@@ -101,6 +143,12 @@ class PreTestController extends Controller
 
             $result->update(['score' => $score]);
 
+            Progress::where([
+                        'user_id' => auth()->user()->id,
+                        'competency_id' => 4,
+                    ])
+                    ->update(['status' => 'unlock']);
+
             DB::commit();
 
             return response()->json([
@@ -121,5 +169,24 @@ class PreTestController extends Controller
             ]);
         }
         
+    }
+
+    public function showResult($id)
+    {
+        $data = McqResult::where([
+                            'id' => $id,
+                            'user_id' => auth()->user()->id,
+                        ])
+                        ->with([
+                        'resultDetails' => function($q) {
+                            $q->select('id', 'mcq_result_id', 'mc_question_id', 'option_id', 'correct', 'score');
+                        },
+                        'resultDetails.question:id,case,question,note,difficulty',
+                        'resultDetails.question.options:id,mc_question_id,title,correct',
+                        'resultDetails.option:id,title',
+                        ])
+                        ->first();
+
+        return view('pre-test.result-show', compact('data'));
     }
 }

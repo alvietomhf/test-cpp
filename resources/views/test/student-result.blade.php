@@ -31,17 +31,23 @@
                                     <tbody>
                                         @foreach ($result as $key => $value)
                                             <tr class="">
-                                                <td class="align-middle">{{ $value->competency->title }}</td>
-                                                <td class="align-middle">Ke - {{ $value->attempt }}</td>
-                                                <td class="align-middle"
-                                                    style="color: {{ $value->passed ? 'green' : 'red' }};">
-                                                    {{ $value->score ?? '0' }}
+                                                <td class="align-middle">
+                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title) : 'Pre Test' }}
                                                 </td>
+                                                <td class="align-middle">Ke - {{ $value->attempt }}</td>
+                                                <td class="align-middle">{{ $value->score ?? '0' }} /
+                                                    {{ $value->competency ? $maxScoreCode : $maxScoreMcq }}</td>
                                                 <td class="align-middle">{{ $value->created_at }}</td>
                                                 <td class="align-middle">
-                                                    <button type="button" class="btn btn-info btn-modal rounded"
-                                                        data-href="{{ route('student.test.result.show', [$value->competency->slug, $value->id]) }}"
-                                                        data-container=".app-modal">Lihat</button>
+                                                    @if ($value->type === 'code')
+                                                        <button type="button" class="btn btn-info btn-modal rounded"
+                                                            data-href="{{ route('student.test.result.show', [$value->competency->slug, $value->id]) }}"
+                                                            data-container=".app-modal">Lihat</button>
+                                                    @else
+                                                        <button type="button" class="btn btn-info btn-modal rounded"
+                                                            data-href="{{ route('student.pretest.result.show', $value->id) }}"
+                                                            data-container=".app-modal">Lihat</button>
+                                                    @endif
                                                 </td>
                                                 </td>
                                             </tr>
@@ -55,9 +61,9 @@
             </div>
         </div>
     @else
-        <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center mt-2">
             <div class="card col-12 col-md-6" style="border: 1px solid #5a3da1">
-                <h1 class="p-2 font-bold text-center">Belum ada hasil tes</h1>
+                <h1 class="p-2 font-bold text-center">Belum ada hasil pengerjaan</h1>
             </div>
 
         </div>

@@ -21,10 +21,35 @@
                         <span class="menu-title">Siswa</span>
                     </a>
                 </li>
-                <li class=" nav-item {{ request()->is('hasil-tes*') ? ' active' : '' }}">
-                    <a href="{{ route('teacher.result') }}">
+                <li class=" nav-item {{ request()->is('hasil-*') ? 'menu-collapsed-open open' : '' }}">
+                    <a href="#">
                         <i class="la la-bookmark"></i>
                         <span class="menu-title">Hasil Tes</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li
+                            style="background-color: {{ request()->is('hasil-kognitif*') ? '#512da8' : '' }}; font-weight: {{ request()->is('hasil-kognitif*') ? 'bold' : 'normal' }};">
+                            <a class="menu-item" href="{{ route('teacher.result.kognitif') }}"
+                                style=" color: {{ request()->is('hasil-kognitif*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                <i class="la la-circle-o"></i>
+                                <span> Kognitif</span>
+                            </a>
+                        </li>
+                        <li
+                            style="background-color: {{ request()->is('hasil-sumatif*') ? '#512da8' : '' }}; font-weight: {{ request()->is('hasil-sumatif*') ? 'bold' : 'normal' }};">
+                            <a class="menu-item" href="{{ route('teacher.result') }}"
+                                style=" color: {{ request()->is('hasil-sumatif*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                <i class="la la-circle-o"></i>
+                                <span> Sumatif</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item {{ request()->is('kognitif*') ? ' active' : '' }}">
+                    <a href="{{ route('teacher.kognitif.index') }}">
+                        <i class="la la-question"></i>
+                        <span class="menu-title">Soal Kognitif</span>
                     </a>
                 </li>
                 @php
@@ -32,8 +57,8 @@
                 @endphp
                 <li class=" nav-item {{ request()->is('*/pertanyaan') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
-                        <i class="la la-file"></i>
-                        <span class="menu-title">Soal</span>
+                        <i class="la la-code-fork"></i>
+                        <span class="menu-title">Soal Sumatif</span>
                     </a>
                     <ul class="menu-content">
                         @foreach ($competency as $key => $value)
@@ -54,14 +79,14 @@
                 @php
                     $progress = \App\Models\Progress::where('user_id', auth()->user()->id)
                         ->whereHas('competency', function ($query) {
-                            $query->where('id', '!=', 6);
+                            $query->where('id', '!=', 4);
                         })
                         ->with('competency')
                         ->get();
 
                     $project = \App\Models\Progress::where('user_id', auth()->user()->id)
                         ->whereHas('competency', function ($query) {
-                            $query->where('id', 6);
+                            $query->where('id', 4);
                         })
                         ->with('competency')
                         ->get();
@@ -100,8 +125,7 @@
                                 style="background-color: {{ request()->is('tes/' . $value->competency->slug . '*') ? '#512da8' : '' }}; font-weight: {{ request()->is('tes/' . $value->competency->slug . '*') ? 'bold' : 'normal' }};">
                                 <a href="{{ route('student.test.show', [$value->competency->slug]) }}" class="menu-item"
                                     style=" color: {{ request()->is('tes/' . $value->competency->slug . '*') ? '#ffffff' : '#6b6f82' }} !important;">
-                                    <i
-                                        class="mr-1 @if ($value->status !== 'lock') {{ 'ft-unlock' }}@else{{ 'ft-lock' }} @endif"></i>
+                                    <i class="mr-1 la la-code"></i>
                                     <span
                                         data-i18n="{{ $value->competency->title }}">{{ $value->competency->title }}</span>
                                 </a>
@@ -120,9 +144,8 @@
                 @foreach ($project as $key => $value)
                     <li class=" nav-item {{ request()->is('tes/proyek-akhir*') ? 'active' : '' }}">
                         <a href="{{ route('student.test.show', [$value->competency->slug]) }}">
-                            <i class="la la-file-code-o"></i>
-                            <span class="menu-title"
-                                data-i18n="{{ $value->competency->title }}">{{ $value->competency->title }}</span>
+                            <i class="la la-code-fork"></i>
+                            <span class="menu-title" data-i18n="Post Test">Post Test</span>
                         </a>
                     </li>
                 @endforeach

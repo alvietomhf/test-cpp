@@ -12,10 +12,15 @@ class McqResult extends Model
 
     protected $fillable = ['user_id', 'score', 'is_timeup', 'timeup'];
 
-    // public function getCreatedAtAttribute($date)
-    // {
-    //     return Carbon::createFromFormat('Y-m-d H:i:s', $date)->timezone('Asia/Jakarta')->format('d M y, H:i');
-    // }
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->timezone('Asia/Jakarta')->format('d M y, H:i');
+    }
+
+    public function competency()
+    {
+        return $this->belongsTo(Competency::class);
+    }
 
     public function user()
     {

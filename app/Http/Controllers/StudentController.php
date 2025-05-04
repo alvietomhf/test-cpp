@@ -76,22 +76,16 @@ class StudentController extends Controller
         Progress::create([
             'user_id' => $data->id,
             'competency_id' => 2,
+            'status' => 'unlock',
         ]);
         Progress::create([
             'user_id' => $data->id,
             'competency_id' => 3,
+            'status' => 'unlock',
         ]);
         Progress::create([
             'user_id' => $data->id,
             'competency_id' => 4,
-        ]);
-        Progress::create([
-            'user_id' => $data->id,
-            'competency_id' => 5,
-        ]);
-        Progress::create([
-            'user_id' => $data->id,
-            'competency_id' => 6,
         ]);
 
         flash('Berhasil menambahkan siswa')->success();

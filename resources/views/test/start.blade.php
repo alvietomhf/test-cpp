@@ -239,7 +239,7 @@
                                                         .competency_id;
                                                     let description;
 
-                                                    if (competencyId === 6) {
+                                                    if (competencyId === 4) {
                                                         description =
                                                             `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`
                                                     } else {
@@ -387,7 +387,7 @@
                                             .competency_id;
                                         let description;
 
-                                        if (competencyId === 6) {
+                                        if (competencyId === 4) {
                                             description =
                                                 `Skormu: <b>${res.data.score}</b> / Minimum: <b>${res.data.min_score}</b><br>${res.data.description}`
                                         } else {
