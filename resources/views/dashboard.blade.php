@@ -57,7 +57,8 @@
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
                                             <h3 class="danger">
-                                                {{ is_numeric(optional($mcq)->score) ? intval($mcq->score) : '-' }}</h3>
+                                                {{ is_numeric(optional($mcq)->score) ? round((intval($mcq->score) / $maxScoreMcq) * 100) : '-' }}
+                                            </h3>
                                             <span>Skor Pre Test</span>
                                         </div>
                                         <div class="align-self-center">
@@ -75,7 +76,8 @@
                                     <div class="media d-flex">
                                         <div class="media-body text-left">
                                             <h3 class="info">
-                                                {{ is_numeric(optional($project)->score) ? intval($project->score) : '-' }}</h3>
+                                                {{ is_numeric(optional($project)->score) ? round((intval($project->score) / $maxScoreCode) * 100) : '-' }}
+                                            </h3>
                                             <span>Skor Post Test</span>
                                         </div>
                                         <div class="align-self-center">

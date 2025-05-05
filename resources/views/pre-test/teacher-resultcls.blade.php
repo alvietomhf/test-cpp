@@ -37,7 +37,7 @@
                                         <tr class="">
                                             <td class="align-middle">{{ $value->user->name }}</td>
                                             <td class="align-middle">
-                                                {{ $value->score ?? '0' }} / {{ $maxScoreMcq }}
+                                                {{ round((($value->score ?? 0) / $maxScoreMcq) * 100) }}
                                             </td>
                                             <td class="align-middle">{{ $value->created_at }}</td>
                                             <td class="align-middle">

@@ -43,8 +43,7 @@
                                             </td>
                                             <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                             <td class="align-middle">
-                                                {{ $value->score ?? '0' }} /
-                                                {{ $value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground }}
+                                                {{ round((($value->score ?? 0) / ($value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground)) * 100) }}
                                             </td>
                                             <td class="align-middle">{{ $value->created_at }}</td>
                                             <td class="align-middle">

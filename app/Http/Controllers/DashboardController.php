@@ -36,6 +36,34 @@ class DashboardController extends Controller
                     ->where('r.competency_id', '=', 4)
                     ->first();
 
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+        
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
         $totalClass = Clas::count();
         $totalStudent = User::role('student')->count();
         $totalMateri = Competency::where('id', '!=', 4)->count();
@@ -44,6 +72,9 @@ class DashboardController extends Controller
         $countMcQuestion = McQuestion::count();
         $totalQuestion = $countQuestion + $countMcQuestion;
 
-        return view('dashboard', compact('competency', 'playground', 'mcq', 'project', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion'));
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $maxScoreMcq = $countMcQuestion;
+
+        return view('dashboard', compact('competency', 'playground', 'mcq', 'project', 'totalClass', 'totalStudent', 'totalMateri', 'totalQuestion', 'maxScoreCode', 'maxScoreMcq'));
     }
 }

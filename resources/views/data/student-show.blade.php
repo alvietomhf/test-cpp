@@ -92,8 +92,8 @@
                                                     {{ $value->competency ? ($value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title) : 'Pre Test' }}
                                                 </td>
                                                 <td class="align-middle">Ke - {{ $value->attempt }}</td>
-                                                <td class="align-middle">{{ $value->score ?? '0' }} /
-                                                    {{ $value->competency ? ($value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground) : $maxScoreMcq }}
+                                                <td class="align-middle">
+                                                    {{ round((($value->score ?? 0) / ($value->competency ? ($value->competency->id === 4 ? $maxScoreCode : $maxScorePlayground) : $maxScoreMcq)) * 100) }}
                                                 </td>
                                                 <td class="align-middle">
                                                     @if ($value->type === 'code')

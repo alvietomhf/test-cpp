@@ -25,10 +25,18 @@ class PreTestController extends Controller
 
     public function start()
     {
+        $result = McqResult::where('user_id', auth()->user()->id)->first();
+
+        if (isset($result)) {
+            flash('Pre Test sudah selesai kamu kerjakan!')->warning();
+            return redirect()->route('student.pretest.show');
+        }
+
         $data = McQuestion::with([
                         'options' => function($q) {
                             $q->select('id', 'mc_question_id', 'title');
                         }])
+                        ->orderBy('id', 'asc')
                         ->get();
 
         return view('pre-test.start', compact('data'));
