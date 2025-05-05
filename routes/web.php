@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('tes/{competency:slug}/started', [TestController::class, 'start'])->name('test.start');
         Route::get('tes/{competency:slug}/hasil', [TestController::class, 'result'])->name('test.result');
         Route::get('tes/{competency:slug}/hasil/{id}', [TestController::class, 'showResult'])->name('test.result.show');
+        Route::get('tes/{competency:slug}/rubrik/{id}', [TestController::class, 'showRubric'])->name('test.rubric.show');
         Route::get('tes/{competency:slug}/hasil/{id}/pdf', [TestController::class, 'downloadResultPdf'])->name('test.result.download');
         Route::post('tes/{competency:slug}', [TestController::class, 'storeResult'])->name('test.store');
 
@@ -82,6 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('hasil-sumatif', [TestController::class, 'teacherResult'])->name('result');
         Route::get('hasil-sumatif/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
         Route::get('hasil-sumatif/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
+        Route::get('hasil-sumatif/{competency:slug}/rubrik/{id}', [TestController::class, 'showTeacherRubric'])->name('rubric.show');
         Route::get('tes/{competency:slug}/{userId}/hasil/{id}/pdf-guru', [TestController::class, 'teacherDownloadResultPdf'])->name('test.result.download');
 
         Route::get('hasil-kognitif', [PreTestController::class, 'teacherResult'])->name('result.kognitif');

@@ -333,6 +333,139 @@ class TestController extends Controller
         return view('test.result-show', compact('data', 'competency'));
     }
 
+    public function showRubric(Competency $competency, $id)
+    {
+        $data = Result::where([
+                        'id' => $id,
+                        'user_id' => auth()->user()->id,
+                    ])
+                    ->with([
+                        'resultDetails',
+                        'resultDetails.resultDescriptions',
+                        'resultDetails.resultDescriptions.description',
+                        'resultDetails.resultDescriptions.rdFirstAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer.assessmentSubaspect.aspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer.assessmentSubaspect.aspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer.assessmentSubaspect.aspect',
+                    ])
+                    ->first();
+
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+    
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $finalScore = round(($data->score / $maxScoreCode) * 100);
+
+        if ($finalScore >= 85) {
+            $criteria = 'A (Sangat Baik)';
+        } elseif ($finalScore >= 70) {
+            $criteria = 'B (Baik)';
+        } elseif ($finalScore >= 50) {
+            $criteria = 'C (Cukup)';
+        } else {
+            $criteria = 'D (Kurang)';
+        }
+
+        return view('test.rubric', compact('data', 'competency', 'finalScore', 'criteria'));
+    }
+
+    public function showTeacherRubric(Competency $competency, $id)
+    {
+        $data = Result::where([
+                        'id' => $id,
+                    ])
+                    ->with([
+                        'resultDetails',
+                        'resultDetails.resultDescriptions',
+                        'resultDetails.resultDescriptions.description',
+                        'resultDetails.resultDescriptions.rdFirstAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.firstAnswer.assessmentSubaspect.aspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.secondAnswer.assessmentSubaspect.aspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer.assessmentSubaspect',
+                        'resultDetails.resultDescriptions.rdFirstAnswers.rdSecondAnswers.rdThirdAnswers.thirdAnswer.assessmentSubaspect.aspect',
+                    ])
+                    ->first();
+
+        $question = Question::where('competency_id', 4)
+                    ->with([
+                        'descriptions',
+                        'descriptions.firstAnswers',
+                        'descriptions.firstAnswers.secondAnswers',
+                        'descriptions.firstAnswers.secondAnswers.thirdAnswers',
+                    ])
+                    ->first();
+
+        $totalFirstAnswers = 0;
+        $totalSecondAnswers = 0;
+        $totalThirdAnswers = 0;
+    
+        foreach ($question->descriptions as $description) {
+            $firstAnswers = $description->firstAnswers;
+            $totalFirstAnswers += $firstAnswers->count();
+        
+            foreach ($firstAnswers as $firstAnswer) {
+                $secondAnswers = $firstAnswer->secondAnswers;
+                $totalSecondAnswers += $secondAnswers->count();
+        
+                foreach ($secondAnswers as $secondAnswer) {
+                    $thirdAnswers = $secondAnswer->thirdAnswers;
+                    $totalThirdAnswers += $thirdAnswers->count();
+                }
+            }
+        }
+
+        $maxScoreCode = $totalFirstAnswers + $totalSecondAnswers + $totalThirdAnswers;
+        $finalScore = round(($data->score / $maxScoreCode) * 100);
+
+        if ($finalScore >= 85) {
+            $criteria = 'A (Sangat Baik)';
+        } elseif ($finalScore >= 70) {
+            $criteria = 'B (Baik)';
+        } elseif ($finalScore >= 50) {
+            $criteria = 'C (Cukup)';
+        } else {
+            $criteria = 'D (Kurang)';
+        }
+
+        return view('test.rubric', compact('data', 'competency', 'finalScore', 'criteria'));
+    }
+
     public function downloadResultPdf(Competency $competency, $id)
     {
         $data = Result::where([

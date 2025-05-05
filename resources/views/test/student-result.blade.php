@@ -44,6 +44,11 @@
                                                         <button type="button" class="btn btn-info btn-modal rounded"
                                                             data-href="{{ route('student.test.result.show', [$value->competency->slug, $value->id]) }}"
                                                             data-container=".app-modal">Lihat</button>
+                                                        @if ($value->competency->id === 4)
+                                                            <button type="button" class="btn btn-warning btn-modal rounded"
+                                                                data-href="{{ route('student.test.rubric.show', [$value->competency->slug, $value->id]) }}"
+                                                                data-container=".app-modal">Rubrik</button>
+                                                        @endif
                                                     @else
                                                         <button type="button" class="btn btn-info btn-modal rounded"
                                                             data-href="{{ route('student.pretest.result.show', $value->id) }}"

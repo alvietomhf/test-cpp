@@ -100,6 +100,11 @@
                                                         <button type="button" class="btn btn-info btn-modal rounded"
                                                             data-href="{{ route('teacher.result.show', [$value->competency->slug, $value->id]) }}"
                                                             data-container=".app-modal">Lihat</button>
+                                                        @if ($value->competency->id === 4)
+                                                            <button type="button" class="btn btn-warning btn-modal rounded"
+                                                                data-href="{{ route('teacher.rubric.show', [$value->competency->slug, $value->id]) }}"
+                                                                data-container=".app-modal">Rubrik</button>
+                                                        @endif
                                                     @else
                                                         <button type="button" class="btn btn-info btn-modal rounded"
                                                             data-href="{{ route('teacher.result.kognitif.show', [$data->clas->id, $value->id]) }}"
