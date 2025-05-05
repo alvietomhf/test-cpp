@@ -157,6 +157,43 @@
                     </div>
                 </div>
 
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-info text-white font-weight-bold">
+                        Video Pembelajaran
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h5>Tipe Data dan Variabel</h5>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/_agqO67gOgg"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h5>Struktur Data</h5>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/q04buHDFT6M"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h5>Percabangan</h5>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/VSL19lCLqHk"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h5>Perulangan</h5>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/UnjN6paBra0"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     @else
