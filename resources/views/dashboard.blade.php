@@ -310,7 +310,7 @@
                                 <ul type="a">
                                     <li>Tombol <b>Tambah</b> digunakan untuk membuka halaman yang berisi form pembuatan soal
                                         baru
-                                        dengan format pilihan ganda (opsi A–D).</li>
+                                        dengan format pilihan ganda (opsi A–E).</li>
                                     <li>Tombol berwarna ungu digunakan untuk mengedit soal yang telah dibuat sebelumnya.</li>
                                     <li>Tombol berwarna merah digunakan untuk menghapus soal yang tidak digunakan.</li>
                                 </ul>

@@ -157,7 +157,7 @@ class McQuestionController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'options.*.id' => 'required|exists:options,id',
             'options.*.title' => 'required|string',
-            'correct_option' => 'required|in:0,1,2,3'
+            'correct_option' => 'required|in:0,1,2,3,4'
         ]);
 
         if ($validator->fails()) {
