@@ -89,7 +89,7 @@
                                             <tr class="">
                                                 <td class="align-middle">{{ $value->created_at }}</td>
                                                 <td class="align-middle">
-                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title) : 'Pre Test' }}
+                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Post Tes Psikomotorik' : 'Play Ground : ' . $value->competency->title) : 'Tes Kognitif' }}
                                                 </td>
                                                 <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                                 <td class="align-middle">

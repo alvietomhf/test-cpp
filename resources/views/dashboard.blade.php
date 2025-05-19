@@ -59,7 +59,7 @@
                                             <h3 class="danger">
                                                 {{ is_numeric(optional($mcq)->score) ? round((intval($mcq->score) / $maxScoreMcq) * 100) : '-' }}
                                             </h3>
-                                            <span>Skor Pre Test</span>
+                                            <span>Skor Tes Kognitif</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-bag danger font-large-2 float-right"></i>
@@ -78,7 +78,7 @@
                                             <h3 class="info">
                                                 {{ is_numeric(optional($project)->score) ? round((intval($project->score) / $maxScoreCode) * 100) : '-' }}
                                             </h3>
-                                            <span>Skor Post Test</span>
+                                            <span>Skor Tes Psikomotorik</span>
                                         </div>
                                         <div class="align-self-center">
                                             <i class="icon-graduation info font-large-2 float-right"></i>
@@ -138,7 +138,7 @@
                                 </ul>
                             </li>
 
-                            <li><strong>Menu Pre Test</strong>
+                            <li><strong>Menu Tes Kognitif</strong>
                                 <ul>
                                     <li>Berisi soal pilihan ganda yang mencakup berbagai topik materi pemrograman.</li>
                                     <li>Siswa mengerjakan soal-soal ini untuk mengukur pemahaman awal sebelum mengikuti
@@ -147,7 +147,7 @@
                             </li>
 
 
-                            <li><strong>Menu Post Test</strong>
+                            <li><strong>Menu Tes Psikomotorik</strong>
                                 <ul>
                                     <li>Berisi soal pemrograman berupa proyek yang terdiri dari gabungan beberapa materi.</li>
                                     <li>Siswa akan mengerjakan proyek sebagai bagian dari evaluasi kemampuan menyeluruh.</li>
@@ -293,7 +293,8 @@
                             </li>
 
                             <li><strong>Menu Hasil Tes</strong><br>
-                                <p>Menu ini digunakan untuk monitoring hasil tes kognitif dan sumatif siswa. Pada halaman ini
+                                <p>Menu ini digunakan untuk monitoring hasil tes kognitif dan psikomotorik siswa. Pada halaman
+                                    ini
                                     terdapat daftar
                                     kelas
                                     dimana didalamnya ada tabel yang
@@ -316,8 +317,8 @@
                                 </ul>
                             </li>
 
-                            <li><strong>Menu Soal Sumatif</strong><br>
-                                <p>Menu ini digunakan untuk memanajemen data soal sumatif, seperti: menambah, mengedit dan
+                            <li><strong>Menu Soal Psikomotorik</strong><br>
+                                <p>Menu ini digunakan untuk memanajemen data soal psikomotorik, seperti: menambah, mengedit dan
                                     menghapus
                                     data soal.</p>
                                 <ul type="a">

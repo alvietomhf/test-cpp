@@ -63,11 +63,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('tes/{competency:slug}/hasil/{id}/pdf', [TestController::class, 'downloadResultPdf'])->name('test.result.download');
         Route::post('tes/{competency:slug}', [TestController::class, 'storeResult'])->name('test.store');
 
-        Route::get('pre-tes', [PreTestController::class, 'show'])->name('pretest.show');
-        Route::get('pre-tes/started', [PreTestController::class, 'start'])->name('pretest.start');
-        Route::get('pre-tes/hasil/{id}', [PreTestController::class, 'showResult'])->name('pretest.result.show');
-        // Route::get('pre-tes/hasil/{id}/pdf', [PreTestController::class, 'downloadResultPdf'])->name('pretest.result.download');
-        Route::post('pre-tes', [PreTestController::class, 'storeResult'])->name('pretest.store');
+        Route::get('tes-kognitif', [PreTestController::class, 'show'])->name('pretest.show');
+        Route::get('tes-kognitif/started', [PreTestController::class, 'start'])->name('pretest.start');
+        Route::get('tes-kognitif/hasil/{id}', [PreTestController::class, 'showResult'])->name('pretest.result.show');
+        // Route::get('tes-kognitif/hasil/{id}/pdf', [PreTestController::class, 'downloadResultPdf'])->name('pretest.result.download');
+        Route::post('tes-kognitif', [PreTestController::class, 'storeResult'])->name('pretest.store');
 
         Route::get('hasil-tes-siswa', [TestController::class, 'studentResult'])->name('result');
 
@@ -80,10 +80,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::resource('siswa', StudentController::class);
         });
 
-        Route::get('hasil-sumatif', [TestController::class, 'teacherResult'])->name('result');
-        Route::get('hasil-sumatif/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
-        Route::get('hasil-sumatif/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
-        Route::get('hasil-sumatif/{competency:slug}/rubrik/{id}', [TestController::class, 'showTeacherRubric'])->name('rubric.show');
+        Route::get('hasil-psikomotorik', [TestController::class, 'teacherResult'])->name('result');
+        Route::get('hasil-psikomotorik/{clas}', [TestController::class, 'teacherResultClas'])->name('result.clas');
+        Route::get('hasil-psikomotorik/{competency:slug}/{id}', [TestController::class, 'showTeacherResult'])->name('result.show');
+        Route::get('hasil-psikomotorik/{competency:slug}/rubrik/{id}', [TestController::class, 'showTeacherRubric'])->name('rubric.show');
         Route::get('tes/{competency:slug}/{userId}/hasil/{id}/pdf-guru', [TestController::class, 'teacherDownloadResultPdf'])->name('test.result.download');
 
         Route::get('hasil-kognitif', [PreTestController::class, 'teacherResult'])->name('result.kognitif');

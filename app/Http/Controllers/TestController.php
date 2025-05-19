@@ -40,7 +40,7 @@ class TestController extends Controller
                             ->first();
 
         if ($competency->id === 4 && $progress->status === 'lock') {
-            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            flash('Tes Psikomotorik masih terkunci! Selesaikan Tes Kognitif berikut terlebih dahulu')->warning();
             return redirect()->route('student.pretest.show');
         }
                                         
@@ -57,11 +57,11 @@ class TestController extends Controller
                             ->first();
 
         if ($competency->id === 4 && $progress->status === 'lock') {
-            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            flash('Tes Psikomotorik masih terkunci! Selesaikan Tes Kognitif berikut terlebih dahulu')->warning();
             return redirect()->route('student.pretest.show');
         }
         if ($competency->id === 4 && $progress->status === 'passed') {
-            flash('Post Test sudah selesai kamu kerjakan!')->warning();
+            flash('Tes Psikomotorik sudah selesai kamu kerjakan!')->warning();
             return redirect()->route('student.test.show', [$progress->competency->slug]);
         }
 
@@ -244,7 +244,7 @@ class TestController extends Controller
 
             if ($competency->id == 4) {
                 $resUrl = $passed == 1 ? route('student.result') : route('student.test.show', [$competency->slug]);
-                $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan Post Test! Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
+                $resDesc = $passed == 1 ? 'Kamu berhasil menyelesaikan Tes Psikomotorik! Yuk cek hasil jawabannya.' : 'Skormu belum cukup. Pelajari kembali dan coba lagi ya.';
             } else {
                 $resUrl = route('student.result');
                 $resDesc = 'Jawaban kamu berhasil terkirim! Silahkan cek hasilnya.';
@@ -295,7 +295,7 @@ class TestController extends Controller
         }
 
         if ($competency->id === 4 && $progress->status === 'lock') {
-            flash('Post Test masih terkunci! Selesaikan Pre Test berikut terlebih dahulu')->warning();
+            flash('Tes Psikomotorik masih terkunci! Selesaikan Tes Kognitif berikut terlebih dahulu')->warning();
             return redirect()->route('student.pretest.show');
         }
 

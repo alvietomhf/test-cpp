@@ -36,11 +36,11 @@
                             </a>
                         </li>
                         <li
-                            style="background-color: {{ request()->is('hasil-sumatif*') ? '#512da8' : '' }}; font-weight: {{ request()->is('hasil-sumatif*') ? 'bold' : 'normal' }};">
+                            style="background-color: {{ request()->is('hasil-psikomotorik*') ? '#512da8' : '' }}; font-weight: {{ request()->is('hasil-psikomotorik*') ? 'bold' : 'normal' }};">
                             <a class="menu-item" href="{{ route('teacher.result') }}"
-                                style=" color: {{ request()->is('hasil-sumatif*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                style=" color: {{ request()->is('hasil-psikomotorik*') ? '#ffffff' : '#6b6f82' }} !important;">
                                 <i class="la la-circle-o"></i>
-                                <span> Sumatif</span>
+                                <span> Psikomotorik</span>
                             </a>
                         </li>
                     </ul>
@@ -55,19 +55,20 @@
                 @php
                     $competency = \App\Models\Competency::all();
                 @endphp
-                <li class=" nav-item {{ request()->is('*/pertanyaan') ? 'menu-collapsed-open open' : '' }}">
+                <li
+                    class=" nav-item {{ request()->is('*/pertanyaan*') || request()->is('*/keterangan*') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
                         <i class="la la-code-fork"></i>
-                        <span class="menu-title">Soal Sumatif</span>
+                        <span class="menu-title">Soal Psikomotorik</span>
                     </a>
                     <ul class="menu-content">
                         @foreach ($competency as $key => $value)
                             <li
-                                style="background-color: {{ request()->is($value->slug . '/pertanyaan*') ? '#512da8' : '' }}; font-weight: {{ request()->is($value->slug . '/pertanyaan*') ? 'bold' : 'normal' }};">
+                                style="background-color: {{ request()->is($value->slug . '/pertanyaan*') || request()->is($value->slug . '/keterangan*') ? '#512da8' : '' }}; font-weight: {{ request()->is($value->slug . '/pertanyaan*') || request()->is($value->slug . '/keterangan*') ? 'bold' : 'normal' }};">
                                 <a class="menu-item" href="{{ route('teacher.pertanyaan.index', [$value->slug]) }}"
-                                    style=" color: {{ request()->is($value->slug . '/pertanyaan*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                    style=" color: {{ request()->is($value->slug . '/pertanyaan*') || request()->is($value->slug . '/keterangan*') ? '#ffffff' : '#6b6f82' }} !important;">
                                     <i class="la la-circle-o"></i>
-                                    <span> {{ $value->title ?? '' }}</span>
+                                    <span> {{ $value->id === 4 ? 'Post Tes Psikomotorik' : $value->title ?? '' }}</span>
                                 </a>
                             </li>
                         @endforeach
@@ -114,7 +115,7 @@
 
 
                 <li
-                    class=" nav-item {{ request()->is('tes/*') && !request()->is('tes/post-test*') ? 'menu-collapsed-open open' : '' }}">
+                    class=" nav-item {{ request()->is('tes/*') && !request()->is('tes/psikomotorik*') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
                         <i class="la la-play"></i>
                         <span class="menu-title" data-i18n="Soal">Play Ground</span>
@@ -134,18 +135,18 @@
                     </ul>
                 </li>
 
-                <li class=" nav-item {{ request()->is('pre-tes*') ? 'active' : '' }}">
+                <li class=" nav-item {{ request()->is('tes-kognitif*') ? 'active' : '' }}">
                     <a href="{{ route('student.pretest.show') }}">
                         <i class="la la-clipboard"></i>
-                        <span class="menu-title" data-i18n="Pre Test">Pre Test</span>
+                        <span class="menu-title" data-i18n="Tes Kognitif">Tes Kognitif</span>
                     </a>
                 </li>
 
                 @foreach ($project as $key => $value)
-                    <li class=" nav-item {{ request()->is('tes/post-test*') ? 'active' : '' }}">
+                    <li class=" nav-item {{ request()->is('tes/psikomotorik*') ? 'active' : '' }}">
                         <a href="{{ route('student.test.show', [$value->competency->slug]) }}">
                             <i class="la la-code-fork"></i>
-                            <span class="menu-title" data-i18n="Post Test">Post Test</span>
+                            <span class="menu-title" data-i18n="Tes Psikomotorik">Tes Psikomotorik</span>
                         </a>
                     </li>
                 @endforeach

@@ -24,7 +24,7 @@
             $questionCount = count($data);
         @endphp
         <div class="row w-full justify-content-start bg-info p-1 rounded text-white font-weight-bold">
-            <span>PreTest</span>
+            <span>Tes Kognitif</span>
         </div>
         <div class="row">
             <div class="col-12 px-2 pt-2 d-flex flex-column">

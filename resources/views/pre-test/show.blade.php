@@ -21,8 +21,8 @@
             <div class="row d-flex justify-content-center mt-2">
                 <div class="col-12 col-md-8">
                     @if (!$result)
-                        <h1 class="font-weight-bold">Pretest: Mengukur Pemahaman Awal Kamu</h1>
-                        <p>Sebelum mulai belajar, coba isi pretest ini dulu, ya! Tujuannya buat ngecek seberapa paham kamu
+                        <h1 class="font-weight-bold">Tes Kognitif: Mengukur Pemahaman Awal Kamu</h1>
+                        <p>Sebelum mulai belajar, coba isi tes ini dulu, ya! Tujuannya buat ngecek seberapa paham kamu
                             sama materi yang akan dipelajari. Tenang, hasilnya nggak ngaruh ke nilai akhir, kok. Anggap aja
                             pemanasan biar belajarnya makin pas buat kamu.</p>
 
@@ -37,14 +37,15 @@
                             <li>Kalau sudah selesai, <strong>periksa lagi jawabanmu</strong> sebelum klik submit.</li>
                         </ol>
 
-                        <p><strong>Perhatian:</strong> Pretest ini hanya bisa dikerjakan sekali, jadi pastikan kamu sudah
+                        <p><strong>Perhatian:</strong> Tes Kognitif ini hanya bisa dikerjakan sekali, jadi pastikan kamu
+                            sudah
                             siap sebelum memulai!</p>
 
                         <button type="button" data-href="{{ route('student.pretest.start') }}"
                             class="btn btn-info w-100 w-md-25 btn-start mt-3">Mulai</button>
                     @else
-                        <h1 class="font-weight-bold">Kamu Sudah Menyelesaikan Pretest</h1>
-                        <p>Mantap! Kamu udah ngerjain pretest-nya. Sekarang saatnya lihat hasilnya biar kamu bisa tahu
+                        <h1 class="font-weight-bold">Kamu Sudah Menyelesaikan Tes Kognitif</h1>
+                        <p>Mantap! Kamu udah ngerjain tes-nya. Sekarang saatnya lihat hasilnya biar kamu bisa tahu
                             sejauh mana pemahaman awalmu sebelum mulai belajar materi inti. Hasil ini bisa bantu kamu dan
                             gurumu buat menyesuaikan pembelajaran supaya lebih pas dan efektif buat kamu.</p>
                         <p class="mt-2 mb-0">Yuk, klik tombol di bawah ini untuk melihat hasil pengerjaanmu!</p>

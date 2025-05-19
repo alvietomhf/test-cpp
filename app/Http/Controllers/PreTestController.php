@@ -28,7 +28,7 @@ class PreTestController extends Controller
         $result = McqResult::where('user_id', auth()->user()->id)->first();
 
         if (isset($result)) {
-            flash('Pre Test sudah selesai kamu kerjakan!')->warning();
+            flash('Tes Kognitif sudah selesai kamu kerjakan!')->warning();
             return redirect()->route('student.pretest.show');
         }
 

@@ -39,7 +39,7 @@
                                         <tr class="">
                                             <td class="align-middle">{{ $value->user->name }}</td>
                                             <td class="align-middle">
-                                                {{ $value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title }}
+                                                {{ $value->competency->id === 4 ? 'Post Tes Psikomotorik' : 'Play Ground : ' . $value->competency->title }}
                                             </td>
                                             <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                             <td class="align-middle">

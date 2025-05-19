@@ -32,7 +32,7 @@
                                         @foreach ($result as $key => $value)
                                             <tr class="">
                                                 <td class="align-middle">
-                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Post Test' : 'Play Ground : ' . $value->competency->title) : 'Pre Test' }}
+                                                    {{ $value->competency ? ($value->competency->id === 4 ? 'Tes Psikomotorik' : 'Play Ground : ' . $value->competency->title) : 'Tes Kognitif' }}
                                                 </td>
                                                 <td class="align-middle">Ke - {{ $value->attempt }}</td>
                                                 <td class="align-middle">
