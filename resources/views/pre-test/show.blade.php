@@ -29,7 +29,7 @@
                         <h3 class="font-weight-bold mt-4">Panduan Pelaksanaan Pengerjaan Soal</h3>
                         <ol class="pl-3">
                             <li>Ada <strong>16 soal</strong> yang harus kamu kerjakan. Baca soalnya baik-baik, ya!</li>
-                            <li>Waktu yang disediakan cuma <strong>40 menit</strong>, jadi jangan terlalu lama di satu soal.
+                            <li>Waktu yang disediakan cuma <strong>50 menit</strong>, jadi jangan terlalu lama di satu soal.
                             </li>
                             <li>Pastikan koneksi internet di komputermu <strong>stabil</strong>.</li>
                             <li>Fokus ngerjain soal dan <strong>jangan ngobrol</strong> saat tes berlangsung.</li>

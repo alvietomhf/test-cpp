@@ -62,7 +62,7 @@
                         <div class="d-flex flex-column mt-2">
                             <p class="font-weight-bold mb-1">Sisa Waktu</p>
                             <div class="text-center" style="border: 1px solid #e6e6e6; padding: 7px; border-radius: 10px;">
-                                <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">15 : 00</span>
+                                <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">60 : 00</span>
                             </div>
                         </div>
                         <div class="d-flex flex-row mt-2 align-items-center justify-content-end">
@@ -107,7 +107,7 @@
 
 @section('js')
     <script type="text/javascript">
-        const minuteDuration = 15;
+        const minuteDuration = 60;
         let timeDurationArr = [];
         let submitted = false;
 

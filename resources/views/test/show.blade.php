@@ -48,7 +48,7 @@
 
                         <li>Pengerjaan berbentuk live coding, di mana peserta menuliskan langsung kode programnya.</li>
 
-                        <li>Waktu pengerjaan adalah 15 menit.</li>
+                        <li>Waktu pengerjaan adalah 60 menit.</li>
 
                         @if ($progress->competency->id === 4)
                             <li>Skor berada pada rentang 0-100. Dapatkan skor minimum 75.</li>

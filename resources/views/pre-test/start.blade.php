@@ -31,7 +31,7 @@
                 <div class="text-center p-1"
                     style="border: 1px solid #e6e6e6; padding: 7px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); background-color: #ffffff;">
                     <p class="font-weight-bold mb-0">Sisa Waktu</p>
-                    <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">40 : 00</span>
+                    <span class="timer font-weight-bold" style="font-size: 17px; color: #5a30bf">50 : 00</span>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
 
 @section('js')
     <script type="text/javascript">
-        const minuteDuration = 40;
+        const minuteDuration = 50;
         let submitted = false;
 
         $(document).ready(function() {
