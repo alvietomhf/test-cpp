@@ -11,6 +11,7 @@ class PjblQuestion extends Model
 
     protected $fillable = [
         'competency_id',
+        'custom_competency',
         'description',
         'case',
     ];

@@ -34,7 +34,8 @@
                                         @foreach ($questions as $question)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $question->competency->name }}</td>
+                                                <td>{{ $question->custom_competency ?? ($question->competency_id ? $question->competency->title : '') }}
+                                                </td>
                                                 <td>{!! $question->description !!}</td>
                                                 <td>{!! $question->case !!}</td>
                                                 <td>

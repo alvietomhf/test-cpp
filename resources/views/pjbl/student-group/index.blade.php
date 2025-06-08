@@ -23,7 +23,9 @@
                             style="border-bottom: 3px solid #5a3da1">
                             <div class="card-content text-center">
                                 <p class="h3 text-dark font-weight-bold">{{ $group->name }}</p>
-                                <p class="h4 text-dark">Materi - {{ $group->question->competency->title }}</p>
+                                <p class="h4 text-dark">Materi -
+                                    {{ $group->question->custom_competency ?? ($group->question->competency_id ? $group->question->competency->title : '') }}
+                                </p>
                             </div>
                         </a>
                     </div>

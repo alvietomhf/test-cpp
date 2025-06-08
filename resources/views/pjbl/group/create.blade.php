@@ -36,7 +36,8 @@
                                             oninput="this.setCustomValidity('')" required>
                                             <option value="" disabled selected>Pilih Soal</option>
                                             @foreach ($questions as $value)
-                                                <option value="{{ $value->id }}">{{ $value->competency->title }}
+                                                <option value="{{ $value->id }}">
+                                                    {{ $value->custom_competency ?? ($value->competency_id ? $value->competency->title : '') }}
                                                 </option>
                                             @endforeach
                                         </select>

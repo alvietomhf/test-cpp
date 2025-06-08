@@ -42,7 +42,8 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $group->name }}</td>
                                                 <td>{{ $group->clas->name }}</td>
-                                                <td>{{ $group->question->competency->title }}</td>
+                                                <td>{{ $group->question->custom_competency ?? ($group->question->competency_id ? $group->question->competency->title : '') }}
+                                                </td>
                                                 <td>{{ $memberInfo }}</td>
                                                 <td>
                                                     <a href="{{ route('teacher.pjbl.group.show', $group->id) }}"

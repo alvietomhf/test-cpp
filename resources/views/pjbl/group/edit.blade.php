@@ -34,8 +34,8 @@
                                     <select class="form-control" id="question" name="question" disabled>
                                         @foreach ($questions as $value)
                                             <option value="{{ $value->id }}"
-                                                {{ $value->id == $group->question_id ? 'selected' : '' }}>
-                                                {{ $value->competency->title }}
+                                                {{ $value->id == $group->pjbl_question_id ? 'selected' : '' }}>
+                                                {{ $value->custom_competency ?? ($value->competency_id ? $value->competency->title : '') }}
                                             </option>
                                         @endforeach
                                     </select>

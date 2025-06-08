@@ -32,16 +32,14 @@ class PjblController extends Controller
 
     public function questionCreate()
     {
-        $competencies = Competency::all();
-
-        return view('pjbl.question.create', compact('competencies'));
+        return view('pjbl.question.create');
     }
 
     public function questionStore(Request $request)
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'competency' => 'required|integer',
+            'custom_competency' => 'required|string',
             'description' => 'required|string',
             'case' => 'required|string',
         ]);
@@ -57,12 +55,7 @@ class PjblController extends Controller
         try {
             DB::beginTransaction();
 
-            PjblQuestion::create(array_merge(
-                $validator->validated(),
-                [
-                    'competency_id' => $request->competency,
-                ]
-            ));
+            PjblQuestion::create($validator->validated());
 
             DB::commit();
 
@@ -88,16 +81,15 @@ class PjblController extends Controller
     public function questionEdit($id)
     {
         $question = PjblQuestion::findOrFail($id);
-        $competencies = Competency::all();
 
-        return view('pjbl.question.edit', compact('question', 'competencies'));
+        return view('pjbl.question.edit', compact('question'));
     }
 
     public function questionUpdate(Request $request, $id)
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'competency' => 'required|integer',
+            'custom_competency' => 'required|string',
             'description' => 'required|string',
             'case' => 'required|string',
         ]);
@@ -115,12 +107,7 @@ class PjblController extends Controller
 
             $question = PjblQuestion::findOrFail($id);
 
-            $question->update(array_merge(
-                $validator->validated(),
-                [
-                    'competency_id' => $request->competency,
-                ]
-            ));
+            $question->update($validator->validated());
 
             DB::commit();
 

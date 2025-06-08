@@ -26,15 +26,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <fieldset class="form-group">
-                                    <label class="fw-600" for="competency">Materi</label>
-                                    <select class="form-control" id="competency" name="competency">
-                                        <option disabled>Pilih Materi</option>
-                                        @foreach ($competencies as $competency)
-                                            <option value="{{ $competency->id }}"
-                                                {{ $question->competency->id === $competency->id ? 'selected' : '' }}>
-                                                {{ $competency->title }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="fw-600" for="custom_competency">Materi</label>
+                                    <input oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                        oninput="this.setCustomValidity('')" type="text" id="custom_competency"
+                                        class="form-control" placeholder="Materi" name="custom_competency"
+                                        value="{{ $question->custom_competency ?? ($question->competency->id ? $question->competency->title : '') }}"
+                                        required>
                                 </fieldset>
                                 <fieldset class="form-group">
                                     <label class="fw-600" for="description">Deskripsi</label>
@@ -68,12 +65,6 @@
 
             let valid = true;
             let messages = [];
-
-            const competency = document.getElementById('competency').value;
-            if (!competency || competency === 'Pilih Materi') {
-                valid = false;
-                messages.push('⚙️ Materi wajib dipilih.');
-            }
 
             const descVal = CKEDITOR.instances['description'].getData().trim();
             const caseVal = CKEDITOR.instances['case'].getData().trim();
