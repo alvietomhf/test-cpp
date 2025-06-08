@@ -153,6 +153,17 @@
                                     <li>Siswa akan mengerjakan proyek sebagai bagian dari evaluasi kemampuan menyeluruh.</li>
                                 </ul>
                             </li>
+
+                            <li><strong>Menu PjBL</strong>
+                                <ul>
+                                    <li>Berisi aktivitas pembelajaran berbasis proyek yang dilakukan secara berkelompok.</li>
+                                    <li>Siswa akan mengerjakan proyek sesuai sintaks pembelajaran yang telah ditentukan guru.
+                                    </li>
+                                    <li>Proyek yang dikerjakan akan menjadi bagian dari penilaian keterampilan dan kolaborasi
+                                        siswa.</li>
+                                </ul>
+                            </li>
+
                         </ol>
                     </div>
                 </div>
@@ -330,6 +341,23 @@
                                         bobot poin serta kunci jawaban.</li>
                                     <li>Tombol berwarna hijau digunakan untuk mengedit data yang sudah ada.</li>
                                     <li>Tombol berwarna merah digunakan untuk menghapus data.</li>
+                                </ul>
+                            </li>
+
+                            <li><strong>Menu PjBL</strong><br>
+                                <p>Menu ini digunakan untuk mengelola pembelajaran berbasis proyek (Project Based Learning).
+                                    Guru dapat membuat soal proyek dan mengelompokkan siswa untuk bekerja dalam tim.</p>
+                                <ul type="a">
+                                    <li>Terdapat dua submenu yaitu <b>Soal</b> dan <b>Kelompok</b>.</li>
+                                    <li>Submenu <b>Soal</b> digunakan untuk membuat dan mengelola soal-soal proyek.</li>
+                                    <li>Submenu <b>Kelompok</b> digunakan untuk membentuk kelompok siswa dan memantau
+                                        perkembangan proyek mereka.</li>
+                                    <li>Tombol Tambah digunakan untuk membuat soal atau kelompok baru.</li>
+                                    <li>Tombol berwarna ungu digunakan untuk mengedit soal atau kelompok yang telah dibuat.
+                                    </li>
+                                    <li>Tombol berwarna merah digunakan untuk menghapus data soal atau kelompok.</li>
+                                    <li>Tombol berwarna orange digunakan untuk melihat progress kelompok.</li>
+                                    <li>Tombol berwarna hijau digunakan untuk melihat anggota kelompok.</li>
                                 </ul>
                             </li>
                         </ol>

@@ -9,6 +9,7 @@ use App\Http\Controllers\FirstAnswerController;
 use App\Http\Controllers\FirstKeyController;
 use App\Http\Controllers\KeyController;
 use App\Http\Controllers\McQuestionController;
+use App\Http\Controllers\PjblController;
 use App\Http\Controllers\PreTestController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionOutputController;
@@ -72,6 +73,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('hasil-tes-siswa', [TestController::class, 'studentResult'])->name('result');
 
         Route::post('execute', [TestController::class, 'execute'])->name('execute');
+
+        Route::group(['as' => 'pjbl.', 'prefix' => 'pjbl'], function() {
+            Route::group(['as' => 'group.', 'prefix' => 'kelompok-siswa'], function() {
+                Route::get('/', [PjblController::class, 'studentGroupIndex'])->name('index');
+                Route::get('/{id}', [PjblController::class, 'studentGroupDetail'])->name('show');
+                Route::get('/{id}/anggota', [PjblController::class, 'studentGroupMember'])->name('member');
+                Route::get('/{id}/hasil/{pjbl_phase:slug}', [PjblController::class, 'studentGroupResult'])->name('result');
+
+                Route::post('problem', [PjblController::class, 'storeProblem'])->name('problem.store');
+                Route::post('file', [PjblController::class, 'storeFile'])->name('file.store');
+            });
+        });
     });
 
     Route::group(['as' => 'teacher.', 'middleware' => ['role:teacher']], function() {
@@ -92,6 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('siswa', [DataController::class, 'student'])->name('student.index');
         Route::get('siswa/{id}', [DataController::class, 'studentShow'])->name('student.show');
+        Route::get('siswa-kelas/{classId}', [DataController::class, 'getStudentsByClasId'])->name('student.byclass');
 
         Route::resource('kognitif', McQuestionController::class);
         Route::group(['prefix' => '{competency:slug}'], function() {
@@ -106,6 +120,35 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('{description}/jawaban-pertama/{firstAnswer}/kj-pertama', FirstKeyController::class);
         Route::resource('{firstAnswer}/jawaban-kedua/{secondAnswer}/kj-kedua', SecondKeyController::class);
         Route::resource('{secondAnswer}/jawaban-ketiga/{thirdAnswer}/kj-ketiga', ThirdKeyController::class);
+
+        Route::group(['as' => 'pjbl.', 'prefix' => 'pjbl'], function() {
+            Route::group(['as' => 'question.', 'prefix' => 'soal'], function() {
+                Route::get('/', [PjblController::class, 'questionIndex'])->name('index');
+                Route::get('/tambah', [PjblController::class, 'questionCreate'])->name('create');
+                Route::post('/', [PjblController::class, 'questionStore'])->name('store');
+                Route::get('/{id}/edit', [PjblController::class, 'questionEdit'])->name('edit');
+                Route::put('/{id}', [PjblController::class, 'questionUpdate'])->name('update');
+                Route::delete('/{id}', [PjblController::class, 'questionDestroy'])->name('destroy');
+            });
+
+            Route::group(['as' => 'group.', 'prefix' => 'kelompok'], function() {
+                Route::get('/', [PjblController::class, 'groupIndex'])->name('index');
+                Route::get('/{id}', [PjblController::class, 'groupDetail'])->name('show');
+                Route::get('/{id}/hasil/{pjbl_phase:slug}', [PjblController::class, 'groupResult'])->name('result');
+                Route::get('/tambah/data', [PjblController::class, 'groupCreate'])->name('create');
+                Route::post('/', [PjblController::class, 'groupStore'])->name('store');
+                Route::post('/feedback', [PjblController::class, 'storeFeedback'])->name('feedback.store');
+                Route::get('/{id}/edit/data', [PjblController::class, 'groupEdit'])->name('edit');
+                Route::put('/{id}', [PjblController::class, 'groupUpdate'])->name('update');
+                Route::delete('/{id}', [PjblController::class, 'groupDestroy'])->name('destroy');
+
+                Route::get('/{groupId}/anggota', [PjblController::class, 'groupMember'])->name('member.index');
+                Route::get('/{groupId}/anggota/tambah', [PjblController::class, 'groupMemberCreate'])->name('member.create');
+                Route::post('/{groupId}/anggota', [PjblController::class, 'groupMemberStore'])->name('member.store');
+                Route::post('/{groupId}/anggota/set-ketua', [PjblController::class, 'groupMemberLead'])->name('member.lead');
+                Route::delete('/{groupId}/anggota/{memberId}', [PjblController::class, 'groupMemberDestroy'])->name('member.destroy');
+            });
+        });
     });
 
     Route::get('profil', [DataController::class, 'profile'])->name('profile.index');

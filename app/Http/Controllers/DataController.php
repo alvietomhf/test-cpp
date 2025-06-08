@@ -7,8 +7,10 @@ use App\Models\McQuestion;
 use App\Models\Question;
 use App\Models\Result;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -138,5 +140,32 @@ class DataController extends Controller
             'status' => true,
             'url' => route('profile.index'),
         ]);
+    }
+
+    public function getStudentsByClasId($classId)
+    {
+        try {
+            $students = User::role('student')->where('clas_id', $classId)->get();
+
+            if (count($students) > 0) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Berhasil mendapatkan data siswa',
+                    'data' => $students,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal mendapatkan data siswa',
+                ]);
+            }
+        } catch (Exception $e) {
+            Log::error('Error when get students by class ID: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan pada sistem',
+            ]);
+        }
     }
 }

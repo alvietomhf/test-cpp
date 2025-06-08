@@ -74,6 +74,31 @@
                         @endforeach
                     </ul>
                 </li>
+
+                <li class=" nav-item {{ request()->is('pjbl*') ? 'menu-collapsed-open open' : '' }}">
+                    <a href="#">
+                        <i class="la la-share-alt"></i>
+                        <span class="menu-title">Pjbl</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li
+                            style="background-color: {{ request()->is('pjbl/soal*') ? '#512da8' : '' }}; font-weight: {{ request()->is('pjbl/soal*') ? 'bold' : 'normal' }};">
+                            <a class="menu-item" href="{{ route('teacher.pjbl.question.index') }}"
+                                style=" color: {{ request()->is('pjbl/soal*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                <i class="la la-circle-o"></i>
+                                <span> Soal</span>
+                            </a>
+                        </li>
+                        <li
+                            style="background-color: {{ request()->is('pjbl/kelompok*') ? '#512da8' : '' }}; font-weight: {{ request()->is('pjblpsikomotorik*') ? 'bold' : 'normal' }};">
+                            <a class="menu-item" href="{{ route('teacher.pjbl.group.index') }}"
+                                style=" color: {{ request()->is('pjbl/kelompok*') ? '#ffffff' : '#6b6f82' }} !important;">
+                                <i class="la la-circle-o"></i>
+                                <span> Kelompok</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             @endrole
 
             @role('student')
@@ -150,6 +175,13 @@
                         </a>
                     </li>
                 @endforeach
+
+                <li class=" nav-item {{ request()->is('pjbl*') ? ' active' : '' }}">
+                    <a href="{{ route('student.pjbl.group.index') }}">
+                        <i class="la la-share-alt"></i>
+                        <span class="menu-title" data-i18n="Pjbl">Pjbl</span>
+                    </a>
+                </li>
             @endrole
         </ul>
     </div>
