@@ -275,7 +275,7 @@
                                             <div class="form-group mt-2 mb-2">
                                                 <label class="font-weight-bold">Analisis Masalah</label>
                                                 <textarea class="form-control timer-controlled" id="desc_3" name="desc_3" rows="3"
-                                                    placeholder="Masukan analisis masalah disini..." data-timer-phase="3"
+                                                    placeholder="Masukan analisis masalah disini..." data-timer-phase="4"
                                                     {{ $data['passed'] ? 'readonly' : 'required disabled' }}>{{ $data['passed'] ? $data['pgwProblem']->desc_3 : '' }}</textarea>
                                                 @error('desc_3')
                                                     <small class="text-danger">{{ $message }}</small>
@@ -336,6 +336,16 @@
                 phase2: {
                     duration: 120,
                     text: 'Bisa mulai untuk mengisi Rumusan Masalah',
+                    color: 'bg-warning'
+                },
+                phase3: {
+                    duration: 120,
+                    text: 'Bisa mulai untuk mengisi Indikator Pemecahan Masalah',
+                    color: 'bg-warning'
+                },
+                phase4: {
+                    duration: 180,
+                    text: 'Bisa mulai untuk mengisi Analisis Masalah',
                     color: 'bg-warning'
                 }
             };
@@ -410,6 +420,36 @@
                 timerText.text(TIMER_CONFIG.phase2.text);
                 updateTimerPanelColor('warning');
                 enableInputsByPhase(2);
+
+                runTimer();
+            }
+
+            function startPhase3() {
+                currentPhase = 3;
+                totalDuration = TIMER_CONFIG.phase3.duration;
+                startTime = performance.now();
+                isRunning = true;
+
+                // Ensure timer display remains visible
+                timerDisplay.show().css('display', 'block');
+                timerText.text(TIMER_CONFIG.phase3.text);
+                updateTimerPanelColor('warning');
+                enableInputsByPhase(3);
+
+                runTimer();
+            }
+
+            function startPhase4() {
+                currentPhase = 4;
+                totalDuration = TIMER_CONFIG.phase4.duration;
+                startTime = performance.now();
+                isRunning = true;
+
+                // Ensure timer display remains visible
+                timerDisplay.show().css('display', 'block');
+                timerText.text(TIMER_CONFIG.phase4.text);
+                updateTimerPanelColor('warning');
+                enableInputsByPhase(4);
 
                 runTimer();
             }
@@ -524,7 +564,27 @@
                     }, 1500);
 
                 } else if (currentPhase === 2) {
-                    // Complete phase 2, enable all inputs
+                    // Complete phase 2, move to phase 3
+                    showPhaseCompletionMessage(
+                        'Waktu mengisi Rumusan Masalah selesai! Sekarang Kamu dapat mengisi Indikator Pemecahan Masalah.'
+                    );
+
+                    setTimeout(() => {
+                        startPhase3();
+                    }, 1500);
+
+                } else if (currentPhase === 3) {
+                    // Complete phase 3, move to phase 4
+                    showPhaseCompletionMessage(
+                        'Waktu mengisi Indikator Pemecahan Masalah selesai! Sekarang Kamu dapat mengisi Analisis Masalah.'
+                    );
+
+                    setTimeout(() => {
+                        startPhase4();
+                    }, 1500);
+
+                } else if (currentPhase === 4) {
+                    // Complete phase 4, enable submit button
                     // Set progress to 100%
                     const progressElement = document.getElementById('timer-progress');
                     if (progressElement) {
@@ -535,17 +595,16 @@
                     }
 
                     updateTimerPanelColor('success');
-                    enableInputsByPhase(3);
                     enableSubmitButton();
 
                     // Change timer text to completion message but keep timer visible
-                    timerText.text('Semua input sudah dapat diisi');
-                    timerCountdown.remove()
+                    timerText.text('Semua input sudah dapat diisi dan dapat di-submit');
+                    timerCountdown.remove();
 
                     // Show completion message but keep timer display visible
                     setTimeout(() => {
                         showPhaseCompletionMessage(
-                            'Semua input sudah dapat diisi. Kamu dapat menyelesaikan tahapan ini sekarang.');
+                            'Semua fase telah selesai! Kamu dapat menyelesaikan tahapan ini sekarang.');
 
                         // Optionally hide timer after showing completion message
                         timerDisplay.fadeOut(500);
