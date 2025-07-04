@@ -78,7 +78,7 @@
                 <li class=" nav-item {{ request()->is('pjbl*') ? 'menu-collapsed-open open' : '' }}">
                     <a href="#">
                         <i class="la la-share-alt"></i>
-                        <span class="menu-title">Pjbl</span>
+                        <span class="menu-title">Project Based Learning</span>
                     </a>
                     <ul class="menu-content">
                         <li
@@ -179,7 +179,7 @@
                 <li class=" nav-item {{ request()->is('pjbl*') ? ' active' : '' }}">
                     <a href="{{ route('student.pjbl.group.index') }}">
                         <i class="la la-share-alt"></i>
-                        <span class="menu-title" data-i18n="Pjbl">Pjbl</span>
+                        <span class="menu-title" data-i18n="Pjbl">Project Based Learning</span>
                     </a>
                 </li>
             @endrole

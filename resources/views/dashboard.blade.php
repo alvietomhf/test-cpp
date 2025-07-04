@@ -154,7 +154,7 @@
                                 </ul>
                             </li>
 
-                            <li><strong>Menu PjBL</strong>
+                            <li><strong>Menu Project Based Learning</strong>
                                 <ul>
                                     <li>Berisi aktivitas pembelajaran berbasis proyek yang dilakukan secara berkelompok.</li>
                                     <li>Siswa akan mengerjakan proyek sesuai sintaks pembelajaran yang telah ditentukan guru.
@@ -344,7 +344,7 @@
                                 </ul>
                             </li>
 
-                            <li><strong>Menu PjBL</strong><br>
+                            <li><strong>Menu Project Based Learning</strong><br>
                                 <p>Menu ini digunakan untuk mengelola pembelajaran berbasis proyek (Project Based Learning).
                                     Guru dapat membuat soal proyek dan mengelompokkan siswa untuk bekerja dalam tim.</p>
                                 <ul type="a">

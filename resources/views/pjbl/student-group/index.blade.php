@@ -10,7 +10,7 @@
             @include('flash::message')
             <table width="100%" class="mb-2">
                 <td style="width:1px; padding: 0 10px; white-space: nowrap;">
-                    <h3 class="text-dark font-weight-bold">Kelompok PJBL SISWA</h3>
+                    <h3 class="text-dark font-weight-bold">Kelompok Project Based Learning SISWA</h3>
                 </td>
                 <td>
                     <hr />
