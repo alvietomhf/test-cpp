@@ -23,22 +23,16 @@ class ProgressSeeder extends Seeder
         Progress::create([
             'user_id' => 2,
             'competency_id' => 2,
+            'status' => 'unlock',
         ]);
         Progress::create([
             'user_id' => 2,
             'competency_id' => 3,
+            'status' => 'unlock',
         ]);
         Progress::create([
             'user_id' => 2,
             'competency_id' => 4,
-        ]);
-        Progress::create([
-            'user_id' => 2,
-            'competency_id' => 5,
-        ]);
-        Progress::create([
-            'user_id' => 2,
-            'competency_id' => 6,
         ]);
     }
 }

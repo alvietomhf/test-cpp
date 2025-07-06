@@ -16,10 +16,9 @@ class CompetencySeeder extends Seeder
     public function run()
     {
         $subjectA = ['Tipe Data', 'Operator'];
-        $subjectB = ['Operasi Aritmatika', 'Operasi Logika'];
-        $subjectC = ['Percabangan'];
-        $subjectD = ['Perulangan'];
-        $subjectE = ['Array', 'List'];
+        $subjectB = ['Percabangan', 'Perulangan'];
+        $subjectC = ['Array', 'List'];
+        $subjectD = ["Tipe Data", "Operator", "Operasi Aritmatika", "Operasi Logika", "Percabangan", "Perulangan", "Array", "List"];
 
         Competency::create([
             'title' => 'Tipe Data',
@@ -29,39 +28,25 @@ class CompetencySeeder extends Seeder
             'subject' => json_encode($subjectA),
         ]);
         Competency::create([
-            'title' => 'Sekuensial',
-            'name' => 'Struktur Sekuensial',
-            'slug' => 'sekuensial',
-            'description' => 'Membuat kode program dengan operasi aritmatika dan logika.',
+            'title' => 'Struktrur Kontrol',
+            'name' => 'Struktrur Kontrol',
+            'slug' => 'struktur-kontrol',
+            'description' => 'Membuat kode program struktur kontrol.',
             'subject' => json_encode($subjectB),
-        ]);
-        Competency::create([
-            'title' => 'Percabangan',
-            'name' => 'Struktur Kontrol Percabangan',
-            'slug' => 'percabangan',
-            'description' => 'Membuat kode program struktur kontrol percabangan.',
-            'subject' => json_encode($subjectC),
-        ]);
-        Competency::create([
-            'title' => 'Perulangan',
-            'name' => 'Struktur Kontrol Perulangan',
-            'slug' => 'perulangan',
-            'description' => 'Membuat kode program struktur kontrol perulangan.',
-            'subject' => json_encode($subjectD),
         ]);
         Competency::create([
             'title' => 'Struktur Data',
             'name' => 'Struktur Data',
             'slug' => 'struktur-data',
             'description' => 'Membuat kode program struktur data.',
-            'subject' => json_encode($subjectE),
+            'subject' => json_encode($subjectC),
         ]);
         Competency::create([
-            'title' => 'Proyek',
-            'name' => 'Proyek Akhir',
-            'slug' => 'proyek-akhir',
-            'description' => 'Membuat kode program proyek akhir.',
-            'subject' => json_encode(array_merge($subjectA, $subjectB, $subjectC, $subjectD, $subjectE)),
+            'title' => 'Tes Psikomotorik',
+            'name' => 'Tes Psikomotorik C++',
+            'slug' => 'psikomotorik',
+            'description' => 'Tes ini bertujuan untuk mengukur pemahaman peserta didik dalam menerapkan konsep dasar pemrograman C++ melalui pengelolaan data siswa dalam suatu kelas. Peserta diminta membuat program yang menyimpan data nama, nilai, dan kehadiran siswa, menghitung total dan rata-rata nilai, menampilkan siswa dengan nilai tertinggi dan kehadiran terbaik, serta mengidentifikasi siswa yang tidak lulus dan siswa dengan kehadiran kurang dari 80%. Post test ini menilai kemampuan dalam penggunaan array, struktur kontrol (perulangan dan percabangan), serta pemilihan tipe data yang tepat dalam konteks pemrograman dasar.',
+            'subject' => json_encode($subjectD),
         ]);
     }
 }

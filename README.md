@@ -1,64 +1,338 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# StudyRoom
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+StudyRoom adalah aplikasi web yang dibangun menggunakan Laravel 8 untuk memfasilitasi ruang belajar dan manajemen pembelajaran.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Laravel**: 8.x
+-   **PHP**: 8.1.x
+-   **MySQL**: 8.0.x
+-   **Composer**: 2.4.x
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Pastikan sistem Anda memiliki:
 
-## Learning Laravel
+-   PHP 8.1.x atau lebih tinggi
+-   MySQL 8.0.x atau lebih tinggi
+-   Composer 2.4.x atau lebih tinggi
+-   GCC 11.4.0 (untuk kompilasi kode C++)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation & Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone Repository
 
-## Laravel Sponsors
+```bash
+git clone <repository-url>
+cd studyroom
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### 2. Install GCC 11.4.0
 
-### Premium Partners
+**Ubuntu/Debian:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```bash
+sudo apt update
+sudo apt install build-essential gcc-11 g++-11
 
-## Contributing
+# Set as default compiler
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 60
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 60
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Verify installation
+gcc --version
+g++ --version
+```
 
-## Code of Conduct
+**macOS:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Install Xcode Command Line Tools
+xcode-select --install
 
-## Security Vulnerabilities
+# Install via Homebrew
+brew install gcc@11
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Verify installation
+gcc-11 --version
+g++-11 --version
+```
 
-## License
+**Windows:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# Install via MSYS2
+pacman -S mingw-w64-x86_64-gcc
+
+# Or install via Visual Studio Build Tools
+# Download from Microsoft website
+```
+
+### 3. Install Dependencies
+
+```bash
+composer install
+```
+
+### 4. Environment Configuration
+
+```bash
+cp .env.example .env
+```
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Database Configuration
+
+Edit file `.env` dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=studyroom
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### 7. Database Setup
+
+**Option A: Using Database File (Recommended)**
+Jika tersedia file `studyroom.sql`, import database yang sudah siap pakai:
+
+**MySQL Command Line:**
+
+```bash
+mysql -u your_username -p -e "CREATE DATABASE studyroom;"
+mysql -u your_username -p studyroom < studyroom.sql
+```
+
+**phpMyAdmin:**
+
+1. Buka phpMyAdmin
+2. Buat database baru bernama `studyroom`
+3. Pilih database `studyroom`
+4. Klik tab **Import**
+5. Pilih file `studyroom.sql`
+6. Klik **Go**
+
+**MySQL Workbench:**
+
+1. Buka MySQL Workbench
+2. Connect ke MySQL server
+3. Buat schema baru: `CREATE DATABASE studyroom;`
+4. Klik **Server** > **Data Import**
+5. Pilih **Import from Self-Contained File**
+6. Browse dan pilih file `studyroom.sql`
+7. Pilih **Default Target Schema**: `studyroom`
+8. Klik **Start Import**
+
+**DBeaver:**
+
+1. Buka DBeaver dan connect ke MySQL
+2. Klik kanan pada connection, pilih **Create** > **Database**
+3. Nama database: `studyroom`
+4. Klik kanan pada database `studyroom`, pilih **SQL Editor** > **Execute SQL Script**
+5. Pilih file `studyroom.sql`
+6. Klik **Execute**
+
+**Option B: Using Migrations & Seeders**
+Jika tidak ada file `studyroom.sql`, gunakan Laravel migrations:
+
+```bash
+# Buat database kosong
+mysql -u your_username -p -e "CREATE DATABASE studyroom;"
+
+# Jalankan migrations
+php artisan migrate
+
+# (Optional) Seed database
+php artisan db:seed
+```
+
+### 8. Create Storage Link
+
+```bash
+php artisan storage:link
+```
+
+## Running the Application
+
+### Development Mode
+
+Untuk menjalankan aplikasi dalam mode development:
+
+```bash
+php artisan serve
+```
+
+Aplikasi akan berjalan di: `http://localhost:8000`
+
+### Production Mode (Localhost)
+
+#### 1. Optimize Application
+
+```bash
+# Clear dan cache configuration
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Optimize autoloader
+composer install --optimize-autoloader --no-dev
+```
+
+#### 2. Set Environment to Production
+
+Edit file `.env`:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+```
+
+#### 3. Generate Application Key (if not done)
+
+```bash
+php artisan key:generate
+```
+
+#### 4. Run with Production Server
+
+Gunakan salah satu metode berikut:
+
+**Option A: PHP Built-in Server**
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+**Option B: Using Apache/Nginx**
+
+**Apache Configuration:**
+Buat file virtual host baru (contoh: `/etc/apache2/sites-available/studyroom.conf`):
+
+```apache
+<VirtualHost *:80>
+    ServerName studyroom.local
+    DocumentRoot /path/to/studyroom/public
+
+    <Directory /path/to/studyroom/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/studyroom_error.log
+    CustomLog ${APACHE_LOG_DIR}/studyroom_access.log combined
+</VirtualHost>
+```
+
+Enable site dan restart Apache:
+
+```bash
+sudo a2ensite studyroom.conf
+sudo systemctl restart apache2
+```
+
+Tambahkan ke `/etc/hosts`:
+
+```
+127.0.0.1 studyroom.local
+```
+
+**Nginx Configuration:**
+Buat file konfigurasi baru (contoh: `/etc/nginx/sites-available/studyroom`):
+
+```nginx
+server {
+    listen 80;
+    server_name studyroom.local;
+    root /path/to/studyroom/public;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+
+Enable site dan restart Nginx:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/studyroom /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+```
+
+Tambahkan ke `/etc/hosts`:
+
+```
+127.0.0.1 studyroom.local
+```
+
+Akses aplikasi di: `http://studyroom.local`
+
+**Option C: Using Laravel Valet (macOS)**
+
+```bash
+valet link studyroom
+```
+
+#### 5. Set Proper Permissions
+
+```bash
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
+```
+
+## Additional Commands
+
+### Clear Cache
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+### Run Tests
+
+```bash
+php artisan test
+```
+
+## Troubleshooting
+
+### Permission Issues
+
+```bash
+sudo chown -R www-data:www-data storage
+sudo chown -R www-data:www-data bootstrap/cache
+```
+
+### Storage Link (for file uploads)
+
+```bash
+php artisan storage:link
+```
+
+### Reset Database
+
+```bash
+php artisan migrate:fresh --seed
+```

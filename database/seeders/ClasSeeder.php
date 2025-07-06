@@ -19,9 +19,5 @@ class ClasSeeder extends Seeder
             'name' => 'X RPL 1',
             'season' => '2024/2025',
         ]);
-        // Clas::create([
-        //     'name' => 'X RPL 2',
-        //     'season' => '2022/2023',
-        // ]);
     }
 }

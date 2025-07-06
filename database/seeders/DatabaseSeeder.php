@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CompetencySeeder::class,
             ProgressSeeder::class,
-            // QuestionSeeder::class,
         ]);
     }
 }
